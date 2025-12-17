@@ -1,0 +1,29 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+logs/
+*.log
+
+# Environment
+.env
+
+# Virtualenv
+venv/
+env/
+.venv/
+
+# VS Code
+.vscode/
+
+# Backup & dumps
+yedek_m_
+
+data.json

@@ -1,0 +1,348 @@
+{# Düzenlendi: product_form.html - Responsive tam uyumlu hale getirildi #}
+{% extends 'adminpanel/base_admin.html' %}
+{% block title %}Ürün Ekle{% endblock %}
+{% block extra_css %}
+<style>
+    .form-container {
+        background: #fff;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid #f0f0f0;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        padding: 0.75rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #A27B5C;
+        box-shadow: 0 0 0 0.2rem rgba(162, 123, 92, 0.25);
+    }
+
+    .btn-submit {
+        background-color: #28a745;
+        border: none;
+        padding: 12px 24px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+        color: white;
+    }
+
+    .btn-submit:hover {
+        background-color: #218838;
+    }
+
+    .btn-cancel {
+        background-color: #6c757d;
+        border: none;
+        padding: 12px 24px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background-color: #5a6268;
+    }
+
+    .checkbox-group {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .form-check {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Responsive Ayarlar */
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            font-size: 0.9rem;
+        }
+
+        .form-control,
+        .form-select {
+            padding: 0.6rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-submit,
+        .btn-cancel {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .checkbox-group {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-check {
+            font-size: 0.85rem;
+        }
+
+        .row>.col-md-6 {
+            width: 100%;
+            padding: 0 !important;
+        }
+
+        .d-flex.gap-3 {
+            flex-direction: column;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .form-container {
+            padding: 0.8rem;
+        }
+
+        .form-label {
+            font-size: 0.8rem;
+        }
+
+        .form-control,
+        .form-select {
+            padding: 0.4rem;
+            font-size: 0.8rem;
+        }
+
+    .form-check {
+        font-size: 0.75rem;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+}
+
+/* Alert Styles */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    float: right;
+    margin-top: -0.2rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="mb-4">Yeni Ürün Ekle</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.name.id_for_label }}" class="form-label">Ürün Adı</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <div class="text-danger small mt-1">
+                            {% for error in form.name.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.category.id_for_label }}" class="form-label">Kategori</label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <div class="text-danger small mt-1">
+                            {% for error in form.category.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}" class="form-label">Açıklama</label>
+            {{ form.description }}
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.price.id_for_label }}" class="form-label">Fiyat</label>
+                    {{ form.price }}
+                    {% if form.price.errors %}
+                        <div class="text-danger small mt-1">
+                            {% for error in form.price.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.discounted_price.id_for_label }}" class="form-label">İndirimli Fiyat</label>
+                    {{ form.discounted_price }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.material.id_for_label }}" class="form-label">Malzeme</label>
+                    {{ form.material }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.color.id_for_label }}" class="form-label">Renk</label>
+                    {{ form.color }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.brand.id_for_label }}" class="form-label">Marka</label>
+                    {{ form.brand }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.size.id_for_label }}" class="form-label">Boyut</label>
+                    {{ form.size }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.product_type.id_for_label }}" class="form-label">Ürün Tipi</label>
+                    {{ form.product_type }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.stock_quantity.id_for_label }}" class="form-label">Stok Miktarı</label>
+                    {{ form.stock_quantity }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.stock_status.id_for_label }}" class="form-label">Stok Durumu</label>
+            {{ form.stock_status }}
+            {% if form.stock_status.errors %}
+                <div class="text-danger small mt-1">
+                    {% for error in form.stock_status.errors %}{{ error }}{% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.image.id_for_label }}" class="form-label">Ürün Görseli</label>
+            {{ form.image }}
+            {% if form.image.errors %}
+                <div class="text-danger small mt-1">
+                    {% for error in form.image.errors %}{{ error }}{% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Ürün Özellikleri</label>
+            <div class="checkbox-group">
+                <div class="form-check">
+                    {{ form.is_active }}
+                    <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                        Aktif
+                    </label>
+                </div>
+                <div class="form-check">
+                    {{ form.is_featured }}
+                    <label class="form-check-label" for="{{ form.is_featured.id_for_label }}">
+                        Öne Çıkan
+                    </label>
+                </div>
+                <div class="form-check">
+                    {{ form.is_campaign }}
+                    <label class="form-check-label" for="{{ form.is_campaign.id_for_label }}">
+                        Kampanyalı
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary btn-submit">Ürün Ekle</button>
+            <a href="{% url 'product_list_admin' %}" class="btn btn-secondary btn-cancel">İptal</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,213 @@
+<div id="products-group">
+  <div class="products-section">
+    <div class="section-title">Ürünler</div>
+    <div class="products-wrapper">
+      <div class="products-slider">
+        {% if products %}
+          {% for product in products %}
+            <div class="product-card">
+              <div class="product-img-container">
+                <img src="{{ product.get_main_image.url }}" class="product-img" alt="{{ product.name }}"
+                  onclick="openProductModal({{ product.id }})">
+                <div class="product-actions-overlay">
+                  <button onclick="openProductModal({{ product.id }})">İncele</button>
+                  <a href="{% url 'pages:add_to_cart' product.id %}" class="sepete-ekle-link">Sepete Ekle</a>
+                </div>
+                {% if product.discounted_price %}
+                <div class="discount-badge">-%{{ product.discount_percentage }}</div>
+                {% endif %}
+              </div>
+              <div class="product-info">
+                <div class="product-title">
+                  {{ product.name }}
+                  <button class="favorite-toggle-btn" data-product-id="{{ product.id }}" data-user-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
+                    {% if user.is_authenticated and product.id in favorite_product_ids %}
+                      <i class="fas fa-heart"></i>
+                      <span>Favorilerde</span>
+                    {% else %}
+                      <i class="far fa-heart"></i>
+                      <span>Favorilere Ekle</span>
+                    {% endif %}
+                  </button>
+                </div>
+                <div class="product-price">
+                  {% if product.discounted_price %}
+                  <span class="original-price">{{ product.price }} TL</span>
+                  <span class="discounted-price">{{ product.discounted_price }} TL</span>
+                  {% else %}
+                  <span class="price">{{ product.price }} TL</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="no-products-message">Ürün bulunamadı.</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="section-navigation">
+      <button class="nav-button prev" onclick="prevPage('products')" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        Önceki
+      </button>
+      <div class="page-info">Sayfa <span class="current-page">1</span> / <span class="total-pages">1</span></div>
+      <button class="nav-button next" onclick="nextPage('products')" disabled>
+        Sonraki
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+<div id="sets-group" style="display:none;">
+  <div class="sets-section">
+    <div class="section-title">Setler</div>
+    <div class="sets-wrapper">
+      <div class="sets-slider">
+        {% if featured_products %}
+          {% for product in featured_products %}
+            <div class="product-card">
+              <div class="product-img-container">
+                <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }}"
+                  onclick="openProductModal({{ product.id }})">
+                <div class="product-actions-overlay">
+                  <button onclick="openProductModal({{ product.id }})">İncele</button>
+                  {% if product.id %}
+                  <a href="{% url 'pages:add_to_cart' product.id %}" class="sepete-ekle-link">Sepete Ekle</a>
+                  {% else %}
+                  <span style="color: red;">ID eksik</span>
+                  {% endif %}
+                </div>
+                {% if product.discounted_price %}
+                <div class="discount-badge">-%{{ product.discount_percentage }}</div>
+                {% endif %}
+              </div>
+              <div class="product-info">
+                <div class="product-title">{{ product.name }}</div>
+                <div class="product-price">
+                  {% if product.discounted_price %}
+                  <span class="original-price">{{ product.price }} TL</span>
+                  <span class="discounted-price">{{ product.discounted_price }} TL</span>
+                  {% else %}
+                  <span class="price">{{ product.price }} TL</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="no-products-message">Set bulunamadı.</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="section-navigation">
+      <button class="nav-button prev" onclick="prevPage('sets')" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        Önceki
+      </button>
+      <div class="page-info">Sayfa <span class="current-page">1</span> / <span class="total-pages">1</span></div>
+      <button class="nav-button next" onclick="nextPage('sets')" disabled>
+        Sonraki
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+<div id="campaigns-group" style="display:none;">
+  <div class="campaigns-section">
+    <div class="section-title">Kampanyalar</div>
+    <div class="campaigns-wrapper">
+      <div class="campaigns-slider">
+        {% if campaign_products %}
+          {% for product in campaign_products %}
+            <div class="product-card">
+              <div class="product-img-container">
+                <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }}"
+                  onclick="openProductModal({{ product.id }})">
+                <div class="product-actions-overlay">
+                  <button onclick="openProductModal({{ product.id }})">İncele</button>
+                  {% if product.id %}
+                  <a href="{% url 'pages:add_to_cart' product.id %}" class="sepete-ekle-link">Sepete Ekle</a>
+                  {% else %}
+                  <span style="color: red;">ID eksik</span>
+                  {% endif %}
+                </div>
+                {% if product.discounted_price %}
+                <div class="discount-badge">-%{{ product.discount_percentage }}</div>
+                {% endif %}
+              </div>
+              <div class="product-info">
+                <div class="product-title">{{ product.name }}</div>
+                <div class="product-price">
+                  {% if product.discounted_price %}
+                  <span class="original-price">{{ product.price }} TL</span>
+                  <span class="discounted-price">{{ product.discounted_price }} TL</span>
+                  {% else %}
+                  <span class="price">{{ product.price }} TL</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="no-products-message">Kampanya bulunamadı.</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="section-navigation">
+      <button class="nav-button prev" onclick="prevPage('campaigns')" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        Önceki
+      </button>
+      <div class="page-info">Sayfa <span class="current-page">1</span> / <span class="total-pages">1</span></div>
+      <button class="nav-button next" onclick="nextPage('campaigns')" disabled>
+        Sonraki
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+<style>
+.no-products-message {
+  text-align: center;
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 2.5rem 0;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.favorite-toggle-btn').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      const productId = this.dataset.productId;
+      fetch(`/favori-degistir/${productId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}',
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'added' || data.status === 'removed') {
+            window.location.reload(); // Favori değiştiyse sayfayı yenile
+          }
+        });
+    });
+  });
+});
+</script> 

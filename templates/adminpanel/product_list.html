@@ -1,0 +1,132 @@
+{# Düzenlendi: product_list.html - Responsive tasarım eklendi, mobil optimizasyonu yapıldı #}
+{% extends 'adminpanel/base_admin.html' %}
+{% block title %}Ürün Yönetimi{% endblock %}
+{% block extra_css %}
+    <style>
+        .product-image {
+            max-width: 100px;
+            height: auto;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+        .add-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .add-button:hover {
+            background-color: #218838;
+            color: white;
+            text-decoration: none;
+        }
+        .table-responsive {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .table th {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+        }
+        .btn-sm {
+            margin: 2px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .product-image {
+                max-width: 60px;
+            }
+            .add-button {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+            }
+            .table-responsive {
+                font-size: 0.85rem;
+            }
+            .btn-sm {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+                margin: 1px;
+            }
+            .table th, .table td {
+                padding: 0.5rem 0.25rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .product-image {
+                max-width: 40px;
+            }
+            .add-button {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+                margin-bottom: 10px;
+            }
+            .table-responsive {
+                font-size: 0.7rem;
+            }
+            .btn-sm {
+                padding: 0.15rem 0.3rem;
+                font-size: 0.65rem;
+                margin: 1px;
+            }
+            .table th, .table td {
+                padding: 0.3rem 0.15rem;
+            }
+            .table-responsive .table {
+                min-width: 320px;
+            }
+            .table th:nth-child(6), .table td:nth-child(6) {
+                display: none;
+            }
+            .table th:nth-child(5), .table td:nth-child(5) {
+                display: none;
+            }
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <h1 class="mb-4">Ürün Listesi</h1>
+    <a href="{% url 'product_create_admin' %}" class="add-button">➕ Yeni Ürün Ekle</a>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Görsel</th>
+                    <th>Ad</th>
+                    <th>Fiyat</th>
+                    <th>Stok Durumu</th>
+                    <th>Aktif?</th>
+                    <th>📊 Ziyaret</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td><img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image"></td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.price }} ₺</td>
+                    <td>{% if product.is_campaign %} Kampanyalı {% else %} Normal {% endif %}</td>
+                    <td>{{ product.is_active|yesno:"Evet,Hayır" }}</td>
+                    <td>{{ product.visit_count }}</td>
+                    <td>
+                        <a href="{% url 'product_edit_admin' product.id %}" class="btn btn-sm btn-primary">🖊 Güncelle</a>
+                        <a href="{% url 'product_delete_admin' product.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Bu ürünü silmek istediğine emin misin?')">🗑 Sil</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" class="text-center">Hiç ürün yok.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

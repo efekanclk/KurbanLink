@@ -1,0 +1,345 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kayıt Ol - Zişan Mobilya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2C3639;
+      --primary-light: #3F4E4F;
+      --secondary: #A27B5C;
+      --accent: #DCD7C9;
+      --background: #F5E6D3;
+      --card-bg: #ffffff;
+      --text-dark: #2C3639;
+      --text-light: #6c757d;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      position: relative;
+      min-height: 100vh;
+      background: url('{% static "img/d33babe84b525ab224955e46840a3a00 (1).jpg" %}') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(255,255,255,0.75);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .register-container, .header {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      background: var(--card-bg);
+      box-shadow: var(--shadow-sm);
+      padding: 1rem 2rem;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .nav-button {
+      padding: 0.5rem 1.25rem;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-button:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+
+    .header-logo {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .header-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .register-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .register-card {
+      background: rgba(255,255,255,0.92);
+      padding: 2rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .register-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px rgba(162,123,92,0.1);
+    }
+
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .terms input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-top: 0.3rem;
+      border: 2px solid var(--secondary);
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.875rem;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    .form-links {
+      display: flex;
+      justify-content: center;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .form-links a {
+      color: var(--secondary);
+      text-decoration: none;
+      margin-left: 0.5rem;
+    }
+
+    .form-links a:hover {
+      color: var(--primary);
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 1rem;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .alert-info {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    @media (max-width: 768px) {
+      .register-card {
+        padding: 1.5rem;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        padding: 1rem;
+      }
+
+      .header-title {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="{% url 'pages:anasayfa' %}" class="logo-link">
+        <img src="{% static 'img/logo_2.png' %}" alt="Logo" class="header-logo">
+        <span class="header-title">ZİŞAN MOBİLYA</span>
+      </a>
+      <a href="{% url 'pages:anasayfa' %}" class="nav-button">
+        <i class="fas fa-home"></i>
+        Ana Sayfa
+      </a>
+    </div>
+  </header>
+
+  <main class="register-container">
+    <div class="register-card">
+      <h1 class="register-title">Kayıt Ol</h1>
+      
+      {% if messages %}
+      <div class="messages">
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">
+              {{ message }}
+          </div>
+          {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="first_name">Ad</label>
+            <input type="text" id="first_name" name="first_name" class="form-input" placeholder="Adınız" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="surname">Soyad</label>
+            <input type="text" id="surname" name="surname" class="form-input" placeholder="Soyadınız" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">E-posta</label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="E-posta adresiniz" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="username">Kullanıcı Adı</label>
+          <input type="text" id="username" name="username" class="form-input" placeholder="Kullanıcı adınız" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="phone">Telefon</label>
+          <input type="tel" id="phone" name="phone" class="form-input" placeholder="Telefon numaranız">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="password">Şifre</label>
+            <input type="password" id="password" name="password" class="form-input" placeholder="Şifreniz" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="password-confirm">Şifre Tekrar</label>
+            <input type="password" id="password-confirm" name="password-confirm" class="form-input" placeholder="Şifrenizi tekrar girin" required>
+          </div>
+        </div>
+        <div class="terms">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">
+            Kişisel verilerimin işlenmesine ilişkin <a href="#" style="text-decoration: underline;">aydınlatma metnini</a> okudum ve kabul ediyorum.
+          </label>
+        </div>
+        <div class="form-footer">
+          <button type="submit" class="submit-btn">Kayıt Ol</button>
+          <div class="form-links">
+            <span>Zaten hesabınız var mı?</span>
+            <a href="{% url 'login' %}">Giriş Yap</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

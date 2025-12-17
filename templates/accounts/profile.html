@@ -1,0 +1,654 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profilim - Zişan Mobilya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2C3639;
+      --primary-light: #3F4E4F;
+      --secondary: #A27B5C;
+      --accent: #DCD7C9;
+      --background: #F5E6D3;
+      --card-bg: #ffffff;
+      --text-dark: #2C3639;
+      --text-light: #6c757d;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.4)), url('d33babe84b525ab224955e46840a3a00 (1).jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    .header {
+      background: var(--card-bg);
+      box-shadow: var(--shadow-sm);
+      padding: 1rem 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .nav-button {
+      padding: 0.5rem 1.25rem;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-button:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+
+    .header-logo {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .header-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .profile-header {
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--primary);
+    }
+
+    .profile-info h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-info p {
+      color: var(--text-light);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: var(--card-bg);
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab-button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      background: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 1rem;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tab-button.active {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .tab-button:hover:not(.active) {
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .info-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .info-group label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .order-card,
+    .product-card {
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .order-card img,
+    .product-card img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+    }
+
+    .card-info {
+      flex: 1;
+    }
+
+    .card-info h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .card-info p {
+      color: var(--text-light);
+      margin-bottom: 0.25rem;
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .status-delivered {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-processing {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-secondary {
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .cart-total {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      text-align: right;
+    }
+
+    /* Mesaj stilleri */
+    .messages {
+      margin-bottom: 1.5rem;
+    }
+
+    .alert {
+      position: relative;
+      padding: 1rem 3rem 1rem 1rem;
+      margin-bottom: 1rem;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .alert-info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    .message-text {
+      flex: 1;
+    }
+
+    .message-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      padding: 0.25rem;
+      border-radius: 50%;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .message-close:hover {
+      opacity: 1;
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .tabs {
+        flex-wrap: wrap;
+      }
+
+      .tab-button {
+        flex: 1 1 calc(50% - 0.5rem);
+      }
+
+      .order-card,
+      .product-card {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .action-buttons {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="#" class="logo-link">
+        <img src="{% static 'img/logo_2.png' %}" alt="Logo" class="header-logo">
+        <span class="header-title">ZİŞAN MOBİLYA</span>
+      </a>
+      <a href="{% url 'pages:anasayfa' %}" class="nav-button">
+        <i class="fas fa-home"></i>
+        Ana Sayfa
+      </a>
+    </div>
+  </header>
+
+  <div class="container">
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}" id="message-{{ forloop.counter }}">
+        <span class="message-text">{{ message }}</span>
+        <button class="message-close" onclick="closeMessage('message-{{ forloop.counter }}')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="profile-avatar">
+      <i class="fas fa-user"></i>
+    </div>
+    <div class="profile-info">
+      <h1>Hoşgeldin, {{ user.get_full_name|default:user.username }}</h1>
+      <p>{{ user.email }}</p>
+      <p>Son giriş: {{ user.last_login|date:"d F Y" }}</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-button {% if not show_orders_tab %}active{% endif %}" onclick="showTab(event, 'profile-info-tab')">Profil Bilgileri</button>
+    <button class="tab-button {% if show_orders_tab %}active{% endif %}" onclick="showTab(event, 'orders-tab')">Siparişlerim</button>
+    <button class="tab-button" onclick="showTab(event, 'addresses-tab')">Adreslerim</button>
+    <button class="tab-button" onclick="showTab(event, 'cart-tab')">Sepetim</button>
+    <button class="tab-button" onclick="showTab(event, 'favorites-tab')">Favorilerim</button>
+  </div>
+
+
+  <div id="profile-info-tab" class="tab-content {% if not show_orders_tab %}active{% endif %}">
+    <form method="POST" action="">
+      {% csrf_token %}
+      <input type="hidden" name="update_profile" value="1">
+      <div class="info-group">
+        <label>Ad Soyad</label>
+        <input type="text" name="first_name" value="{{ user.get_full_name }}" required>
+      </div>
+      <div class="info-group">
+        <label>E-posta</label>
+        <input type="email" name="email" value="{{ user.email }}" required>
+      </div>
+      <div class="info-group">
+        <label>Telefon</label>
+        <input type="tel" name="phone" value="{{ user.userprofile.phone|default:'' }}">
+      </div>
+      <button type="submit" class="btn btn-primary">Bilgileri Güncelle</button>
+    </form>
+  </div>
+
+<div id="orders-tab" class="tab-content {% if show_orders_tab %}active{% endif %}">
+  <h2>Siparişlerim</h2>
+  {% if orders %}
+  <ul style="list-style:none; padding:0;">
+    {% for order in orders %}
+    <li style="margin-bottom:1.5rem; background:#f9f9f9; padding:1rem; border-radius:8px;">
+      <strong>Sipariş No:</strong> {{ order.order_number }}<br>
+      <strong>Ürün:</strong> {{ order.product.name }}<br>
+      <strong>Adres:</strong> {{ order.address_title }} - {{ order.address_text }}<br>
+      <strong>Ad Soyad:</strong> {{ order.full_name }}<br>
+      <strong>Not:</strong> {{ order.note|default:'-' }}<br>
+      <strong>Durum:</strong> {{ order.get_status_display }}<br>
+      <strong>Tarih:</strong> {{ order.created_at|date:'d.m.Y H:i' }}<br>
+
+      {% if order.can_be_cancelled and order.status != 'cancelled' and order.status not in 'preparing,shipping,delivered' %}
+       <form method="post" style="display:inline;">
+        {% csrf_token %}
+        <input type="hidden" name="order_id" value="{{ order.id }}">
+        <button type="submit" name="cancel_order" class="btn btn-danger btn-sm">Siparişi İptal Et</button>
+      </form>
+      {% elif order.status == 'cancelled' %}
+      <div style="color:#e74c3c; margin-top:0.5rem;">Bu sipariş iptal edilmiştir.</div>
+      {% elif order.status in 'preparing,shipping,delivered' %}
+      <div style="color:#e74c3c; margin-top:0.5rem;">"{{ order.get_status_display }}" durumundaki siparişler iptal edilemez.</div>
+      {% else %}
+      <div style="color:#e74c3c; margin-top:0.5rem;">Bu sipariş artık iptal edilemez.</div>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div>Henüz siparişiniz yok.</div>
+  {% endif %}
+</div>
+
+
+  <div id="addresses-tab" class="tab-content">
+    <h2>Adreslerim</h2>
+    <ul style="list-style:none; padding:0;">
+      {% for address in addresses %}
+      <li style="margin-bottom:1rem; background:#f9f9f9; padding:1rem; border-radius:8px;">
+        <strong>{{ address.title }}</strong><br>
+        {{ address.address }}<br>
+        {{ address.city }} {{ address.district }} {{ address.postal_code }}
+        <form method="post" style="display:inline; float:right;">
+          {% csrf_token %}
+          <input type="hidden" name="address_id" value="{{ address.id }}">
+          <button type="submit" name="delete_address"
+            style="background:#e74c3c; color:white; border:none; border-radius:4px; padding:0.3rem 0.7rem; margin-left:1rem; cursor:pointer;">Sil</button>
+        </form>
+      </li>
+      {% empty %}
+      <li>Henüz adres eklemediniz.</li>
+      {% endfor %}
+    </ul>
+    <h3>Yeni Adres Ekle</h3>
+    <form method="post" style="margin-top:1rem;">
+      {% csrf_token %}
+      <div class="info-group">
+        <label for="address_title">Adres Başlığı</label>
+        <input type="text" name="address_title" id="address_title" placeholder="Ev, Ofis, vb.">
+      </div>
+      <div class="info-group">
+        <label for="address_text">Adres</label>
+        <textarea name="address_text" id="address_text" rows="2" required></textarea>
+      </div>
+      <div class="info-group">
+        <label for="city">Şehir</label>
+        <input type="text" name="city" id="city">
+      </div>
+      <div class="info-group">
+        <label for="district">İlçe</label>
+        <input type="text" name="district" id="district">
+      </div>
+      <div class="info-group">
+        <label for="postal_code">Posta Kodu</label>
+        <input type="text" name="postal_code" id="postal_code">
+      </div>
+      <button type="submit" name="add_address"
+        style="background:#2C3639; color:white; border:none; border-radius:4px; padding:0.5rem 1.2rem; cursor:pointer;">Adres
+        Ekle</button>
+    </form>
+  </div>
+
+  <div id="cart-tab" class="tab-content">
+    <h2>Sepetim</h2>
+    {% if cart_items %}
+    <ul style="list-style:none; padding:0;">
+      {% for item in cart_items %}
+      <li style="margin-bottom:1rem; background:#f9f9f9; padding:1rem; border-radius:8px;">
+        <strong>{{ item.product.name }}</strong> <br>
+        Adet: {{ item.quantity }} <br>
+        Fiyat: {{ item.product.price }} TL
+      </li>
+      {% endfor %}
+    </ul>
+    <div><strong>Toplam Tutar:</strong> {{ total }} TL</div>
+    {% else %}
+    <div>Sepetinizde ürün yok.</div>
+    {% endif %}
+  </div>
+  <div id="favorites-tab" class="tab-content">
+    <h2>Favorilerim</h2>
+    {% if favorites %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+      {% for favorite in favorites %}
+      <div class="product-card"
+        style="position: relative; overflow: hidden; background: #fff; border-radius: 14px; box-shadow: 0 2px 8px rgba(44,54,57,0.07); transition: box-shadow 0.18s;">
+        <div class="product-img-container" style="position: relative; cursor: pointer;">
+          <img src="{{ favorite.product.get_main_image.url }}" class="product-img" alt="{{ favorite.product.name }}"
+            style="width:100%; border-radius: 12px; object-fit: cover; min-height: 180px; max-height: 180px;">
+          <div class="product-actions-overlay"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.7rem; background: rgba(255,255,255,0.82); opacity: 0; transition: opacity 0.18s;">
+            <a href="{% url 'pages:add_to_cart' favorite.product.id %}" class="sepete-ekle-link"
+              style="background: #2C3639; color: #fff; border: none; border-radius: 8px; padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 600; text-decoration: none; cursor: pointer;">Sepete
+              Ekle</a>
+          </div>
+          <button class="favorite-toggle-btn" data-product-id="{{ favorite.product.id }}"
+            style="position: absolute; top: 10px; right: 10px; background: none; border: none; cursor: pointer; z-index: 10;">
+            <i class="fas fa-heart" style="color: #b04a4a; font-size: 20px; pointer-events: none;"></i>
+          </button>
+          {% if favorite.product.discounted_price %}
+          <div class="discount-badge"
+            style="position: absolute; left: 10px; top: 10px; background: #b04a4a; color: #fff; border-radius: 8px; padding: 2px 10px; font-size: 0.95rem; font-weight: 700;">
+            -%{{ favorite.product.discount_percentage }}</div>
+          {% endif %}
+        </div>
+        <div class="product-info" style="padding: 0.7rem 0.5rem 0.9rem 0.5rem;">
+          <div class="product-title"
+            style="font-size: 1.08rem; font-weight: 700; color: #2C3639; margin-bottom: 0.2rem;">{{ favorite.product.name }}</div>
+          <div class="product-price">
+            {% if favorite.product.discounted_price %}
+            <span class="original-price"
+              style="color: #b04a4a; text-decoration: line-through; font-size: 0.98rem; margin-right: 0.5rem;">{{ favorite.product.price }} TL</span>
+            <span class="discounted-price" style="color: #2C3639; font-size: 1.08rem; font-weight: 700;">{{ favorite.product.discounted_price }} TL</span>
+            {% else %}
+            <span class="price" style="color: #2C3639; font-size: 1.08rem; font-weight: 700;">{{ favorite.product.price }} TL</span>
+            {% endif %}
+          </div>
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.7rem;">
+            <a href="{% url 'pages:anasayfa' %}?product_id={{ favorite.product.id }}" class="incele-link"
+              style="display: inline-block; background: #A27B5C; color: #fff; border: none; border-radius: 8px; padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer; flex: 1; text-align: center;">İncele</a>
+            <a href="{% url 'pages:add_to_cart' favorite.product.id %}" class="sepete-ekle-link"
+              style="display: inline-block; background: #2C3639; color: #fff; border: none; border-radius: 8px; padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer; flex: 1; text-align: center;">Sepete
+              Ekle</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>Henüz favori ürününüz yok.</p>
+    {% endif %}
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.favorite-toggle-btn').forEach(button => {
+        button.addEventListener('click', function (e) {
+          e.preventDefault();
+          const productId = this.dataset.productId;
+          fetch(`/favori-degistir/${productId}/`, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': '{{ csrf_token }}',
+              'Content-Type': 'application/json'
+            }
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.status === 'removed') {
+                location.reload();
+              }
+            });
+        });
+      });
+    });
+  </script>
+
+
+  <script>
+    function showTab(evt, tabId) {
+      var i, tabcontent, tabbuttons;
+      tabcontent = document.getElementsByClassName("tab-content");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+      }
+      tabbuttons = document.getElementsByClassName("tab-button");
+      for (i = 0; i < tabbuttons.length; i++) {
+        tabbuttons[i].classList.remove("active");
+      }
+      document.getElementById(tabId).classList.add("active");
+      evt.currentTarget.classList.add("active");
+    }
+
+    function closeMessage(messageId) {
+      const messageElement = document.getElementById(messageId);
+      if (messageElement) {
+        messageElement.style.opacity = '0';
+        messageElement.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          messageElement.remove();
+        }, 300);
+      }
+    }
+  </script>
+
+</body>
+
+</html>

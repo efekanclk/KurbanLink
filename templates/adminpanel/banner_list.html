@@ -1,0 +1,158 @@
+{# Düzenlendi: banner_list.html - Responsive tasarım eklendi, mobil optimizasyonu yapıldı #}
+{% extends 'adminpanel/base_admin.html' %}
+{% block title %}Banner'lar{% endblock %}
+{% block extra_css %}
+<style>
+    .banner-image {
+        max-width: 120px;
+        height: auto;
+        border-radius: 6px;
+        border: 1px solid #eee;
+    }
+    .add-button {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 15px;
+        background-color: #28a745;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+    .add-button:hover {
+        background-color: #218838;
+        color: white;
+        text-decoration: none;
+    }
+    .table-responsive {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .table th {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 600;
+    }
+    .btn-sm {
+        margin: 2px;
+    }
+    .banner-title {
+        max-width: 200px;
+        word-break: break-word;
+    }
+    .banner-description {
+        max-width: 250px;
+        word-break: break-word;
+        font-size: 0.9rem;
+        color: #666;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .banner-image {
+            max-width: 80px;
+        }
+        .add-button {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .table-responsive {
+            font-size: 0.85rem;
+        }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            margin: 1px;
+        }
+        .table th, .table td {
+            padding: 0.5rem 0.25rem;
+        }
+        .banner-title {
+            max-width: 150px;
+        }
+        .banner-description {
+            max-width: 180px;
+            font-size: 0.8rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .banner-image {
+            max-width: 60px;
+        }
+        .add-button {
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+        .table-responsive {
+            font-size: 0.8rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .btn-sm {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.7rem;
+            margin: 1px;
+            white-space: nowrap;
+        }
+        .table th, .table td {
+            padding: 0.4rem 0.2rem;
+            white-space: nowrap;
+        }
+        .banner-title {
+            max-width: 120px;
+        }
+        .banner-description {
+            max-width: 140px;
+            font-size: 0.75rem;
+        }
+        .table-responsive .table {
+            min-width: 600px;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+<h2 class="mb-4">Banner Listesi</h2>
+<a href="{% url 'banner_create_admin' %}" class="add-button">➕ Yeni Banner Ekle</a>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Görsel</th>
+                <th>Başlık</th>
+                <th>Açıklama</th>
+                <th>Durum</th>
+                <th>Tarih</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for banner in banners %}
+            <tr>
+                <td><img src="{{ banner.image.url }}" alt="{{ banner.title }}" class="banner-image"></td>
+                <td class="banner-title">{{ banner.title }}</td>
+                <td class="banner-description">{{ banner.description|truncatewords:10 }}</td>
+                <td>
+                    {% if banner.is_active %}
+                        <span class="badge bg-success">Aktif</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Pasif</span>
+                    {% endif %}
+                </td>
+                <td>{{ banner.created_at|date:"d.m.Y" }}</td>
+                <td>
+                    <a href="{% url 'banner_edit_admin' banner.id %}" class="btn btn-sm btn-primary">🖊 Güncelle</a>
+                    <a href="{% url 'banner_delete_admin' banner.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Bu banner\'ı silmek istediğine emin misin?')">🗑 Sil</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center">Hiç banner yok.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} 

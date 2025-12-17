@@ -1,0 +1,1029 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sepetim - Zişan Mobilya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2C3639;
+      --primary-light: #3F4E4F;
+      --secondary: #A27B5C;
+      --accent: #DCD7C9;
+      --background: #F5E6D3;
+      --card-bg: #ffffff;
+      --text-dark: #2C3639;
+      --text-light: #6c757d;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100vh;
+      background: var(--background);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    .header {
+      background: var(--card-bg);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      top: 0;
+      z-index: 1000;
+      padding: 0.5rem 0;
+    }
+
+    .header-row {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .header-logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      transition: var(--transition);
+    }
+
+    .header-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .header-title {
+      color: var(--primary);
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .header-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .header-icon:hover {
+      background: var(--secondary);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .auth-button {
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .auth-button.login {
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    .auth-button.register {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .auth-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .main-container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      color: var(--text-light);
+      font-size: 1.1rem;
+    }
+
+    .cart-container {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .cart-header {
+      background: var(--primary);
+      color: var(--white);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .cart-header i {
+      font-size: 1.5rem;
+    }
+
+    .cart-header h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .cart-items {
+      padding: 2rem;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.5rem;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+      background: var(--white);
+    }
+
+    .cart-item:hover {
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+
+    .cart-item-image {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .cart-item-details {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .cart-item-price {
+      color: var(--secondary);
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .cart-item-total {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .cart-item-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--background);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem;
+    }
+
+    .quantity-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: var(--white);
+      color: var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .quantity-btn:hover {
+      background: var(--secondary);
+      color: var(--white);
+    }
+
+    .quantity-input {
+      width: 50px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 1rem;
+    }
+
+    .quantity-input:focus {
+      outline: none;
+    }
+
+    .remove-btn {
+      background: #e74c3c;
+      color: var(--white);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .remove-btn:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+    }
+
+    .cart-summary {
+      background: var(--accent);
+      padding: 2rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .summary-row.total {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      border-top: 2px solid var(--secondary);
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+
+    .cart-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .continue-shopping {
+      background: var(--accent);
+      color: var(--primary);
+      padding: 1rem 2rem;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .continue-shopping:hover {
+      background: var(--secondary);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .checkout-btn {
+      background: var(--primary);
+      color: var(--white);
+      padding: 1rem 2rem;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .empty-cart {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .empty-cart-icon {
+      font-size: 4rem;
+      color: var(--text-light);
+      margin-bottom: 1rem;
+    }
+
+    .empty-cart-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-cart-text {
+      color: var(--text-light);
+      margin-bottom: 2rem;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-container {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: slideIn 0.3s ease;
+      position: relative;
+    }
+
+    .modal-header {
+      background: var(--primary);
+      color: var(--white);
+      padding: 1.5rem 2rem;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0;
+    }
+
+    .modal-title i {
+      font-size: 1.2rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .modal-body {
+      padding: 2rem;
+    }
+
+    .preorder-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .alert-info {
+      background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+      color: #1565c0;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      border-left: 4px solid #2196f3;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .alert-info i {
+      font-size: 1.1rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    .alert-link {
+      color: #1565c0;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .payment-info {
+      background: linear-gradient(135deg, #fff3e0 0%, #fce4ec 100%);
+      color: #e65100;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      border-left: 4px solid #ff9800;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(255, 152, 0, 0.1);
+    }
+
+    .payment-info i {
+      font-size: 1.1rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    .alert-link:hover {
+      color: #0d47a1;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .form-label i {
+      color: var(--secondary);
+      font-size: 0.9rem;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      padding: 0.875rem 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      transition: var(--transition);
+      background: var(--white);
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(162, 123, 92, 0.1);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-textarea::placeholder {
+      color: var(--text-light);
+      font-style: italic;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+      flex: 1;
+      padding: 0.875rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .btn-cancel {
+      background: #f5f5f5;
+      color: var(--text-dark);
+      border: 2px solid #e0e0e0;
+    }
+
+    .btn-cancel:hover {
+      background: #e0e0e0;
+      transform: translateY(-2px);
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: var(--white);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { 
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-row {
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .header-title {
+        font-size: 1.5rem;
+      }
+
+      .main-container {
+        padding: 0 1rem;
+      }
+
+      .cart-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+
+      .cart-item-actions {
+        align-items: center;
+      }
+
+      .cart-actions {
+        flex-direction: column;
+      }
+
+      .page-title {
+        font-size: 2rem;
+      }
+
+      .modal-container {
+        width: 95%;
+        margin: 1rem;
+      }
+
+      .modal-header {
+        padding: 1rem 1.5rem;
+      }
+
+      .modal-title {
+        font-size: 1.2rem;
+      }
+
+      .modal-body {
+        padding: 1.5rem;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .btn-cancel,
+      .btn-submit {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-row">
+      <div class="header-left">
+        <img src="{% static 'img/logo_2.png' %}" alt="Zişan Mobilya" class="header-logo">
+        <h1 class="header-title">Zişan Mobilya</h1>
+      </div>
+      <div class="header-right">
+        <a href="{% url 'pages:anasayfa' %}" class="header-icon" title="Ana Sayfa">
+          <i class="fas fa-home"></i>
+        </a>
+        <div class="auth-buttons">
+          {% if user.is_authenticated %}
+          <a href="{% url 'profile' %}" class="auth-button login">Profilim</a>
+          <a href="{% url 'logout' %}" class="auth-button register">Çıkış</a>
+          {% else %}
+          <a href="{% url 'login' %}" class="auth-button login">Giriş</a>
+          <a href="{% url 'register' %}" class="auth-button register">Kayıt Ol</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-container">
+    <div class="page-header">
+      <h1 class="page-title">Sepetim</h1>
+      <p class="page-subtitle">Alışveriş sepetinizdeki ürünleri yönetin</p>
+    </div>
+
+    <div class="cart-container">
+      {% if cart_items %}
+      <div class="cart-header">
+        <i class="fas fa-shopping-cart"></i>
+        <h2>Sepetinizde {{ cart_items|length }} ürün bulunuyor</h2>
+      </div>
+
+      <div class="cart-items">
+        {% for item in cart_items %}
+        <div class="cart-item">
+          <img src="{{ item.product.get_main_image.url }}" alt="{{ item.product.name }}" class="cart-item-image">
+
+          <div class="cart-item-details">
+            <h3 class="cart-item-name">{{ item.product.name }}</h3>
+            <p class="cart-item-price">Birim Fiyat: {{ item.product.price }} TL</p>
+            <p class="cart-item-total">Toplam: {{ item.total_price }} TL</p>
+          </div>
+
+          <div class="cart-item-actions">
+            <form method="post" action="{% url 'pages:update_quantity' item.id %}" class="quantity-controls">
+              {% csrf_token %}
+              <button type="button" class="quantity-btn" onclick="updateQuantity({{ item.id }}, -1)">-</button>
+              <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="quantity-input"
+                onchange="onQuantityChange(this)">
+              <button type="button" class="quantity-btn" onclick="updateQuantity({{ item.id }}, 1)">+</button>
+            </form>
+
+            <form method="POST" action="{% url 'pages:remove_from_cart' item.id %}">
+              {% csrf_token %}
+              <button type="submit" class="remove-btn">
+                <i class="fas fa-trash"></i>
+                Ürünü Sil
+              </button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="cart-summary">
+        <div class="summary-row total">
+          <span>Toplam Tutar:</span>
+          <span>{{ total|floatformat:2 }} TL</span>
+        </div>
+
+        <div class="cart-actions">
+          <a href="{% url 'pages:anasayfa' %}" class="continue-shopping">
+            <i class="fas fa-arrow-left"></i>
+            Alışverişe Devam Et
+          </a>
+          <!-- Ön Sipariş Oluştur Butonu -->
+          <button class="checkout-btn" id="open-preorder-modal" type="button" style="opacity:1; cursor:pointer;">
+            <i class="fas fa-receipt"></i>
+            Ön Sipariş Oluştur
+          </button>
+        </div>
+      </div>
+      <!-- Ön Sipariş Modalı -->
+      <div id="preorder-modal" class="modal-overlay">
+        <div class="modal-container">
+          <div class="modal-header">
+            <h2 class="modal-title">
+              <i class="fas fa-receipt"></i>
+              Ön Sipariş Oluştur
+            </h2>
+            <button class="modal-close" onclick="closeModal()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          
+          <div class="modal-body">
+            <div class="payment-info">
+              <i class="fas fa-credit-card"></i>
+              <div>
+                <strong>Ödeme Bilgisi:</strong> Sitemiz üzerinden ödeme almıyoruz. Ön sipariş oluşturduktan sonra sizinle iletişime geçip siparişinizi teyit edip onayladıktan sonra ücreti talep ediyoruz.
+              </div>
+            </div>
+            <form method="post" class="preorder-form">
+              {% csrf_token %}
+              
+              {% if not user.userprofile.addresses.exists %}
+              <div class="alert-info">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                  <strong>Bilgi:</strong> Sipariş verebilmek için önce
+                  <a href="{% url 'profile' %}#adreslerim" class="alert-link">profilinizdeki Adreslerim</a> kısmına en az bir adres ekleyin.
+                </div>
+              </div>
+              {% endif %}
+
+              <div class="form-group">
+                <label for="address_id" class="form-label">
+                  <i class="fas fa-map-marker-alt"></i>
+                  Adres Seç
+                </label>
+                <select name="address_id" id="address_id" class="form-select" required>
+                  <option value="">Adres seçiniz</option>
+                  {% for address in user.userprofile.addresses.all %}
+                  <option value="{{ address.id }}">{{ address.title }} - {{ address.address|truncatechars:30 }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="full_name" class="form-label">
+                  <i class="fas fa-user"></i>
+                  Ad Soyad
+                </label>
+                <input type="text" name="full_name" id="full_name" class="form-input" 
+                       value="{{ user.first_name }} {{ user.last_name }}" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="note" class="form-label">
+                  <i class="fas fa-sticky-note"></i>
+                  Not (isteğe bağlı)
+                </label>
+                <textarea name="note" id="note" class="form-textarea" rows="3" 
+                          placeholder="Siparişinizle ilgili özel notlarınızı buraya yazabilirsiniz..."></textarea>
+              </div>
+              
+              <div class="form-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal()">
+                  <i class="fas fa-times"></i>
+                  İptal
+                </button>
+                <button type="submit" name="create_preorder" class="btn-submit">
+                  <i class="fas fa-check"></i>
+                  Siparişi Oluştur
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <script>
+        document.getElementById('open-preorder-modal').onclick = function () {
+          var modal = document.getElementById('preorder-modal');
+          modal.style.display = 'flex';
+          modal.style.alignItems = 'center';
+          modal.style.justifyContent = 'center';
+          
+          // Modal açıldığında body scroll'unu engelle
+          document.body.style.overflow = 'hidden';
+        };
+
+        // Modal kapatma fonksiyonu
+        function closeModal() {
+          var modal = document.getElementById('preorder-modal');
+          modal.style.display = 'none';
+          document.body.style.overflow = 'auto';
+        }
+
+        // ESC tuşu ile modal kapatma
+        document.addEventListener('keydown', function(event) {
+          if (event.key === 'Escape') {
+            closeModal();
+          }
+        });
+
+        // Modal dışına tıklayınca kapatma
+        document.getElementById('preorder-modal').addEventListener('click', function(event) {
+          if (event.target === this) {
+            closeModal();
+          }
+        });
+      </script>
+      {% else %}
+      <div class="empty-cart">
+        <div class="empty-cart-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <h2 class="empty-cart-title">Sepetiniz Boş</h2>
+        <p class="empty-cart-text">Henüz sepetinize ürün eklemediniz. Alışverişe başlamak için aşağıdaki butona
+          tıklayın.</p>
+        <a href="{% url 'pages:anasayfa' %}" class="continue-shopping">
+          <i class="fas fa-shopping-bag"></i>
+          Alışverişe Başla
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </main>
+
+  <script>
+    function updateQuantity(itemId, change) {
+      const form = document.querySelector(`form[action*="${itemId}"]`);
+      if (!form) return;
+
+      const input = form.querySelector('input[name="quantity"]');
+      if (!input) return;
+
+      const currentValue = parseInt(input.value);
+      const newValue = Math.max(1, currentValue + change);
+
+      // AJAX ile güncelle
+      fetch('/ajax/update-quantity/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+          item_id: itemId,
+          quantity: newValue
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Input değerini güncelle
+            input.value = data.quantity;
+
+            // Ürün toplam fiyatını güncelle
+            const totalElement = form.closest('.cart-item').querySelector('.cart-item-total');
+            if (totalElement) {
+              totalElement.textContent = `Toplam: ${data.item_total} TL`;
+            }
+
+            // Sepet toplamını güncelle
+            const cartTotalElement = document.querySelector('.summary-row.total span:last-child');
+            if (cartTotalElement) {
+              cartTotalElement.textContent = `${data.cart_total} TL`;
+            }
+
+            // Sepet sayısını güncelle (header'daki)
+            updateCartCount();
+          } else {
+            alert('Güncelleme başarısız: ' + data.error);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Bir hata oluştu!');
+        });
+    }
+
+    // CSRF token için yardımcı fonksiyon
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    // Sepet sayısını güncelle
+    function updateCartCount() {
+      fetch('/ajax/cart-count/')
+        .then(response => response.json())
+        .then(data => {
+          const badge = document.querySelector('.header-icon .badge');
+          if (badge) {
+            badge.textContent = data.count;
+          }
+        });
+    }
+
+    // Input değiştiğinde de AJAX ile güncelle
+    function onQuantityChange(input) {
+      const form = input.closest('form');
+      const itemId = form.action.split('/').filter(Boolean).pop();
+      const newQuantity = parseInt(input.value);
+
+      if (newQuantity < 1) {
+        input.value = 1;
+        return;
+      }
+
+      updateQuantity(itemId, 0); // 0 çünkü zaten input'ta yeni değer var
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,287 @@
+{# Düzenlendi: dashboard.html - Responsive tasarım eklendi, mobil optimizasyonu yapıldı #}
+{% extends 'adminpanel/base_admin.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block extra_css %}
+<style>
+    .stat-box {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(44,54,57,0.06);
+        padding: 24px 18px 18px 18px;
+        text-align: center;
+        margin-bottom: 18px;
+        transition: box-shadow 0.2s;
+        border: 1px solid #f0f0f0;
+    }
+    .stat-title {
+        font-size: 1.1rem;
+        color: #888;
+        margin-bottom: 4px;
+    }
+    .stat-value {
+        font-size: 2.1rem;
+        font-weight: 600;
+        color: #2C3639;
+    }
+    .dashboard-section {
+        margin-bottom: 32px;
+    }
+    .dashboard-section h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #2C3639;
+    }
+    .dashboard-tables .table {
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
+    .product-img-thumb {
+        width: 48px;
+        height: 48px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #eee;
+        background: #fafafa;
+        display: block;
+        margin: 0 auto;
+    }
+    .product-name-cell {
+        vertical-align: middle;
+        font-weight: 500;
+        font-size: 1.05rem;
+    }
+    .visit-count-cell {
+        vertical-align: middle;
+        text-align: right;
+        font-weight: 500;
+    }
+    .stat-icon {
+        font-size: 1.5rem;
+        color: #A27B5C;
+        background: #f5f1ed;
+        border-radius: 50%;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .most-visited-table th, .most-visited-table td {
+        vertical-align: middle;
+    }
+    .mv-img-thumb {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(44,54,57,0.10);
+        background: #fafafa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .mv-img-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+    .most-visited-table tbody tr:hover {
+        background: #f5f1ed;
+        transition: background 0.2s;
+    }
+    .most-visited-scroll {
+        max-height: 420px;
+        overflow-y: auto;
+        border-radius: 8px;
+        border: 1px solid #f0f0f0;
+        background: #fff;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .stat-box {
+            padding: 16px 12px 12px 12px;
+            margin-bottom: 12px;
+        }
+        .stat-title {
+            font-size: 0.9rem;
+        }
+        .stat-value {
+            font-size: 1.6rem;
+        }
+        .dashboard-section {
+            margin-bottom: 20px;
+        }
+        .dashboard-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .most-visited-scroll {
+            max-height: 300px;
+        }
+        .mv-img-thumb {
+            width: 36px;
+            height: 36px;
+        }
+        .product-name-cell {
+            font-size: 0.9rem;
+        }
+        .table-responsive {
+            font-size: 0.85rem;
+        }
+        .badge {
+            font-size: 0.75rem !important;
+            padding: 0.25rem 0.5rem !important;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .stat-box {
+            padding: 12px 8px 8px 8px;
+        }
+        .stat-title {
+            font-size: 0.8rem;
+        }
+        .stat-value {
+            font-size: 1.4rem;
+        }
+        .dashboard-section h3 {
+            font-size: 1rem;
+        }
+        .most-visited-scroll {
+            max-height: 250px;
+        }
+        .mv-img-thumb {
+            width: 32px;
+            height: 32px;
+        }
+        .product-name-cell {
+            font-size: 0.8rem;
+        }
+        .table-responsive {
+            font-size: 0.8rem;
+        }
+        .badge {
+            font-size: 0.7rem !important;
+            padding: 0.2rem 0.4rem !important;
+        }
+        .table th, .table td {
+            padding: 0.5rem 0.25rem;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+<h2 class="mb-4">Raporlar & İstatistikler</h2>
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="stat-box">
+            <div class="stat-title">Kullanıcı</div>
+            <div class="stat-value">{{ total_users }}</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-box">
+            <div class="stat-title">Ürün</div>
+            <div class="stat-value">{{ total_products }}</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-box">
+            <div class="stat-title">Sipariş</div>
+            <div class="stat-value">{{ total_orders }}</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-box">
+            <div class="stat-title">Son 30 Gün Sipariş</div>
+            <div class="stat-value">{{ recent_orders }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-section">
+    <h3>Kategoriye Göre Ürün Dağılımı</h3>
+    <div class="dashboard-tables">
+        <div class="table-responsive mb-2">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light"><tr><th>Kategori</th><th>Ürün Sayısı</th></tr></thead>
+                <tbody>
+                {% for stat in category_stats %}
+                <tr><td>{{ stat.name }}</td><td>{{ stat.product_count }}</td></tr>
+                {% empty %}
+                <tr><td colspan="2">Veri yok.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-section">
+    <div class="d-flex align-items-center mb-2">
+        <span class="stat-icon me-2"><i class="fas fa-chart-bar"></i></span>
+        <h3 class="mb-0">En Çok Ziyaret Edilen Ürünler</h3>
+    </div>
+    <div class="dashboard-tables">
+        <div class="most-visited-scroll mb-2">
+            <table class="table align-middle table-hover table-borderless most-visited-table">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 60px;">#</th>
+                        <th>Görsel</th>
+                        <th>Ürün</th>
+                        <th>Ziyaret</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for product in most_visited_products %}
+                <tr>
+                    <td class="text-muted fw-bold" style="font-size:1.1rem;">{{ forloop.counter }}</td>
+                    <td>
+                        {% if product.get_main_image %}
+                            <div class="mv-img-thumb">
+                                <img src="{{ product.get_main_image.url }}" alt="{{ product.name }}">
+                            </div>
+                        {% else %}
+                            <div class="mv-img-thumb">
+                                <img src="https://via.placeholder.com/48x48?text=No+Image" alt="No Image">
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td class="product-name-cell">{{ product.name }}</td>
+                    <td>
+                        <span class="badge bg-primary fs-6 px-3 py-2">{{ product.visit_count }}</span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center text-muted">Veri yok.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-section">
+    <h3>Sipariş Durum Dağılımı</h3>
+    <div class="dashboard-tables">
+        <div class="table-responsive mb-2">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-light"><tr><th>Durum</th><th>Adet</th></tr></thead>
+                <tbody>
+                {% for stat in order_status_stats %}
+                <tr><td>{{ stat.status }}</td><td>{{ stat.count }}</td></tr>
+                {% empty %}
+                <tr><td colspan="2">Veri yok.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

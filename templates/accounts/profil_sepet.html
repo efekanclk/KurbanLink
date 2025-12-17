@@ -1,0 +1,19 @@
+{% for item in cart_items %}
+<div class="urun-karti">
+  <img src="{{ item.product.get_main_image.url }}" alt="{{ item.product.name }}" class="urun-img">
+  <div class="urun-detay">
+    <h3>{{ item.product.name }}</h3>
+    <p>{{ item.product.price }} TL</p>
+  </div>
+  <form method="POST" action="{% url 'pages:remove_from_cart' item.id %}">
+    {% csrf_token %}
+    <button type="submit" class="sil-buton">Sil</button>
+  </form>
+</div>
+{% empty %}
+<p>Sepetiniz boş.</p>
+{% endfor %}
+
+<div class="toplam-alan">
+  Toplam: {{ total|floatformat:2 }} TL
+</div>

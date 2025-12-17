@@ -1,0 +1,1549 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zişan Mobilya</title>
+  <link rel="icon" type="image/png" href="{% static 'img/logo_2.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{%static 'css/style.css'%}">
+</head>
+
+<body>
+  <header class="header">
+    <div class="header-row">
+      <!-- Sol: Logo ve başlık -->
+      <div class="header-left">
+        <img src="{% static 'img/logo_2.png' %}" alt="Logo" class="header-logo">
+        <div class="header-content">
+          <span class="header-title">ZİŞAN MOBİLYA</span>
+          <div class="header-socials">
+            <a href="https://www.instagram.com/zisanmobilya/" target="_blank" class="header-icon" title="Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="5" stroke="#2C3639" stroke-width="2" fill="none"/>
+                <circle cx="12" cy="12" r="4.5" stroke="#2C3639" stroke-width="2" fill="none"/>
+                <circle cx="17.2" cy="6.8" r="1.2" fill="#2C3639"/>
+              </svg>
+            </a>
+            <a href="https://wa.me/905518538313" target="_blank" class="header-icon" title="WhatsApp">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="#2C3639" stroke-width="2" fill="none"/>
+                <path d="M8.5 10.5c.5 2 2.5 3.5 4 4l1.5-1.5c.2-.2.5-.2.7 0l1.2 1.2c.2.2.2.5 0 .7-1.2 1.2-2.8 2-4.4 2-3.3 0-6-2.7-6-6 0-1.6.8-3.2 2-4.4.2-.2.5-.2.7 0l1.2 1.2c.2.2.2.5 0 .7L8.5 10.5z" stroke="#2C3639" stroke-width="1.5" fill="none"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- header-socials artık header-left içinde, dışarıda değil -->
+      <!-- Sağ: Admin paneli, kullanıcı info, profil ve sepet -->
+      <div class="header-right">
+        {% if user.is_authenticated %}
+        <div class="user-info">
+          <span class="user-name">{{ user.username }}</span>
+          <a href="{% url 'logout' %}" class="user-action">Çıkış Yap</a>
+        </div>
+        {% else %}
+        <div class="auth-links">
+          <a href="{% url 'login' %}" class="auth-button login">Giriş Yap</a>
+          <a href="{% url 'register' %}" class="auth-button register">Kayıt Ol</a>
+        </div>
+        {% endif %}
+        <div class="header-buttons-wrapper">
+          <div class="header-icon-container">
+            <a href="{% url 'profile' %}" class="header-icon" title="Profil">
+              <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                <circle cx="12" cy="8" r="4" stroke="#7a5c46" stroke-width="2" />
+                <path d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4" stroke="#7a5c46" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </a>
+            <span class="icon-label">Profil</span>
+          </div>
+          <div class="header-icon-container">
+            <a href="{% url 'pages:sepet' %}" class="header-icon" title="Sepetim">
+              <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                <circle cx="12" cy="12" r="10" fill="#7a5c46" />
+                <!-- Sade alışveriş sepeti ikonu -->
+                <path d="M7 10h10l-1.5 6.5a2 2 0 0 1-2 1.5h-3a2 2 0 0 1-2-1.5L7 10zm2 0V8a3 3 0 1 1 6 0v2" stroke="#fff"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+              </svg>
+            </a>
+            <span class="icon-label">Sepet</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="banner">
+    <div class="banner-slider">
+      {% if banners %}
+      {% for banner in banners %}
+      <div class="banner-slide" style="background-image: url('{{ banner.image.url }}');">
+        {% if banner.title or banner.description %}
+        <div class="banner-content">
+          {% if banner.title %}
+          <h2>{{ banner.title }}</h2>
+          {% endif %}
+          {% if banner.description %}
+          <p>{{ banner.description }}</p>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      {% else %}
+      <!-- Fallback banner if no banners in database -->
+      <div class="banner-slide" style="background-image: url('/media/banners/banner.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('/media/banners/banner.jpg');"></div>
+      <div class="banner-slide" style="background-image: url('/media/banners/banner.jpg');"></div>
+      {% endif %}
+    </div>
+    <div class="banner-nav prev" onclick="prevSlide()">
+      <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+        <path d="M15 18l-6-6 6-6" stroke="#2C3639" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+    <div class="banner-nav next" onclick="nextSlide()">
+      <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+        <path d="M9 18l6-6-6-6" stroke="#2C3639" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+    <div class="banner-dots">
+      {% if banners %}
+      {% for banner in banners %}
+      <div class="banner-dot {% if forloop.first %}active{% endif %}"></div>
+      {% endfor %}
+      {% else %}
+      <div class="banner-dot active"></div>
+      <div class="banner-dot"></div>
+      <div class="banner-dot"></div>
+      {% endif %}
+    </div>
+  </div>
+  <!-- Searchbar moved here below the banner -->
+  <div class="searchbar-row" style="padding: 1.5rem 0 10px 0;">
+    <form class="searchbar"
+      style="display: flex; align-items: center; gap: 1rem; max-width: 800px; margin: 0 auto; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 2px solid var(--background);">
+      <input type="text" id="main-search-input" placeholder="Ürün veya kategori ara..."
+        style="width: 100%; border: none; background: transparent; font-size: 1.1rem; color: var(--text-dark); padding: 0.5rem 0; font-family: inherit; outline: none;">
+      <button type="submit" aria-label="Ara" style="background: none; border: none; cursor: pointer;">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <circle cx="11" cy="11" r="8" stroke="#A27B5C" stroke-width="2" fill="none" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="#A27B5C" stroke-width="2" />
+        </svg>
+      </button>
+    </form>
+  </div>
+  <section class="categories-section">
+    <button class="categories-scroll-btn prev" onclick="scrollCategories('prev')">
+      <svg viewBox="0 0 24 24">
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+    </button>
+    <div class="categories-wrapper">
+      {% if categories %}
+      {% for category in categories %}
+      <div class="category-card" data-category-id="{{ category.id }}"
+        onclick="selectCategory('{{ category.id }}', this)">
+        <img src="{{ category.image.url }}" class="category-img" alt="{{ category.name }}">
+        <div class="category-title">{{ category.name }}</div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <!-- Fallback categories if no categories in database -->
+      <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=400&q=80"
+          class="category-img" alt="Oturma Odası">
+        <div class="category-title">Oturma Odası</div>
+      </div>
+      <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+          class="category-img" alt="Yatak Odası">
+        <div class="category-title">Yatak Odası</div>
+      </div>
+      <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1460518451285-97b6aa326961?auto=format&fit=crop&w=400&q=80"
+          class="category-img" alt="Yemek Odası">
+        <div class="category-title">Yemek Odası</div>
+      </div>
+      {% endif %}
+    </div>
+    <button class="categories-scroll-btn next" onclick="scrollCategories('next')">
+      <svg viewBox="0 0 24 24">
+        <path d="M9 18l6-6-6-6" />
+      </svg>
+    </button>
+  </section>
+  <div class="filters-section"
+    style="display: flex; gap: 0.75rem; align-items: center; width: 100%; margin-bottom: 1.5rem; justify-content: center;">
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+      <div class="filter-group">
+        <button class="filter-button" type="button" onclick="toggleFilter(this)">Fiyat
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <div class="filter-dropdown">
+          {% for pr in price_ranges %}
+          <div class="filter-option">
+            <input type="checkbox" id="price-{{ pr.id }}" value="{{ pr.id }}" class="filter-price">
+            <label for="price-{{ pr.id }}">{{ pr.label }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="filter-group">
+        <button class="filter-button" type="button" onclick="toggleFilter(this)">Malzeme
+          <svg width="12" height="12" viewBox="0 0 24 24">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" />
+          </svg>
+        </button>
+        <div class="filter-dropdown">
+          {% for material in materials %}
+          <div class="filter-option">
+            <input type="checkbox" id="material-{{ material.id }}" value="{{ material.id }}" class="filter-material">
+            <label for="material-{{ material.id }}">{{ material.name }}</label>
+          </div>
+          {% empty %}
+          <div class="filter-option">Malzeme yok</div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="filter-group">
+        <button class="filter-button" type="button" onclick="toggleFilter(this)">Boyut
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <div class="filter-dropdown">
+          {% for size in sizes %}
+          <div class="filter-option">
+            <input type="checkbox" id="size-{{ size.id }}" value="{{ size.id }}" class="filter-size">
+            <label for="size-{{ size.id }}">{{ size.name }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="filter-group">
+        <button class="filter-button" type="button" onclick="toggleFilter(this)">Renk
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <div class="filter-dropdown">
+          {% for color in colors %}
+          <div class="filter-option">
+            <input type="checkbox" id="color-{{ color.id }}" value="{{ color.id }}" class="filter-color">
+            <label for="color-{{ color.id }}">{{ color.name }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="filter-group">
+        <button class="filter-button" type="button" onclick="toggleFilter(this)">Marka
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <div class="filter-dropdown">
+          {% for brand in brands %}
+          <div class="filter-option">
+            <input type="checkbox" id="brand-{{ brand.id }}" value="{{ brand.id }}" class="filter-brand">
+            <label for="brand-{{ brand.id }}">{{ brand.name }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="filter-group">
+        <button class="filter-button" type="button" onclick="toggleFilter(this)">Stok
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <div class="filter-dropdown">
+          <div class="filter-option">
+            <input type="checkbox" id="stock-available">
+            <label for="stock-available">Stokta Var</label>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="stock-limited">
+            <label for="stock-limited">Sınırlı Stok</label>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="stock-out">
+            <label for="stock-out">Stokta Yok</label>
+          </div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <button class="filter-button" type="button" id="reset-filters-btn">Sıfırla</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobil Filtre Sistemi -->
+  <div class="mobile-filters-container">
+    <button class="mobile-filters-btn" type="button" onclick="toggleMobileFilters(this)">
+      Filtreler
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+    <div class="mobile-filters-dropdown">
+      <!-- Fiyat Filtreleri -->
+      <div class="mobile-filter-group">
+        <div class="mobile-filter-title" onclick="toggleMobileFilterGroup(this)">
+          Fiyat
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="mobile-filter-options">
+          {% for pr in price_ranges %}
+          <div class="mobile-filter-option">
+            <input type="checkbox" id="mobile-price-{{ pr.id }}" value="{{ pr.id }}" class="filter-price">
+            <label for="mobile-price-{{ pr.id }}">{{ pr.label }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Malzeme Filtreleri -->
+      <div class="mobile-filter-group">
+        <div class="mobile-filter-title" onclick="toggleMobileFilterGroup(this)">
+          Malzeme
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="mobile-filter-options">
+          {% for material in materials %}
+          <div class="mobile-filter-option">
+            <input type="checkbox" id="mobile-material-{{ material.id }}" value="{{ material.id }}" class="filter-material">
+            <label for="mobile-material-{{ material.id }}">{{ material.name }}</label>
+          </div>
+          {% empty %}
+          <div class="mobile-filter-option">Malzeme yok</div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Boyut Filtreleri -->
+      <div class="mobile-filter-group">
+        <div class="mobile-filter-title" onclick="toggleMobileFilterGroup(this)">
+          Boyut
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="mobile-filter-options">
+          {% for size in sizes %}
+          <div class="mobile-filter-option">
+            <input type="checkbox" id="mobile-size-{{ size.id }}" value="{{ size.id }}" class="filter-size">
+            <label for="mobile-size-{{ size.id }}">{{ size.name }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Renk Filtreleri -->
+      <div class="mobile-filter-group">
+        <div class="mobile-filter-title" onclick="toggleMobileFilterGroup(this)">
+          Renk
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="mobile-filter-options">
+          {% for color in colors %}
+          <div class="mobile-filter-option">
+            <input type="checkbox" id="mobile-color-{{ color.id }}" value="{{ color.id }}" class="filter-color">
+            <label for="mobile-color-{{ color.id }}">{{ color.name }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Marka Filtreleri -->
+      <div class="mobile-filter-group">
+        <div class="mobile-filter-title" onclick="toggleMobileFilterGroup(this)">
+          Marka
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="mobile-filter-options">
+          {% for brand in brands %}
+          <div class="mobile-filter-option">
+            <input type="checkbox" id="mobile-brand-{{ brand.id }}" value="{{ brand.id }}" class="filter-brand">
+            <label for="mobile-brand-{{ brand.id }}">{{ brand.name }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Stok Filtreleri -->
+      <div class="mobile-filter-group">
+        <div class="mobile-filter-title" onclick="toggleMobileFilterGroup(this)">
+          Stok
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="mobile-filter-options">
+          <div class="mobile-filter-option">
+            <input type="checkbox" id="mobile-stock-available">
+            <label for="mobile-stock-available">Stokta Var</label>
+          </div>
+          <div class="mobile-filter-option">
+            <input type="checkbox" id="mobile-stock-limited">
+            <label for="mobile-stock-limited">Sınırlı Stok</label>
+          </div>
+          <div class="mobile-filter-option">
+            <input type="checkbox" id="mobile-stock-out">
+            <label for="mobile-stock-out">Stokta Yok</label>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mobil Filtre Aksiyonları -->
+      <div class="mobile-filter-actions">
+        <button type="button" onclick="applyMobileFilters()">Uygula</button>
+        <button type="button" class="reset" onclick="resetMobileFilters()">Sıfırla</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="group-toggle-row">
+    <span class="group-toggle-link active" id="show-products-link" onclick="showGroup('products')">Ürünler</span>
+    <span class="group-toggle-link" id="show-sets-link" onclick="showGroup('sets')">Setler</span>
+    <span class="group-toggle-link" id="show-campaigns-link" onclick="showGroup('campaigns')">Kampanyalar</span>
+  </div>
+  <div id="products-list">
+    <div id="products-group">
+      <div class="products-section">
+        <div class="section-title">Ürünler</div>
+        <div class="products-wrapper">
+          <div class="products-slider">
+            {% if products %}
+            {% for product in products %}
+            <div class="product-card">
+              <div class="product-img-container">
+                <img src="{{ product.get_main_image.url }}" class="product-img" alt="{{ product.name }}" onclick="openProductModal({{ product.id }})" />
+                <div class="product-actions-overlay">
+                  <button type="button" onclick="openProductModal({{ product.id }})">İncele</button>
+                  <a href="{% url 'pages:add_to_cart' product.id %}" class="sepete-ekle-link">Sepete Ekle</a>
+                </div>
+                {% if product.discounted_price %}
+                <div class="discount-badge">-%{{ product.discount_percentage }}</div>
+                {% endif %}
+              </div>
+              <div class="product-info">
+                <div class="product-title">
+                  {{ product.name }}
+                  <button class="favorite-toggle-btn" data-product-id="{{ product.id }}" data-user-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
+                    {% if user.is_authenticated and product.id in favorite_product_ids %}
+                    <i class="fas fa-heart"></i>
+                    <span>Favorilerde</span>
+                    {% else %}
+                    <i class="far fa-heart"></i>
+                    <span>Favorilere Ekle</span>
+                    {% endif %}
+                  </button>
+                </div>
+                <div class="product-price">
+                  {% if product.discounted_price %}
+                  <span class="original-price">{{ product.price }} TL</span>
+                  <span class="discounted-price">{{ product.discounted_price }} TL</span>
+                  {% else %}
+                  <span class="price">{{ product.price }} TL</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="product-card">
+              <div class="product-title">Ürün bulunamadı.</div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="section-navigation">
+          <button class="nav-button prev" onclick="prevPage('products')" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Önceki
+          </button>
+          <div class="page-info">Sayfa <span class="current-page">1</span> / <span class="total-pages">1</span></div>
+          <button class="nav-button next" onclick="nextPage('products')" disabled>
+            Sonraki
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="sets-group" style="display:none;">
+      <div class="sets-section">
+        <div class="section-title">Setler</div>
+        <div class="sets-wrapper">
+          <div class="sets-slider">
+            {% if featured_products %}
+            {% for product in featured_products %}
+            <div class="product-card">
+              <div class="product-img-container">
+                <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }}" onclick="openProductModal({{ product.id }})" />
+                <div class="product-actions-overlay">
+                  <button type="button" onclick="openProductModal({{ product.id }})">İncele</button>
+                  {% if product.id %}
+                  <a href="{% url 'pages:add_to_cart' product.id %}" class="sepete-ekle-link">Sepete Ekle</a>
+                  {% else %}
+                  <span style="color: red;">ID eksik</span>
+                  {% endif %}
+                </div>
+                {% if product.discounted_price %}
+                <div class="discount-badge">-%{{ product.discount_percentage }}</div>
+                {% endif %}
+              </div>
+              <div class="product-info">
+                <div class="product-title">{{ product.name }}</div>
+                <div class="product-price">
+                  {% if product.discounted_price %}
+                  <span class="original-price">{{ product.price }} TL</span>
+                  <span class="discounted-price">{{ product.discounted_price }} TL</span>
+                  {% else %}
+                  <span class="price">{{ product.price }} TL</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="product-card">
+              <div class="product-title">Set bulunamadı.</div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="section-navigation">
+          <button class="nav-button prev" onclick="prevPage('sets')" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Önceki
+          </button>
+          <div class="page-info">Sayfa <span class="current-page">1</span> / <span class="total-pages">1</span></div>
+          <button class="nav-button next" onclick="nextPage('sets')" disabled>
+            Sonraki
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="campaigns-group" style="display:none;">
+      <div class="campaigns-section">
+        <div class="section-title">Kampanyalar</div>
+        <div class="campaigns-wrapper">
+          <div class="campaigns-slider">
+            {% if campaign_products %}
+            {% for product in campaign_products %}
+            <div class="product-card">
+              <div class="product-img-container">
+                <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }}" onclick="openProductModal({{ product.id }})" />
+                <div class="product-actions-overlay">
+                  <button type="button" onclick="openProductModal({{ product.id }})">İncele</button>
+                  {% if product.id %}
+                  <a href="{% url 'pages:add_to_cart' product.id %}" class="sepete-ekle-link">Sepete Ekle</a>
+                  {% else %}
+                  <span style="color: red;">ID eksik</span>
+                  {% endif %}
+                </div>
+                {% if product.discounted_price %}
+                <div class="discount-badge">-%{{ product.discount_percentage }}</div>
+                {% endif %}
+              </div>
+              <div class="product-info">
+                <div class="product-title">{{ product.name }}</div>
+                <div class="product-price">
+                  {% if product.discounted_price %}
+                  <span class="original-price">{{ product.price }} TL</span>
+                  <span class="discounted-price">{{ product.discounted_price }} TL</span>
+                  {% else %}
+                  <span class="price">{{ product.price }} TL</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="product-card">
+              <div class="product-title">Kampanya bulunamadı.</div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="section-navigation">
+          <button class="nav-button prev" onclick="prevPage('campaigns')" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Önceki
+          </button>
+          <div class="page-info">Sayfa <span class="current-page">1</span> / <span class="total-pages">1</span></div>
+          <button class="nav-button next" onclick="nextPage('campaigns')" disabled>
+            Sonraki
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="#" onclick="openFooterModal('hakkimizda')">Hakkımızda</a>
+      <a href="#" onclick="openFooterModal('sss')">SSS</a>
+      <a href="#" onclick="openFooterModal('iletisim')">İletişim</a>
+      <a href="#" onclick="openFooterModal('gizlilik')">Gizlilik Sözleşmesi</a>
+      <a href="#" onclick="openFooterModal('cerez')">Çerez Politikası</a>
+    </div>
+    <div class="footer-desc">
+      Zişan Mobilya - Kalite ve şıklığı bir arada sunan, müşteri memnuniyetini ön planda tutan modern mobilya
+      mağazası.
+      Tüm hakları saklıdır © 2025
+    </div>
+  </footer>
+
+  <!-- Footer Modal -->
+  <div id="footerModal" class="product-modal" style="display: none;">
+    <div class="modal-content" style="background: #fff; border: 2px solid #A27B5C; max-width: 800px; width: 96%;">
+      <button class="modal-close" onclick="closeFooterModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <div class="modal-body" style="grid-template-columns: 1fr; gap: 1rem; padding: 2rem;">
+        <div class="modal-info" style="gap: 1rem; align-items: flex-start; justify-content: flex-start;">
+          <div class="modal-title" id="footerModalTitle" style="font-size: 1.3rem; font-weight: 700; text-align: center; margin-bottom: 1rem; color: #2C3639;"></div>
+          <div class="modal-desc-box" id="footerModalContent" style="background: #f8f8f8; border-radius: 10px; padding: 1.5rem; width: 100%; text-align: left; color: #2C3639; font-size: 1rem; min-height: 200px; max-height: 400px; overflow-y: auto; line-height: 1.6;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Product Modal -->
+  <div id="productModal" class="product-modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeProductModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <div class="modal-body">
+        <div class="modal-images">
+          <div class="main-image-container">
+            <img src="" alt="" class="main-image" id="modalMainImage"
+              style="object-fit: contain; width: 100%; height: 100%;">
+          </div>
+          <div class="thumbnail-container" id="modalThumbnails" style="gap: 0.3rem;">
+            <!-- Thumbnails will be added here -->
+          </div>
+        </div>
+        <div class="modal-info">
+          <div class="modal-title" id="modalTitle"></div>
+          <div class="modal-price" id="modalPrice"></div>
+          <div class="modal-details">
+            <div class="detail-item">
+              <span class="detail-label" style="font-size: 0.85rem;">Malzeme</span>
+              <span class="detail-value" id="modalMaterial" style="font-size: 0.95rem;"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label" style="font-size: 0.85rem;">Renk</span>
+              <span class="detail-value" id="modalColor" style="font-size: 0.95rem;"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label" style="font-size: 0.85rem;">Boyut</span>
+              <span class="detail-value" id="modalSize" style="font-size: 0.95rem;"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label" style="font-size: 0.85rem;">Marka</span>
+              <span class="detail-value" id="modalBrand" style="font-size: 0.95rem;"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label" style="font-size: 0.85rem;">Ürün Tipi</span>
+              <span class="detail-value" id="modalProductType" style="font-size: 0.95rem;"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label" style="font-size: 0.85rem;">Stok Miktarı</span>
+              <span class="detail-value" id="modalStockQuantity" style="font-size: 0.95rem;"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label" style="font-size: 0.85rem;">Stok Durumu</span>
+              <span class="detail-value" id="modalStockStatus" style="font-size: 0.95rem;"></span>
+            </div>
+          </div>
+          <div class="modal-desc-box">
+            <span class="modal-desc-label">Ürün Açıklaması</span>
+            <span id="modalDescription"></span>
+          </div>
+          <div class="modal-actions">
+            <button id="modalAddToCartBtn"
+              style="background: #2C3639; color: #fff; font-size: 1.05rem; padding: 0.7rem 1.2rem; min-width: 0; max-width: none; width: 100%;">Sepete Ekle</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    console.log("JS YÜKLENDİ!");
+    // CSRF token'ı sayfadan al
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '{{ csrf_token }}';
+
+    // Banner slider functionality
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.banner-slide');
+    const dots = document.querySelectorAll('.banner-dot');
+
+    function showSlide(n) {
+      currentSlide = n;
+      document.querySelector('.banner-slider').style.transform = `translateX(-${currentSlide * 100}%)`;
+      dots.forEach(dot => dot.classList.remove('active'));
+      dots[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+    }
+
+    // Categories scroll functionality
+    function scrollCategories(direction) {
+      const wrapper = document.querySelector('.categories-wrapper');
+      const cardWidth = document.querySelector('.category-card').offsetWidth;
+      const scrollAmount = cardWidth * 3; // Scroll 3 cards at a time
+
+      if (direction === 'next') {
+        wrapper.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      } else {
+        wrapper.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      }
+    }
+
+    // Auto-hide scroll buttons based on scroll position
+    const categoriesWrapper = document.querySelector('.categories-wrapper');
+    const prevBtn = document.querySelector('.categories-scroll-btn.prev');
+    const nextBtn = document.querySelector('.categories-scroll-btn.next');
+
+    function updateScrollButtons() {
+      const isAtStart = categoriesWrapper.scrollLeft <= 0;
+      const isAtEnd = categoriesWrapper.scrollLeft >= (categoriesWrapper.scrollWidth - categoriesWrapper.clientWidth - 1);
+
+      prevBtn.style.opacity = isAtStart ? '0' : '1';
+      prevBtn.style.pointerEvents = isAtStart ? 'none' : 'auto';
+
+      nextBtn.style.opacity = isAtEnd ? '0' : '1';
+      nextBtn.style.pointerEvents = isAtEnd ? 'none' : 'auto';
+    }
+
+    categoriesWrapper.addEventListener('scroll', updateScrollButtons);
+    window.addEventListener('resize', updateScrollButtons);
+    updateScrollButtons(); // Initial check
+
+    // Start banner auto-slide
+    setInterval(nextSlide, 5000);
+
+    // Filtre butonlarını ve dropdown'ları yönet
+    function toggleFilter(button) {
+      // Önce diğer tüm aktif filtreleri kapat
+      document.querySelectorAll('.filter-button.active').forEach(btn => {
+        if (btn !== button) {
+          btn.classList.remove('active');
+          btn.nextElementSibling.style.display = 'none';
+        }
+      });
+
+      // Tıklanan filtreyi aç/kapat
+      button.classList.toggle('active');
+      const dropdown = button.nextElementSibling;
+      if (dropdown) {
+        dropdown.style.display = button.classList.contains('active') ? 'block' : 'none';
+      }
+    }
+
+    // Filtre seçimlerini topla
+    function getSelectedFilters() {
+      const filters = {
+        types: [],
+        materials: [],
+        sizes: [],
+        colors: [],
+        brands: [],
+        price_range: [],
+        stock_status: []
+      };
+
+      // Her bir filtre grubunu kontrol et
+      document.querySelectorAll('.filter-type:checked').forEach(cb => filters.types.push(cb.value));
+      document.querySelectorAll('.filter-material:checked').forEach(cb => filters.materials.push(cb.value));
+      document.querySelectorAll('.filter-size:checked').forEach(cb => filters.sizes.push(cb.value));
+      document.querySelectorAll('.filter-color:checked').forEach(cb => filters.colors.push(cb.value));
+      document.querySelectorAll('.filter-brand:checked').forEach(cb => filters.brands.push(cb.value));
+
+      // Fiyat filtrelerini kontrol et
+      document.querySelectorAll('.filter-price:checked').forEach(cb => filters.price_range.push(cb.value));
+
+      // Stok filtrelerini kontrol et
+      if (document.getElementById('stock-available').checked) filters.stock_status.push('available');
+      if (document.getElementById('stock-limited').checked) filters.stock_status.push('limited');
+      if (document.getElementById('stock-out').checked) filters.stock_status.push('out');
+
+      console.log('Selected filters:', filters);
+      return filters;
+    }
+
+    // AJAX ile filtrelenmiş ürünleri getir
+    function fetchFilteredProducts(extraFilters = {}) {
+      const filters = getSelectedFilters();
+      // Kategori seçimi varsa ekle
+      if (extraFilters.category) {
+        filters.category = extraFilters.category;
+      }
+      const csrftoken = getCookie('csrftoken');
+
+      console.log('Sending filter request with data:', filters);
+
+      // Yükleniyor göstergesi ekle
+      document.getElementById('products-list').style.opacity = '0.5';
+
+      fetch('/ajax/filter-products/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(filters)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Received response:', data);
+
+          if (data.error) {
+            console.error('Server error:', data.error);
+            return;
+          }
+
+          if (data.html) {
+            const productsListDiv = document.getElementById('products-list');
+            productsListDiv.innerHTML = data.html;
+            productsListDiv.style.opacity = '1';
+
+            // Filtreleme sonrası dropdown'ları kapat
+            document.querySelectorAll('.filter-button.active').forEach(btn => {
+              btn.classList.remove('active');
+              if (btn.nextElementSibling) {
+                btn.nextElementSibling.style.display = 'none';
+              }
+            });
+
+            // Event listener'ları tekrar ekle
+            initFilterListeners();
+            initCategoryClickListeners(); // Kategori kartlarına tıklama eventlerini ekle
+          }
+        })
+        .catch(error => {
+          console.error('Filtering error:', error);
+          document.getElementById('products-list').style.opacity = '1';
+        });
+    }
+
+    // Kategori kartlarına tıklama eventini ekle
+    function initCategoryClickListeners() {
+      document.querySelectorAll('.category-card[data-category-id]').forEach(card => {
+        card.onclick = function () {
+          // Tüm kategori kartlarından aktif class'ı kaldır
+          document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+          // Tıklanan karta aktif class ekle
+          this.classList.add('active');
+          // Seçili kategori ID'sini global değişkende tut
+          window.selectedCategoryId = this.getAttribute('data-category-id');
+          // Ürünleri filtrele
+          fetchFilteredProducts();
+        };
+      });
+    }
+
+    // Filtrelerden biri değişirse de ürünleri filtrele
+    function initFilterListeners() {
+      const allCheckboxes = document.querySelectorAll(`
+          .filter-type, 
+          .filter-material, 
+          .filter-size, 
+          .filter-color, 
+          .filter-brand,
+          .filter-price,
+          #stock-available,
+          #stock-limited,
+          #stock-out
+        `);
+      allCheckboxes.forEach(checkbox => {
+        checkbox.onchange = fetchFilteredProducts;
+      });
+    }
+
+    // AJAX ile ürünleri getir
+    function fetchFilteredProducts() {
+      const filters = getSelectedFilters();
+      // Seçili kategori varsa filtreye ekle
+      if (window.selectedCategoryId) {
+        filters.category = window.selectedCategoryId;
+      }
+      const csrftoken = getCookie('csrftoken');
+      document.getElementById('products-list').style.opacity = '0.5';
+      fetch('/ajax/filter-products/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(filters)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.html) {
+            document.getElementById('products-list').innerHTML = data.html;
+            document.getElementById('products-list').style.opacity = '1';
+            initCategoryClickListeners();
+            initFilterListeners();
+          }
+        })
+        .catch(() => {
+          document.getElementById('products-list').style.opacity = '1';
+        });
+    }
+
+    // Sayfa yüklendiğinde başlat
+    document.addEventListener('DOMContentLoaded', () => {
+      initCategoryClickListeners();
+      initFilterListeners();
+    });
+
+    // CSRF token için yardımcı fonksiyon
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    // --- Ürün/Set/Kampanya sayfa geçişi ---
+    const PAGE_SIZE = 18;
+    const sections = {
+      products: {
+        element: document.querySelector('.products-slider'),
+        navigation: document.querySelector('.products-section .section-navigation'),
+      },
+      sets: {
+        element: document.querySelector('.sets-slider'),
+        navigation: document.querySelector('.sets-section .section-navigation'),
+      },
+      campaigns: {
+        element: document.querySelector('.campaigns-slider'),
+        navigation: document.querySelector('.campaigns-section .section-navigation'),
+      }
+    };
+
+    function getTotalPages(section) {
+      if (!sections[section].element) return 1;
+      const total = sections[section].element.children.length;
+      return Math.max(1, Math.ceil(total / PAGE_SIZE));
+    }
+
+    function showPage(section, page) {
+      const slider = sections[section].element;
+      const nav = sections[section].navigation;
+      if (!slider || !nav) return;
+      const totalPages = getTotalPages(section);
+
+      // Tüm ürünleri gizle
+      Array.from(slider.children).forEach((card, idx) => {
+        card.style.display = (idx >= page * PAGE_SIZE && idx < (page + 1) * PAGE_SIZE) ? '' : 'none';
+      });
+
+      // Butonları güncelle
+      nav.querySelector('.nav-button.prev').disabled = (page === 0);
+      nav.querySelector('.nav-button.next').disabled = (page === totalPages - 1);
+      nav.querySelector('.current-page').textContent = (page + 1);
+      nav.querySelector('.total-pages').textContent = totalPages;
+      slider.dataset.currentPage = page;
+    }
+
+    function nextPage(section) {
+      const slider = sections[section].element;
+      if (!slider) return;
+      const totalPages = getTotalPages(section);
+      let page = parseInt(slider.dataset.currentPage || '0', 10);
+      if (page < totalPages - 1) {
+        showPage(section, page + 1);
+      }
+    }
+
+    function prevPage(section) {
+      const slider = sections[section].element;
+      if (!slider) return;
+      let page = parseInt(slider.dataset.currentPage || '0', 10);
+      if (page > 0) {
+        showPage(section, page - 1);
+      }
+    }
+
+    // Sayfa yüklendiğinde başlat
+    ['products', 'sets', 'campaigns'].forEach(section => showPage(section, 0));
+
+    let currentProductId = null;
+
+    function openProductModal(productId) {
+      currentProductId = productId;
+
+      // AJAX ile ürün detaylarını getir
+      fetch(`/ajax/product-details/${productId}/`)
+        .then(response => response.json())
+        .then(data => {
+          // Modal içeriğini doldur
+          document.getElementById('modalTitle').textContent = `Ürün İsmi: ${data.name}`;
+          document.getElementById('modalPrice').textContent = `Fiyat: ${data.discounted_price ? data.discounted_price + ' TL (' + data.discount_percentage + '% İndirim)' : data.price + ' TL'}`;
+          document.getElementById('modalDescription').textContent = data.description;
+          document.getElementById('modalMaterial').textContent = data.material || '-';
+          document.getElementById('modalColor').textContent = data.color || '-';
+          document.getElementById('modalSize').textContent = data.size || '-';
+          document.getElementById('modalBrand').textContent = data.brand || '-';
+          document.getElementById('modalProductType').textContent = data.product_type || '-';
+          document.getElementById('modalStockQuantity').textContent = data.stock_quantity || '-';
+          document.getElementById('modalStockStatus').textContent = data.stock_status || '-';
+
+          // Ana resmi ayarla
+          document.getElementById('modalMainImage').src = data.main_image;
+          document.getElementById('modalMainImage').alt = data.name;
+
+          // Küçük resimleri ekle
+          const thumbnailContainer = document.getElementById('modalThumbnails');
+          thumbnailContainer.innerHTML = '';
+          data.images.forEach((image, index) => {
+            const thumb = document.createElement('img');
+            thumb.src = image;
+            thumb.alt = `${data.name} - Resim ${index + 1}`;
+            thumb.className = 'thumbnail' + (index === 0 ? ' active' : '');
+            thumb.onclick = () => {
+              document.getElementById('modalMainImage').src = image;
+              document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+              thumb.classList.add('active');
+            };
+            thumbnailContainer.appendChild(thumb);
+          });
+
+          // Modalı göster
+          document.getElementById('productModal').style.display = 'block';
+          document.body.style.overflow = 'hidden'; // Scroll'u engelle
+        })
+        .catch(error => {
+          console.error('Error fetching product details:', error);
+        });
+    }
+
+    function closeProductModal() {
+      document.getElementById('productModal').style.display = 'none';
+      document.body.style.overflow = ''; // Scroll'u geri aç
+      currentProductId = null;
+    }
+
+    function addToCart(productId) {
+      // Sepete ekleme fonksiyonu (şimdilik boş)
+      console.log('Ürün sepete eklendi:', productId);
+      alert('Ürün sepete eklendi!');
+    }
+
+    // Modal dışına tıklandığında kapat
+    document.getElementById('productModal').addEventListener('click', function (event) {
+      if (event.target === this) {
+        closeProductModal();
+      }
+    });
+
+    // ESC tuşuna basıldığında modalı kapat
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closeProductModal();
+      }
+    });
+
+    // URL parametresi ile modal açma
+    function checkUrlForProductModal() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('product_id');
+      if (productId) {
+        openProductModal(productId);
+        // URL'den parametreyi temizle
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+      }
+    }
+
+    // Sayfa yüklendiğinde kontrol et
+    document.addEventListener('DOMContentLoaded', function() {
+      checkUrlForProductModal();
+    });
+
+    window.selectedCategoryId = null;
+
+    function selectCategory(categoryId, el) {
+      // Aktif class işlemleri
+      document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      window.selectedCategoryId = categoryId;
+      fetchFilteredProducts();
+    }
+
+    function fetchFilteredProducts() {
+      const filters = getSelectedFilters();
+      if (window.selectedCategoryId) {
+        filters.category = window.selectedCategoryId;
+      }
+      const csrftoken = getCookie('csrftoken');
+      document.getElementById('products-list').style.opacity = '0.5';
+      fetch('/ajax/filter-products/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(filters)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.html) {
+            document.getElementById('products-list').innerHTML = data.html;
+            document.getElementById('products-list').style.opacity = '1';
+            initCategoryClickListeners();
+            initFilterListeners();
+          }
+        })
+        .catch(() => {
+          document.getElementById('products-list').style.opacity = '1';
+        });
+    }
+
+    // Sıfırla butonuna tıklanınca tüm filtreleri ve kategori seçimini sıfırla
+    document.getElementById('reset-filters-btn').onclick = function () {
+      // Tüm filtre checkboxlarını sıfırla
+      document.querySelectorAll('.filters-section input[type="checkbox"]').forEach(cb => cb.checked = false);
+      // Seçili kategori varsa aktif class'ı kaldır
+      document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+      window.selectedCategoryId = null;
+      fetchFilteredProducts();
+    };
+
+    const searchInput = document.getElementById('main-search-input');
+    const searchForm = searchInput.closest('form');
+    const productsList = document.getElementById('products-list');
+
+    function performSearch(query) {
+      fetch('/ajax/search-products/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': (document.querySelector('[name=csrfmiddlewaretoken]') || {}).value || ''
+        },
+        body: JSON.stringify({ query })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.html) {
+            productsList.innerHTML = data.html;
+          }
+        });
+    }
+
+    searchForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      performSearch(searchInput.value);
+    });
+
+    searchInput.addEventListener('input', function () {
+      performSearch(searchInput.value);
+    });
+
+    // Modal içindeki Sepete Ekle butonunu işlevsel yap
+    const modalAddToCartBtn = document.getElementById('modalAddToCartBtn');
+    if (modalAddToCartBtn) {
+      modalAddToCartBtn.onclick = function () {
+        if (currentProductId) {
+          // Django'nun URL tag'ini template string olarak kullan
+          const urlTemplate = '{% url "pages:add_to_cart" 0 %}';
+          // Sonundaki 0'ı ürün id'siyle değiştir
+          const realUrl = urlTemplate.replace('/0/', '/' + currentProductId + '/');
+          window.location.href = realUrl;
+        }
+      };
+    }
+
+    function showGroup(group) {
+      document.getElementById('products-group').style.display = (group === 'products') ? '' : 'none';
+      document.getElementById('sets-group').style.display = (group === 'sets') ? '' : 'none';
+      document.getElementById('campaigns-group').style.display = (group === 'campaigns') ? '' : 'none';
+      document.getElementById('show-products-link').classList.toggle('active', group === 'products');
+      document.getElementById('show-sets-link').classList.toggle('active', group === 'sets');
+      document.getElementById('show-campaigns-link').classList.toggle('active', group === 'campaigns');
+    }
+
+    // Footer modal işlevleri
+    function openFooterModal(type) {
+      let title = '';
+      let content = '';
+
+      switch (type) {
+        case 'hakkimizda':
+          title = 'Hakkımızda';
+          content = `Zişan Mobilya, Harun Erdil tarafından 2025 yılında kurulmuş, mobilya sektöründe kalite ve estetiği bir araya getirmeyi amaçlayan bir markadır. Kurulduğu günden bu yana müşteri memnuniyetini ön planda tutan Zişan Mobilya; modern, fonksiyonel ve uzun ömürlü mobilya çözümleri sunar. Geniş ürün yelpazesi, titiz tasarım anlayışı ve yenilikçi yaklaşımıyla evlerinize ve iş yerlerinize şıklık ve konfor katmayı hedefler. Misyonumuz; her müşterimize kişiselleştirilmiş bir alışveriş deneyimi sunmak ve yaşam alanlarınıza değer katan mobilyalar üretmektir.`;
+          break;
+        case 'sss':
+          title = 'SSS';
+          content = `
+          <div style="text-align: left; line-height: 1.6;">
+            <h3 style="color: #2C3639; margin-bottom: 20px;">Sık Sorulan Sorular</h3>
+            
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">1. Zişan Mobilya'da sipariş nasıl veriliyor?</h4>
+              <p>Sitemizden beğendiğiniz ürün için ücretsiz bir ön sipariş oluşturabilirsiniz. Ödeme işlemi site üzerinden yapılmaz; siparişiniz bize ulaştıktan sonra ekibimiz sizinle iletişime geçerek teyit eder ve sipariş durumunu günceller.</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">2. Ödemeyi nasıl yapabilirim?</h4>
+              <p>Ödeme, siparişiniz onaylandıktan ve ürün teslim edilmeden önce veya teslim sırasında, POS cihazı, IBAN havalesi veya mağazamızın belirttiği diğer yöntemlerle tahsil edilir. Siteden online ödeme alınmamaktadır.</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">3. Nakliye ücreti ne kadar?</h4>
+              <p>Nakliye hizmeti Zişan Mobilya tarafından sağlanır. Ücret, teslimat adresine göre değişkenlik gösterir ve siparişiniz alındıktan sonra sizinle iletişime geçilerek net olarak bildirilir.</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">4. Siparişimi iptal edebilir miyim?</h4>
+              <p>Sipariş "Alındı" veya "Onay Bekliyor" durumundayken iptal edilebilir. "Hazırlanıyor" veya sonraki aşamalarda olan siparişlerde iptal işlemi yapılamaz.</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">5. Stokta olmayan bir ürünü sipariş edebilir miyim?</h4>
+              <p>Stokta bulunmayan veya özel üretim bir ürün talebiniz varsa lütfen İletişim sayfasındaki kanallarımızdan bizimle iletişime geçin; üretim ve temin süreci hakkında size bilgi verilir.</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">6. Siparişimle ilgili değişiklik yapmak istiyorum, ne yapmalıyım?</h4>
+              <p>Siparişinizle ilgili herhangi bir değişiklik veya özel talebiniz için "İletişim" sayfamızda yer alan telefon numaralarımız veya e-posta adresimiz üzerinden bizimle iletişime geçebilirsiniz.</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">7. Ürünlerinizin garantisi var mı?</h4>
+              <p>Tüm ürünlerimiz, ilgili mevzuat çerçevesinde garanti kapsamındadır. Garanti ve iade koşulları hakkında detaylı bilgi için müşteri temsilcimizle görüşebilirsiniz.</p>
+            </div>
+          </div>
+          `;
+          break;
+        case 'iletisim':
+          title = 'İletişim';
+          content = `Bizimle iletişime geçmek için aşağıdaki bilgileri kullanabilirsiniz:<br><br>
+          Yetkili: Harun Erdil<br>
+          Telefon: [0551 853 83 13 – 0539 416 78 51]<br>
+          E-posta: [zisanmobilyaverify@gmail.com]`;
+          break;
+        case 'gizlilik':
+          title = 'Gizlilik Sözleşmesi';
+          content = `
+          <div style="text-align: left; line-height: 1.6;">
+            <h3 style="color: #2C3639; margin-bottom: 20px;">Gizlilik Politikası</h3>
+            
+            <p style="margin-bottom: 20px;">Zişan Mobilya olarak, web sitemizi ziyaret eden ve ön sipariş oluşturan kullanıcılarımızın gizliliğini önemsiyoruz. Bu Gizlilik Politikası, sitemizde toplanan bilgilerin nasıl kullanılacağını ve korunduğunu açıklar.</p>
+
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">Toplanan Bilgiler</h4>
+              <p>Ön sipariş formu aracılığıyla ad, soyad, telefon numarası, e-posta adresi ve teslimat adresi gibi yalnızca siparişin hazırlanması ve teslimatı için gerekli kişisel bilgileri topluyoruz. Sitemizde kredi kartı veya banka bilgileri gibi hassas finansal veriler toplanmaz ve saklanmaz.</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">Bilgilerin Kullanımı</h4>
+              <p>Toplanan kişisel verileriniz; siparişinizin teyidi, ürün ve hizmetler hakkında sizinle iletişime geçilmesi ve müşteri memnuniyetini sağlamak amacıyla kullanılmaktadır.</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">Bilgilerin Paylaşımı</h4>
+              <p>Kişisel bilgileriniz, yasal zorunluluklar dışında üçüncü kişilerle paylaşılmaz. Siparişinizin teslimatı için gerekli olması halinde nakliye gibi iş ortaklarımızla sınırlı şekilde paylaşılabilir.</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">Çerezler (Cookies)</h4>
+              <p>Sitemizde kullanıcı deneyimini geliştirmek ve site trafiğini analiz etmek amacıyla çerezler kullanılabilir. Çerez kullanımını tarayıcı ayarlarınızdan yönetebilirsiniz.</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <h4 style="color: #2C3639; margin-bottom: 10px;">Veri Güvenliği ve Haklarınız</h4>
+              <p>Kişisel bilgilerinizin gizliliğini ve güvenliğini sağlamak için gerekli teknik ve idari tedbirleri alıyoruz. KVKK kapsamında verilerinize erişim, düzeltme ve silme taleplerinizi İletişim sayfamızda yer alan kanallar aracılığıyla bize iletebilirsiniz.</p>
+            </div>
+          </div>
+          `;
+          break;
+        case 'cerez':
+          title = 'Çerez Politikası';
+          content = `
+          <div style="text-align: left; line-height: 1.6;">
+            <h3 style="color: #2C3639; margin-bottom: 20px;">Çerez Politikası</h3>
+            
+            <p style="margin-bottom: 20px;">Zişan Mobilya web sitesi, kullanıcı deneyimini sağlamak ve güvenliği korumak amacıyla yalnızca gerekli çerezleri kullanır. Bu çerezler; oturum açma, form işlemleri ve güvenlik (örneğin CSRF token ve oturum çerezleri) gibi temel işlevleri destekler.</p>
+
+            <p style="margin-bottom: 20px;">Sitemizde üçüncü taraf reklam, pazarlama veya analiz çerezleri kullanılmamaktadır. Tarayıcınızın çerez ayarlarını değiştirerek bu çerezleri yönetebilir veya silebilirsiniz; ancak temel çerezleri devre dışı bırakmanız site işlevlerinin bozulmasına yol açabilir.</p>
+
+            <p style="margin-bottom: 20px;">Bu politikayla, Zişan Mobilya'nın çerez kullanımına dair şeffaf bilgi sağlamayı hedefliyoruz. Daha fazla bilgi için İletişim sayfamızdaki kanallar aracılığıyla bizimle iletişime geçebilirsiniz.</p>
+          </div>
+          `;
+          break;
+        default:
+          title = 'Bilgi';
+          content = 'Bu sayfa henüz içerik içermiyor.';
+          break;
+      }
+
+      document.getElementById('footerModalTitle').textContent = title;
+      document.getElementById('footerModalContent').innerHTML = content;
+      document.getElementById('footerModal').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeFooterModal() {
+      document.getElementById('footerModal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    // Footer modal dışına tıklandığında kapat
+    document.getElementById('footerModal').addEventListener('click', function (event) {
+      if (event.target === this) {
+        closeFooterModal();
+      }
+    });
+
+    // ESC tuşuna basıldığında modalı kapat
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closeFooterModal();
+      }
+    });
+
+    // Mobil Filtre Sistemi Fonksiyonları
+    function toggleMobileFilters(button) {
+      button.classList.toggle('active');
+      const dropdown = button.nextElementSibling;
+      
+      if (button.classList.contains('active')) {
+        dropdown.style.display = 'block';
+        // Mobil filtreleri desktop filtreleriyle senkronize et
+        syncMobileFilters();
+      } else {
+        dropdown.style.display = 'none';
+      }
+    }
+
+    function syncMobileFilters() {
+      // Desktop filtrelerinden mobil filtreleri güncelle
+      document.querySelectorAll('.filter-price:checked').forEach(checkbox => {
+        const mobileId = checkbox.id.replace('price-', 'mobile-price-');
+        const mobileCheckbox = document.getElementById(mobileId);
+        if (mobileCheckbox) mobileCheckbox.checked = true;
+      });
+
+      document.querySelectorAll('.filter-material:checked').forEach(checkbox => {
+        const mobileId = checkbox.id.replace('material-', 'mobile-material-');
+        const mobileCheckbox = document.getElementById(mobileId);
+        if (mobileCheckbox) mobileCheckbox.checked = true;
+      });
+
+      document.querySelectorAll('.filter-size:checked').forEach(checkbox => {
+        const mobileId = checkbox.id.replace('size-', 'mobile-size-');
+        const mobileCheckbox = document.getElementById(mobileId);
+        if (mobileCheckbox) mobileCheckbox.checked = true;
+      });
+
+      document.querySelectorAll('.filter-color:checked').forEach(checkbox => {
+        const mobileId = checkbox.id.replace('color-', 'mobile-color-');
+        const mobileCheckbox = document.getElementById(mobileId);
+        if (mobileCheckbox) mobileCheckbox.checked = true;
+      });
+
+      document.querySelectorAll('.filter-brand:checked').forEach(checkbox => {
+        const mobileId = checkbox.id.replace('brand-', 'mobile-brand-');
+        const mobileCheckbox = document.getElementById(mobileId);
+        if (mobileCheckbox) mobileCheckbox.checked = true;
+      });
+
+      // Stok filtreleri
+      if (document.getElementById('stock-available')?.checked) {
+        document.getElementById('mobile-stock-available').checked = true;
+      }
+      if (document.getElementById('stock-limited')?.checked) {
+        document.getElementById('mobile-stock-limited').checked = true;
+      }
+      if (document.getElementById('stock-out')?.checked) {
+        document.getElementById('mobile-stock-out').checked = true;
+      }
+    }
+
+    function applyMobileFilters() {
+      // Mobil filtrelerden desktop filtreleri güncelle
+      document.querySelectorAll('.filter-price:checked').forEach(checkbox => {
+        const desktopId = checkbox.id.replace('mobile-price-', 'price-');
+        const desktopCheckbox = document.getElementById(desktopId);
+        if (desktopCheckbox) desktopCheckbox.checked = true;
+      });
+
+      document.querySelectorAll('.filter-material:checked').forEach(checkbox => {
+        const desktopId = checkbox.id.replace('mobile-material-', 'material-');
+        const desktopCheckbox = document.getElementById(desktopId);
+        if (desktopCheckbox) desktopCheckbox.checked = true;
+      });
+
+      document.querySelectorAll('.filter-size:checked').forEach(checkbox => {
+        const desktopId = checkbox.id.replace('mobile-size-', 'size-');
+        const desktopCheckbox = document.getElementById(desktopId);
+        if (desktopCheckbox) desktopCheckbox.checked = true;
+      });
+
+      document.querySelectorAll('.filter-color:checked').forEach(checkbox => {
+        const desktopId = checkbox.id.replace('mobile-color-', 'color-');
+        const desktopCheckbox = document.getElementById(desktopId);
+        if (desktopCheckbox) desktopCheckbox.checked = true;
+      });
+
+      document.querySelectorAll('.filter-brand:checked').forEach(checkbox => {
+        const desktopId = checkbox.id.replace('mobile-brand-', 'brand-');
+        const desktopCheckbox = document.getElementById(desktopId);
+        if (desktopCheckbox) desktopCheckbox.checked = true;
+      });
+
+      // Stok filtreleri
+      if (document.getElementById('mobile-stock-available')?.checked) {
+        document.getElementById('stock-available').checked = true;
+      }
+      if (document.getElementById('mobile-stock-limited')?.checked) {
+        document.getElementById('stock-limited').checked = true;
+      }
+      if (document.getElementById('mobile-stock-out')?.checked) {
+        document.getElementById('stock-out').checked = true;
+      }
+
+      // Filtreleri uygula
+      fetchFilteredProducts();
+      
+      // Mobil dropdown'ı kapat
+      const mobileBtn = document.querySelector('.mobile-filters-btn');
+      mobileBtn.classList.remove('active');
+      mobileBtn.nextElementSibling.style.display = 'none';
+    }
+
+    function resetMobileFilters() {
+      // Tüm mobil filtreleri temizle
+      document.querySelectorAll('.mobile-filters-dropdown input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+
+      // Desktop filtreleri de temizle
+      document.querySelectorAll('.filters-section input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+
+      // Filtreleri uygula
+      fetchFilteredProducts();
+      
+      // Mobil dropdown'ı kapat
+      const mobileBtn = document.querySelector('.mobile-filters-btn');
+      mobileBtn.classList.remove('active');
+      mobileBtn.nextElementSibling.style.display = 'none';
+    }
+
+    // Mobil filtre checkbox'larına event listener ekle
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.mobile-filters-dropdown input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          // Mobil filtre değiştiğinde desktop filtreyi de güncelle
+          const desktopId = this.id.replace('mobile-', '');
+          const desktopCheckbox = document.getElementById(desktopId);
+          if (desktopCheckbox) {
+            desktopCheckbox.checked = this.checked;
+          }
+        });
+      });
+    });
+
+    // Mobil filtre gruplarını aç/kapat
+    function toggleMobileFilterGroup(titleElement) {
+      titleElement.classList.toggle('active');
+      const optionsElement = titleElement.nextElementSibling;
+      optionsElement.classList.toggle('active');
+    }
+
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.favorite-toggle-btn').forEach(button => {
+        button.addEventListener('click', function (e) {
+          e.preventDefault();
+          const productId = this.dataset.productId;
+          const userAuthenticated = this.dataset.userAuthenticated === 'true';
+          
+          // Eğer kullanıcı oturum açmamışsa login sayfasına yönlendir
+          if (!userAuthenticated) {
+            window.location.href = '/login/';
+            return;
+          }
+          
+          // Kullanıcı oturum açmışsa normal favori işlemini yap
+          fetch(`/favori-degistir/${productId}/`, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': '{{ csrf_token }}',
+              'Content-Type': 'application/json'
+            }
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.status === 'added' || data.status === 'removed') {
+                window.location.reload(); // Favori değiştiyse sayfayı yenile
+              }
+            });
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

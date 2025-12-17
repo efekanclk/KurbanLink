@@ -1,0 +1,340 @@
+{# Düzenlendi: order_detail.html - Responsive tasarım eklendi, mobil optimizasyonu yapıldı #}
+{% extends 'adminpanel/base_admin.html' %}
+{% block title %}Sipariş Detayı{% endblock %}
+{% block extra_css %}
+<style>
+    .order-container {
+        background: #fff;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border: 1px solid #f0f0f0;
+    }
+    .order-header {
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+    .order-number {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2C3639;
+        margin-bottom: 0.5rem;
+    }
+    .order-status {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    .status-pending { background-color: #fff3cd; color: #856404; }
+    .status-contacting { background-color: #d1ecf1; color: #0c5460; }
+    .status-approved { background-color: #d4edda; color: #155724; }
+    .status-preparing { background-color: #cce5ff; color: #004085; }
+    .status-shipping { background-color: #e2e3e5; color: #383d41; }
+    .status-delivered { background-color: #d1e7dd; color: #0f5132; }
+    .status-cancelled { background-color: #f8d7da; color: #721c24; }
+    
+    .info-section {
+        margin-bottom: 2rem;
+    }
+    .info-title {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+    .info-content {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 6px;
+        border-left: 4px solid #A27B5C;
+    }
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+    .info-label {
+        font-weight: 500;
+        color: #666;
+    }
+    .info-value {
+        font-weight: 600;
+        color: #333;
+    }
+    .product-image {
+        max-width: 100px;
+        height: auto;
+        border-radius: 6px;
+        border: 1px solid #eee;
+    }
+    .status-form {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+    }
+    .btn-update {
+        background-color: #28a745;
+        border: none;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+    .btn-update:hover {
+        background-color: #218838;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .order-container {
+            padding: 1.5rem;
+        }
+        .order-header {
+            margin-bottom: 1.5rem;
+        }
+        .order-number {
+            font-size: 1.3rem;
+        }
+        .order-status {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+        }
+        .info-section {
+            margin-bottom: 1.5rem;
+        }
+        .info-title {
+            font-size: 1rem;
+        }
+        .info-content {
+            padding: 0.8rem;
+        }
+        .info-row {
+            flex-direction: column;
+            margin-bottom: 0.8rem;
+        }
+        .info-label {
+            margin-bottom: 0.2rem;
+        }
+        .product-image {
+            max-width: 80px;
+        }
+        .status-form {
+            padding: 1rem;
+        }
+        .btn-update {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .order-container {
+            padding: 0.5rem;
+        }
+        .order-header {
+            margin-bottom: 0.7rem;
+        }
+        .order-number {
+            font-size: 1rem;
+        }
+        .order-status {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+        }
+        .info-section {
+            margin-bottom: 0.7rem;
+        }
+        .info-title {
+            font-size: 0.85rem;
+        }
+        .info-content {
+            padding: 0.3rem;
+        }
+        .info-row {
+            margin-bottom: 0.3rem;
+            flex-direction: column;
+        }
+        .info-label, .info-value {
+            font-size: 0.8rem;
+        }
+        .product-image {
+            max-width: 40px;
+        }
+        .status-form {
+            padding: 0.3rem;
+        }
+        .btn-update {
+            padding: 5px 0;
+            font-size: 0.8rem;
+            width: 100%;
+        }
+        .form-select {
+            font-size: 0.8rem;
+            padding: 0.3rem;
+            width: 100%;
+        }
+        .row, .col-md-8, .col-md-4 {
+            display: block !important;
+            width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="order-container">
+    <div class="order-header">
+        <div class="order-number">Sipariş #{{ order.order_number }}</div>
+        <div class="order-status status-{{ order.status }}">{{ order.get_status_display }}</div>
+    </div>
+    
+    <div class="info-section">
+        <div class="info-title">Müşteri Bilgileri</div>
+        <div class="info-content">
+            <div class="info-row">
+                <span class="info-label">Ad Soyad:</span>
+                <span class="info-value">{{ order.full_name }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">E-posta:</span>
+                <span class="info-value">{{ order.user.email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Kullanıcı Adı:</span>
+                <span class="info-value">{{ order.user.username }}</span>
+            </div>
+            {% if user_phone %}
+            <div class="info-row">
+                <span class="info-label">Telefon:</span>
+                <span class="info-value">{{ user_phone }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="info-section">
+        <div class="info-title">Ürün Bilgileri</div>
+        <div class="info-content">
+            <div class="info-row">
+                <span class="info-label">Ürün Adı:</span>
+                <span class="info-value">{{ order.product.name }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Fiyat:</span>
+                <span class="info-value">{{ order.product.price }} ₺</span>
+            </div>
+            {% if order.product.image %}
+            <div class="info-row">
+                <span class="info-label">Ürün Görseli:</span>
+                <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}" class="product-image">
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="info-section">
+        <div class="info-title">Teslimat Adresi</div>
+        <div class="info-content">
+            <div class="info-row">
+                <span class="info-label">Adres Başlığı:</span>
+                <span class="info-value">{{ order.address_title|default:"Belirtilmemiş" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Adres:</span>
+                <span class="info-value">{{ order.address_text }}</span>
+            </div>
+        </div>
+    </div>
+    
+    {% if order.note %}
+    <div class="info-section">
+        <div class="info-title">Müşteri Notu</div>
+        <div class="info-content">
+            <div class="info-row">
+                <span class="info-value">{{ order.note }}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="info-section">
+        <div class="info-title">Sipariş Bilgileri</div>
+        <div class="info-content">
+            <div class="info-row">
+                <span class="info-label">Sipariş Tarihi:</span>
+                <span class="info-value">{{ order.created_at|date:"d.m.Y H:i" }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">İptal Edilebilir:</span>
+                <span class="info-value">{{ order.can_be_cancelled|yesno:"Evet,Hayır" }}</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="status-form">
+        <div class="info-title">Sipariş Durumu Güncelle</div>
+        <form method="post" action="{% url 'update_order_status_admin' order.id %}">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Sipariş Durumu:</label>
+                    <select name="status" class="form-select">
+                        {% for status_code, status_name in order.STATUS_CHOICES %}
+                            <option value="{{ status_code }}" {% if order.status == status_code %}selected{% endif %}>
+                                {{ status_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">İptal Durumu:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="can_be_cancelled" id="can_be_cancelled" 
+                               {% if order.can_be_cancelled %}checked{% endif %}
+                               {% if order.status == 'preparing' %}disabled title="Hazırlanıyor durumunda otomatik olarak iptal edilemez"{% endif %}>
+                        <label class="form-check-label" for="can_be_cancelled">
+                            İptal Edilebilir
+                        </label>
+                    </div>
+                    {% if order.status == 'preparing' %}
+                    <small class="text-muted">Hazırlanıyor durumunda otomatik olarak iptal edilemez</small>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-update">Durumu Güncelle</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    {% if order.status != 'preparing' %}
+    <div class="status-form mt-3">
+        <div class="info-title">Sadece İptal Durumu Güncelle</div>
+        <form method="post" action="{% url 'update_order_status_admin' order.id %}">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="can_be_cancelled" id="can_be_cancelled_only" 
+                               {% if order.can_be_cancelled %}checked{% endif %}>
+                        <label class="form-check-label" for="can_be_cancelled_only">
+                            İptal Edilebilir
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-secondary btn-sm">Sadece İptal Durumunu Güncelle</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
