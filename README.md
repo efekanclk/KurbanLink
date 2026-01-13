@@ -89,7 +89,6 @@ KurbanLink’in temel amacı:
 - **Yürütücü:** Efekan ÇELİK  
 - **Danışman:** Halil Hakan Sarıçiçek  
 - **Araştırmacılar:**  
-  - Yusuf EKER  
   - Taha Furkan TOSUN  
   - Omar Mohammed TAHER  
 

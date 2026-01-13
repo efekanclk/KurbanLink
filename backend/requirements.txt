@@ -1,0 +1,18 @@
+# KurbanLink Backend Requirements
+
+# Django and core framework (LTS version)
+Django==4.2.17
+djangorestframework==3.16.1
+djangorestframework-simplejwt==5.5.1
+
+# Database
+# psycopg2-binary==2.9.9  # Uncomment for PostgreSQL support
+
+# ASGI server
+# uvicorn==0.27.0  # Uncomment if using ASGI
+
+# Development dependencies
+# Add these when needed:
+# django-cors-headers==4.3.1
+# python-decouple==3.8
+# pillow==10.2.0  # For image handling
