@@ -31,4 +31,7 @@ urlpatterns = [
     
     # Favorites API
     path('api/favorites/', include('apps.favorites.urls')),
+    
+    # Messages API
+    path('api/messages/', include('apps.messages.urls')),
 ]
