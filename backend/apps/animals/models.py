@@ -67,3 +67,53 @@ class AnimalListing(models.Model):
     
     def __str__(self) -> str:
         return f"{self.animal_type} - {self.breed} by {self.seller.email}"
+
+
+class AnimalImage(models.Model):
+    """
+    Represents an image for an animal listing.
+    
+    Sellers can upload multiple images per listing.
+    Only one image per listing can be marked as primary.
+    """
+    
+    listing = models.ForeignKey(
+        AnimalListing,
+        on_delete=models.CASCADE,
+        related_name='images',
+        help_text="The animal listing this image belongs to"
+    )
+    image = models.ImageField(
+        upload_to='animal_images/',
+        help_text="Image file"
+    )
+    is_primary = models.BooleanField(
+        default=False,
+        help_text="Whether this is the primary image for the listing"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = 'animal image'
+        verbose_name_plural = 'animal images'
+        ordering = ['-is_primary', '-created_at']
+    
+    def __str__(self) -> str:
+        status = "Primary" if self.is_primary else "Secondary"
+        return f"{status} image for {self.listing.breed}"
+    
+    def save(self, *args, **kwargs) -> None:
+        """
+        Override save to enforce single primary image per listing.
+        
+        If this image is being set as primary, unset all other primary images
+        for the same listing.
+        """
+        if self.is_primary:
+            # Unset other primary images for this listing
+            AnimalImage.objects.filter(
+                listing=self.listing,
+                is_primary=True
+            ).exclude(pk=self.pk).update(is_primary=False)
+        
+        super().save(*args, **kwargs)

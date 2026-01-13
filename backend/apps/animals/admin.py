@@ -3,7 +3,7 @@ Admin configuration for animals app.
 """
 
 from django.contrib import admin
-from .models import AnimalListing
+from .models import AnimalListing, AnimalImage
 
 
 @admin.register(AnimalListing)
@@ -29,3 +29,16 @@ class AnimalListingAdmin(admin.ModelAdmin):
             'fields': ('is_active', 'created_at')
         }),
     )
+
+
+@admin.register(AnimalImage)
+class AnimalImageAdmin(admin.ModelAdmin):
+    """
+    Admin interface for AnimalImage model.
+    """
+    
+    list_display = ('listing', 'is_primary', 'created_at')
+    list_filter = ('is_primary', 'created_at')
+    search_fields = ('listing__breed', 'listing__location')
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at',)
