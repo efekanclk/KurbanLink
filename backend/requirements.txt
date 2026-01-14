@@ -6,6 +6,7 @@ djangorestframework==3.16.1
 djangorestframework-simplejwt==5.5.1
 django-filter==24.3
 Pillow>=10.0.0
+django-cors-headers==4.9.0
 
 # Database
 # psycopg2-binary==2.9.9  # Uncomment for PostgreSQL support
