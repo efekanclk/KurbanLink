@@ -37,6 +37,9 @@ urlpatterns = [
     
     # Notifications API
     path('api/notifications/', include('apps.notifications.urls')),
+    
+    # Recommendations API
+    path('api/recommendations/', include('apps.recommendations.urls')),
 ]
 
 # Serve media files in development
