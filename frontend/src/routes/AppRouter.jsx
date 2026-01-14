@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from '../auth/AuthContext';
 import ProtectedRoute from '../auth/ProtectedRoute';
 import Login from '../pages/Login';
-import Home from '../pages/Home';
+import AnimalsList from '../pages/AnimalsList';
+import AnimalDetail from '../pages/AnimalDetail';
 
 const AppRouter = () => {
     return (
@@ -14,7 +15,15 @@ const AppRouter = () => {
                         path="/"
                         element={
                             <ProtectedRoute>
-                                <Home />
+                                <AnimalsList />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/animals/:id"
+                        element={
+                            <ProtectedRoute>
+                                <AnimalDetail />
                             </ProtectedRoute>
                         }
                     />
