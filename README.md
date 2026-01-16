@@ -80,17 +80,8 @@ KurbanLink’in temel amacı:
 - Arama Geçmişi
 - Yorumlar & Puanlamalar
 - Kurban Ortaklıkları
-- Öneri Geçmişi
+- Öneri Sistemi
 
----
-
-## 👥 Proje Ekibi
-
-- **Yürütücü:** Efekan ÇELİK  
-- **Danışman:** Halil Hakan Sarıçiçek  
-- **Araştırmacılar:**  
-  - Taha Furkan TOSUN  
-  - Omar Mohammed TAHER  
 
 ---
 
