@@ -28,7 +28,7 @@ export const fetchConversations = async () => {
  * Fetch messages for a specific conversation
  */
 export const fetchConversationMessages = async (conversationId) => {
-    const response = await apiClient.get(`/api/messages/conversations/${conversationId}/messages/`);
+    const response = await apiClient.get(`/api/messages/?conversation=${conversationId}`);
     return response.data;
 };
 
