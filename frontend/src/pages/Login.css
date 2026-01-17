@@ -1,35 +1,10 @@
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f5f5f5;
-}
-
-.login-box {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-}
-
-.login-box h1 {
-  margin: 0 0 0.5rem 0;
-  color: #2c3e50;
-  font-size: 1.8rem;
-}
-
-.login-box h2 {
-  margin: 0 0 1.5rem 0;
-  color: #7f8c8d;
-  font-size: 1.2rem;
-  font-weight: normal;
+/* Login page specific styles */
+.page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
@@ -40,17 +15,20 @@
 }
 
 .form-group input {
-  width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 2px solid #ecf0f1;
+  border-radius: 6px;
   font-size: 1rem;
-  box-sizing: border-box;
+  transition: border-color 0.3s;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: #667eea;
+}
+
+.form-group input.error {
+  border-color: #e74c3c;
 }
 
 .error {
@@ -61,24 +39,41 @@
   margin-bottom: 1rem;
 }
 
-button {
-  width: 100%;
+.submit-btn {
   padding: 0.75rem;
-  background-color: #3498db;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-button:hover:not(:disabled) {
-  background-color: #2980b9;
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-button:disabled {
-  background-color: #95a5a6;
+.submit-btn:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #7f8c8d;
+}
+
+.register-link a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
 }

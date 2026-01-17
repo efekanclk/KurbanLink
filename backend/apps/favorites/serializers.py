@@ -41,6 +41,11 @@ class FavoriteSerializer(serializers.ModelSerializer):
             'created_at'
         ]
         read_only_fields = ['id', 'user', 'user_email', 'created_at']
+        labels = {
+            'user': 'Kullanıcı',
+            'animal': 'Hayvan İlanı',
+            'created_at': 'Favorilere Eklenme Tarihi'
+        }
     
     def validate_animal(self, value: AnimalListing) -> AnimalListing:
         """

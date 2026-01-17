@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
-import { fetchAllAnimals, fetchAnimalImages } from '../api/animals';
+import { fetchAnimalImages } from '../api/animals';
 import './Favorites.css';
 
 const Favorites = () => {
     const navigate = useNavigate();
     const { logout } = useAuth();
-    const { favorites, loading: favoritesLoading, error: favoritesError, refresh } = useFavorites();
-
+    const { favorites, loading: favoritesLoading } = useFavorites();
     const [listings, setListings] = useState([]);
     const [listingImages, setListingImages] = useState({});
     const [loading, setLoading] = useState(true);
@@ -22,12 +21,10 @@ const Favorites = () => {
         setError(null);
 
         try {
-            // Get all animals
-            const allAnimals = await fetchAnimals();
-
-            // Filter to only favorited ones
-            const favoriteListingIds = favorites.map(fav => fav.listing);
-            const favoriteListings = allAnimals.filter(animal => favoriteListingIds.includes(animal.id));
+            // Use animal_details directly from favorites response
+            const favoriteListings = favorites
+                .map(fav => fav.animal_details)
+                .filter(Boolean);
 
             setListings(favoriteListings);
 
@@ -35,7 +32,10 @@ const Favorites = () => {
             const imagePromises = favoriteListings.map(listing =>
                 fetchAnimalImages(listing.id)
                     .then(images => ({ listingId: listing.id, images }))
-                    .catch(() => ({ listingId: listing.id, images: [] }))
+                    .catch(err => {
+                        console.error(`Failed to load images for listing ${listing.id}:`, err);
+                        return { listingId: listing.id, images: [] };
+                    })
             );
 
             const allImages = await Promise.all(imagePromises);
@@ -49,6 +49,7 @@ const Favorites = () => {
 
             setListingImages(imagesMap);
         } catch (err) {
+            console.error('Favorites load error:', err);
             setError(err.response?.data?.detail || 'Failed to load favorite listings');
         } finally {
             setLoading(false);
@@ -56,39 +57,55 @@ const Favorites = () => {
     };
 
     useEffect(() => {
-        if (!favoritesLoading) {
-            loadFavoriteListings();
-        }
+        loadFavoriteListings();
     }, [favorites, favoritesLoading]);
 
-    if (favoritesLoading || loading) {
+    if (loading || favoritesLoading) {
         return (
             <div className="favorites-container">
                 <div className="favorites-header">
                     <h1>Favorilerim</h1>
                     <div className="header-actions">
-                        <button onClick={() => navigate('/')} className="listings-link-btn">Tüm İlanlar</button>
-                        <button onClick={logout} className="logout-btn">Çıkış</button>
+                        <button onClick={() => navigate('/')} className="back-btn">
+                            ← Geri
+                        </button>
+                        <button onClick={logout} className="logout-btn">
+                            Çıkış Yap
+                        </button>
                     </div>
                 </div>
-                <div className="loading">Favoriler yükleniyor...</div>
+                <div className="page">
+                    <div className="page__container">
+                        <div className="loading">Favoriler yükleniyor...</div>
+                    </div>
+                </div>
             </div>
         );
     }
 
-    if (favoritesError || error) {
+    if (error) {
         return (
             <div className="favorites-container">
                 <div className="favorites-header">
-                    <h1>My Favorites</h1>
+                    <h1>Favorilerim</h1>
                     <div className="header-actions">
-                        <button onClick={() => navigate('/')} className="listings-link-btn">Tüm İlanlar</button>
-                        <button onClick={logout} className="logout-btn">Çıkış</button>
+                        <button onClick={() => navigate('/')} className="back-btn">
+                            ← Geri
+                        </button>
+                        <button onClick={logout} className="logout-btn">
+                            Çıkış Yap
+                        </button>
                     </div>
                 </div>
-                <div className="error-container">
-                    <p className="error">{favoritesError || error}</p>
-                    <button onClick={() => { refresh(); loadFavoriteListings(); }}>Tekrar Dene</button>
+                <div className="page">
+                    <div className="page__container">
+                        <div className="form-card">
+                            <p className="error-message">{error}</p>
+                            <button onClick={loadFavoriteListings} className="retry-btn">
+                                Tekrar Dene
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -98,16 +115,27 @@ const Favorites = () => {
         return (
             <div className="favorites-container">
                 <div className="favorites-header">
-                    <h1>My Favorites</h1>
+                    <h1>Favorilerim</h1>
                     <div className="header-actions">
-                        <button onClick={() => navigate('/')} className="listings-link-btn">Tüm İlanlar</button>
-                        <button onClick={logout} className="logout-btn">Çıkış</button>
+                        <button onClick={() => navigate('/')} className="back-btn">
+                            ← Geri
+                        </button>
+                        <button onClick={logout} className="logout-btn">
+                            Çıkış Yap
+                        </button>
                     </div>
                 </div>
-                <div className="empty-state">
-                    <h2>Henüz Favori Yok</h2>
-                    <p>İlanları gezin ve favorilere ekleyerek burada görün!</p>
-                    <button onClick={() => navigate('/')}>İlanları Görüntüle</button>
+                <div className="page">
+                    <div className="page__container">
+                        <div className="form-card">
+                            <p className="empty-icon">😔</p>
+                            <p>Henüz favori yok.</p>
+                            <p className="empty-subtitle">İlanları beğenerek favorilere ekleyebilirsiniz.</p>
+                            <button onClick={() => navigate('/')} className="browse-btn">
+                                İlanları Gör
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -116,52 +144,65 @@ const Favorites = () => {
     return (
         <div className="favorites-container">
             <div className="favorites-header">
-                <h1>Favorilerim ({listings.length})</h1>
+                <h1>Favorilerim</h1>
                 <div className="header-actions">
-                    <button onClick={() => navigate('/')} className="listings-link-btn">Tüm İlanlar</button>
-                    <button onClick={logout} className="logout-btn">Çıkış</button>
+                    <button onClick={() => navigate('/')} className="back-btn">
+                        ← Geri
+                    </button>
+                    <button onClick={logout} className="logout-btn">
+                        Çıkış Yap
+                    </button>
                 </div>
             </div>
 
-            <div className="favorites-grid">
-                {listings.map(listing => {
-                    const image = listingImages[listing.id];
+            <div className="page">
+                <div className="page__container favorites-grid-container">
+                    <div className="favorites-grid">
+                        {listings.map(listing => {
+                            const image = listingImages[listing.id];
 
-                    return (
-                        <div
-                            key={listing.id}
-                            className="favorite-card"
-                            onClick={() => navigate(`/animals/${listing.id}`)}
-                        >
-                            <div className="favorite-image">
-                                {image ? (
-                                    <img src={image.image_url} alt={`${listing.animal_type} ${listing.breed}`} />
-                                ) : (
-                                    <div className="image-placeholder">Resim Yok</div>
-                                )}
-                            </div>
+                            return (
+                                <div
+                                    key={listing.id}
+                                    className="favorite-card"
+                                    onClick={() => navigate(`/animals/${listing.id}`)}
+                                >
+                                    {image ? (
+                                        <img
+                                            src={`http://localhost:8000${image.image}`}
+                                            alt={listing.breed}
+                                            className="listing-image"
+                                        />
+                                    ) : (
+                                        <div className="no-image">
+                                            🐑
+                                        </div>
+                                    )}
 
-                            <div className="favorite-details">
-                                <h3>{listing.animal_type} - {listing.breed}</h3>
+                                    <div className="listing-content">
+                                        <div className="listing-header">
+                                            <div className="listing-type-breed">
+                                                <h3>{listing.breed}</h3>
+                                                <span className="type">{listing.animal_type}</span>
+                                            </div>
+                                        </div>
 
-                                <div className="favorite-info">
-                                    <div className="info-row">
-                                        <span className="label">Fiyat:</span>
-                                        <span className="value">${listing.price}</span>
-                                    </div>
-                                    <div className="info-row">
-                                        <span className="label">Konum:</span>
-                                        <span className="value">{listing.location}</span>
-                                    </div>
-                                    <div className="info-row">
-                                        <span className="label">Satıcı:</span>
-                                        <span className="value seller">{listing.seller_email}</span>
+                                        <div className="listing-info">
+                                            <div className="info-row">
+                                                <span className="label">Fiyat:</span>
+                                                <span className="value price">{listing.price} TL</span>
+                                            </div>
+                                            <div className="info-row">
+                                                <span className="label">Konum:</span>
+                                                <span className="value">{listing.location}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    );
-                })}
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -16,8 +16,26 @@ class ButcherProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ButcherProfile
-        fields = ['id', 'user', 'user_email', 'business_name', 'city', 'services', 
-                  'price_range', 'rating', 'is_active', 'created_at']
+        fields = [
+            'id',
+            'user',
+            'user_email',
+            'business_name',
+            'city',
+            'services',
+            'price_range',
+            'rating',
+            'is_active'
+        ]
+        labels = {
+            'user': 'Kullanıcı',
+            'business_name': 'İşletme Adı',
+            'city': 'Şehir',
+            'services': 'Hizmetler',
+            'price_range': 'Fiyat Aralığı',
+            'rating': 'Değerlendirme',
+            'is_active': 'Aktif'
+        }
         read_only_fields = ['id', 'user', 'rating', 'created_at']
     
     def validate(self, attrs):
@@ -48,8 +66,29 @@ class AppointmentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Appointment
-        fields = ['id', 'butcher', 'butcher_name', 'user', 'user_email', 'listing',
-                  'date', 'time', 'status', 'note', 'created_at']
+        fields = [
+            'id',
+            'butcher',
+            'butcher_details',
+            'customer',
+            'customer_email',
+            'date',
+            'time',
+            'animal_count',
+            'notes',
+            'status',
+            'created_at'
+        ]
+        labels = {
+            'butcher': 'Kasap',
+            'customer': 'Müşteri',
+            'date': 'Tarih',
+            'time': 'Saat',
+            'animal_count': 'Hayvan Sayısı',
+            'notes': 'Notlar',
+            'status': 'Durum',
+            'created_at': 'Oluşturulma Tarihi'
+        }
         read_only_fields = ['id', 'user', 'status', 'created_at']
     
     def validate_butcher(self, value):

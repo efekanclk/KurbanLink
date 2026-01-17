@@ -15,5 +15,14 @@ class NotificationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Notification
-        fields = ['id', 'type', 'title', 'message', 'data', 'is_read', 'created_at']
-        read_only_fields = ['id', 'type', 'title', 'message', 'data', 'created_at']
+        fields = ['id', 'user', 'type', 'title', 'message', 'data', 'is_read', 'created_at']
+        read_only_fields = ['id', 'user', 'created_at']
+        labels = {
+            'user': 'Kullanıcı',
+            'type': 'Bildirim Türü',
+            'title': 'Başlık',
+            'message': 'Mesaj',
+            'data': 'Veri',
+            'is_read': 'Okundu',
+            'created_at': 'Oluşturulma Tarihi'
+        }

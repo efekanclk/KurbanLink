@@ -2,8 +2,12 @@
 Views for accounts app.
 """
 
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
+from .serializers import CustomTokenObtainPairSerializer, RegisterSerializer
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -15,3 +19,53 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     """
     
     serializer_class = CustomTokenObtainPairSerializer
+
+
+class RegisterView(APIView):
+    """
+    API endpoint for user registration.
+    
+    POST /api/auth/register/
+    
+    Request body:
+    {
+        "email": "user@example.com",
+        "password": "secure12345",
+        "roles": ["SELLER", "BUTCHER"],  // optional
+        "butcher_profile": {  // required if BUTCHER selected
+            "business_name": "Example Butcher",
+            "city": "Ankara",
+            "services": ["Kurban kesimi"],  // optional
+            "price_range": "1000-2000"  // optional
+        }
+    }
+    
+    Response (201 Created):
+    {
+        "id": 1,
+        "email": "user@example.com",
+        "roles": ["BUYER", "SELLER", "BUTCHER"],
+        "access": "<jwt_access_token>",
+        "refresh": "<jwt_refresh_token>"
+    }
+    
+    Test cases:
+    1. Register with email+password only => roles: ["BUYER"]
+    2. Register with roles ["SELLER"] => roles: ["BUYER", "SELLER"]
+    3. Register with roles ["BUTCHER"] + butcher_profile => Success + ButcherProfile created
+    4. Register with roles ["BUTCHER"] without butcher_profile => 400
+    5. Register with invalid role => 400
+    6. Duplicate email => 400
+    """
+    
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        """Handle user registration."""
+        serializer = RegisterSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            user_data = serializer.save()
+            return Response(user_data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -29,30 +29,43 @@ class AnimalListing(models.Model):
     animal_type = models.CharField(
         max_length=10,
         choices=ANIMAL_TYPE_CHOICES,
-        help_text="Type of animal (small or large)"
+        verbose_name='Hayvan Türü',
+        help_text="Küçükbaş veya Büyükbaş"
     )
     breed = models.CharField(
         max_length=100,
-        help_text="Breed of the animal"
+        verbose_name='Cins',
+        help_text="Hayvanın cinsi (örn: Merinos, Kıvırcık)"
     )
-    age = models.PositiveIntegerField(
-        help_text="Age of the animal in months"
+    age = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name='Yaş (ay)',
+        help_text="Hayvanın yaşı (ay cinsinden)"
     )
-    weight = models.PositiveIntegerField(
-        help_text="Weight of the animal in kilograms"
+    weight = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name='Ağırlık (kg)',
+        help_text="Tahmini ağırlık (kg)"
     )
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        help_text="Price in currency"
+        verbose_name='Fiyat (TL)',
+        help_text="Satış fiyatı (TL)"
     )
     location = models.CharField(
         max_length=200,
-        help_text="Location of the animal"
+        verbose_name='Konum',
+        help_text="İlanın bulunduğu şehir/bölge"
     )
     description = models.TextField(
         blank=True,
-        help_text="Optional description of the animal"
+        verbose_name='Açıklama',
+        help_text="İlan detayları (isteğe bağlı)"
     )
     is_active = models.BooleanField(
         default=True,

@@ -15,5 +15,12 @@ class RecommendationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Recommendation
-        fields = ['id', 'type', 'object_id', 'score', 'reason', 'created_at']
-        read_only_fields = ['id', 'type', 'object_id', 'score', 'reason', 'created_at']
+        fields = ['id', 'user', 'animal', 'animal_details', 'score', 'reason', 'created_at']
+        read_only_fields = ['id', 'user', 'score', 'reason', 'created_at']
+        labels = {
+            'user': 'Kullanıcı',
+            'animal': 'Önerilen İlan',
+            'score': 'Puan',
+            'reason': 'Öneri Nedeni',
+            'created_at': 'Oluşturulma Tarihi'
+        }

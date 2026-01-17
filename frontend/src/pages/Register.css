@@ -1,0 +1,129 @@
+/* Register page specific styles */
+.page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.subtitle {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    padding: 0.75rem;
+    border: 2px solid #ecf0f1;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.form-group input.error {
+    border-color: #e74c3c;
+}
+
+.error-text {
+    display: block;
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.help-text {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+.role-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.role-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 2px solid #ecf0f1;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.role-item:has(input:checked) {
+    background: #e8f0fe;
+    border-color: #667eea;
+}
+
+.role-item input[type="checkbox"] {
+    margin-right: 0.75rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+}
+
+.role-item label {
+    margin: 0;
+    cursor: pointer;
+    flex: 1;
+    font-weight: 500;
+}
+
+.submit-btn {
+    padding: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 1rem;
+}
+
+.submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #7f8c8d;
+}
+
+.login-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}

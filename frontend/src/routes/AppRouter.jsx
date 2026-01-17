@@ -3,6 +3,7 @@ import { AuthProvider } from '../auth/AuthContext';
 import { FavoritesProvider } from '../context/FavoritesContext';
 import ProtectedRoute from '../auth/ProtectedRoute';
 import Login from '../pages/Login';
+import Register from '../pages/Register';
 import AnimalsList from '../pages/AnimalsList';
 import AnimalDetail from '../pages/AnimalDetail';
 import Favorites from '../pages/Favorites';
@@ -14,6 +15,7 @@ const AppRouter = () => {
                 <FavoritesProvider>
                     <Routes>
                         <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
                         <Route
                             path="/"
                             element={

@@ -7,7 +7,7 @@ import './AnimalsList.css';
 
 const AnimalsList = () => {
     const navigate = useNavigate();
-    const { logout } = useAuth();
+    const { logout, roles } = useAuth();
     const { isFavorited, toggleFavorite, toggleLoading } = useFavorites();
     const [listings, setListings] = useState([]);
     const [listingImages, setListingImages] = useState({});

@@ -11,9 +11,14 @@ class AnimalListingSerializer(serializers.ModelSerializer):
     Serializer for AnimalListing model.
     
     The seller field is read-only and automatically set to the authenticated user.
+    Labels are automatically taken from model verbose_name.
     """
     
-    seller_email = serializers.EmailField(source='seller.email', read_only=True)
+    seller_email = serializers.EmailField(
+        source='seller.email',
+        read_only=True,
+        label='Satıcı E-posta'
+    )
     
     class Meta:
         model = AnimalListing

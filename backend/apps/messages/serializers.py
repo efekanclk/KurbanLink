@@ -44,6 +44,14 @@ class ConversationSerializer(serializers.ModelSerializer):
             'unread_count',
             'created_at'
         ]
+        labels = {
+            'listing': 'İlan',
+            'buyer': 'Alıcı',
+            'seller': 'Satıcı',
+            'last_message': 'Son Mesaj',
+            'unread_count': 'Okunmamış Sayısı',
+            'created_at': 'Başlangıç Tarihi'
+        }
         read_only_fields = ['id', 'buyer', 'seller', 'created_at']
     
     def get_last_message(self, obj):
