@@ -14,29 +14,34 @@ const Navbar = () => {
 
     return (
         <nav className="navbar">
-            <div className="container navbar-container">
-                <Link to="/" className="navbar-brand">
-                    Kurban<span className="brand-accent">Link</span>
-                </Link>
+            <div className="navbar-container">
+                {/* Left: Brand - ALWAYS left-aligned */}
+                <div className="navbar-brand">
+                    <Link to="/" className="brand-link">
+                        Kurban<span className="brand-accent">Link</span>
+                    </Link>
+                </div>
 
-                <div className="navbar-menu">
+                {/* Center: Navigation Links */}
+                <div className="navbar-nav">
                     <Link to="/" className="nav-link">Ana Sayfa</Link>
                     <Link to="/partnerships" className="nav-link">Kurban Ortaklığı</Link>
                     <Link to="/butchers" className="nav-link">Kasap Bul</Link>
                 </div>
 
-                <div className="navbar-auth">
+                {/* Right: Auth Actions */}
+                <div className="navbar-actions">
                     {user ? (
-                        <div className="auth-buttons">
-                            <Link to="/profile" className="btn-profile">
+                        <>
+                            <Link to="/profile" className="nav-link">
                                 Profilim
                             </Link>
-                            <button onClick={handleLogout} className="btn-secondary">
+                            <button onClick={handleLogout} className="btn-logout">
                                 Çıkış
                             </button>
-                        </div>
+                        </>
                     ) : (
-                        <Link to="/login" className="btn-primary">
+                        <Link to="/login" className="btn-login">
                             Giriş Yap
                         </Link>
                     )}

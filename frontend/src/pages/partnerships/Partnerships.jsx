@@ -39,19 +39,31 @@ const Partnerships = () => {
 
             // Fetch partnerships
             const partnershipsData = await fetchPartnerships();
-            setPartnerships(Array.isArray(partnershipsData) ? partnershipsData : partnershipsData.results || []);
+            // Handle both array and paginated response
+            const partnershipsList = Array.isArray(partnershipsData)
+                ? partnershipsData
+                : (partnershipsData.results || []);
+            setPartnerships(partnershipsList);
 
             // Fetch multiple pages of animals for dropdown (up to 5 pages max)
             const allAnimals = [];
+            const seenIds = new Set(); // Track unique IDs
             let page = 1;
             const maxPages = 5;
 
             while (page <= maxPages) {
                 try {
+                    // fetchAnimals supports object params ({ page, animal_type, etc })
                     const animalsData = await fetchAnimals({ page });
 
                     if (animalsData.results && animalsData.results.length > 0) {
-                        allAnimals.push(...animalsData.results);
+                        // Add only unique animals (deduplicate by ID)
+                        animalsData.results.forEach(animal => {
+                            if (!seenIds.has(animal.id)) {
+                                seenIds.add(animal.id);
+                                allAnimals.push(animal);
+                            }
+                        });
                     }
 
                     // Stop if no more pages
@@ -65,6 +77,16 @@ const Partnerships = () => {
                     break;
                 }
             }
+
+            // Sort by created_at descending (newest first) for better UX
+            allAnimals.sort((a, b) => {
+                // Use Date.parse for safer parsing, fallback to 0 if invalid
+                const timeA = Date.parse(a.created_at);
+                const timeB = Date.parse(b.created_at);
+                const ta = Number.isFinite(timeA) ? timeA : 0;
+                const tb = Number.isFinite(timeB) ? timeB : 0;
+                return tb - ta; // Descending (newest first)
+            });
 
             setAnimals(allAnimals);
         } catch (err) {

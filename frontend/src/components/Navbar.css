@@ -1,115 +1,163 @@
 .navbar {
-    background-color: var(--bg);
+    background-color: var(--bg-surface);
     border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
     position: sticky;
     top: 0;
-    z-index: 50;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    box-shadow: var(--shadow);
+    z-index: 1000;
 }
 
 .navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--space-3);
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    height: 64px;
 }
 
+/* Left: Brand - Fixed width, always left */
 .navbar-brand {
-    font-size: 1.5rem;
-    font-weight: 800;
+    flex: 0 0 auto;
+    margin-right: var(--space-4);
+}
+
+.brand-link {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
     color: var(--text);
     text-decoration: none;
-    letter-spacing: -0.025em;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.brand-link:hover {
+    color: var(--primary);
 }
 
 .brand-accent {
-    color: var(--accent);
+    color: var(--primary);
+    margin-left: 0;
 }
 
-.navbar-menu {
+/* Center: Navigation */
+.navbar-nav {
+    flex: 1 1 auto;
     display: flex;
-    gap: 2rem;
     align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
 }
 
 .nav-link {
-    color: var(--muted);
+    color: var(--text);
+    font-size: var(--font-size-base);
     font-weight: 500;
     text-decoration: none;
-    transition: color 0.2s;
-    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+    position: relative;
 }
 
 .nav-link:hover {
-    color: var(--text);
+    color: var(--primary);
+    background-color: var(--primary-light);
 }
 
-.navbar-auth {
+.nav-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* Right: Actions */
+.navbar-actions {
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
+    gap: var(--space-2);
 }
 
-.auth-buttons {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-}
-
-.btn-primary {
-    background-color: var(--accent);
-    color: white;
-    padding: 0.625rem 1.5rem;
-    border-radius: 8px;
+.btn-logout {
+    padding: 0.5rem 1rem;
+    font-size: var(--font-size-sm);
     font-weight: 600;
-    text-decoration: none;
+    color: white;
+    background-color: var(--primary);
     border: none;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     transition: background-color 0.2s;
-    font-size: 0.95rem;
 }
 
-.btn-primary:hover {
-    background-color: var(--accent-hover);
+.btn-logout:hover {
+    background-color: var(--primary-hover);
 }
 
-.btn-profile {
-    color: var(--text);
+.btn-logout:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.btn-login {
+    padding: 0.5rem 1.25rem;
+    font-size: var(--font-size-base);
     font-weight: 600;
+    color: white;
+    background-color: var(--primary);
+    border-radius: var(--radius-sm);
     text-decoration: none;
-    padding: 0.625rem 1rem;
-    transition: color 0.2s;
+    transition: background-color 0.2s;
 }
 
-.btn-profile:hover {
-    color: var(--accent);
+.btn-login:hover {
+    background-color: var(--primary-hover);
 }
 
-.btn-secondary {
-    background-color: var(--bg-gray);
-    color: var(--muted);
-    padding: 0.625rem 1rem;
-    border-radius: 8px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 0.95rem;
-}
-
-.btn-secondary:hover {
-    background-color: var(--border);
-    color: var(--text);
-}
-
-/* Mobile Responsiveness */
+/* Mobile Responsive */
 @media (max-width: 768px) {
-    .navbar-menu {
-        display: none;
+    .navbar-container {
+        padding: 0 var(--space-2);
     }
 
     .navbar-brand {
-        font-size: 1.25rem;
+        margin-right: var(--space-2);
+    }
+
+    .brand-link {
+        font-size: var(--font-size-lg);
+    }
+
+    .navbar-nav {
+        gap: var(--space-1);
+    }
+
+    .nav-link {
+        font-size: var(--font-size-sm);
+        padding: 0.375rem 0.5rem;
+    }
+
+    .navbar-actions {
+        gap: var(--space-1);
+    }
+
+    .btn-logout,
+    .btn-login {
+        font-size: var(--font-size-sm);
+        padding: 0.375rem 0.75rem;
+    }
+}
+
+@media (max-width: 640px) {
+
+    /* Hide some nav links on very small screens, keep brand left */
+    .navbar-nav {
+        display: none;
+    }
+
+    .navbar-actions .nav-link {
+        display: block;
     }
 }

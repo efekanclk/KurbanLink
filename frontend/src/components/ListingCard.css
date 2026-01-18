@@ -50,16 +50,19 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.badge-yeni {
-    background: #10b981;
+.card-badge.badge-yeni {
+    background-color: #D1FAE5;
+    color: var(--primary);
 }
 
-.badge-uygun {
-    background: #3b82f6;
+.card-badge.badge-uygun {
+    background-color: #FEF3C7;
+    color: #92400E;
 }
 
-.badge-populer {
-    background: var(--accent);
+.card-badge.badge-populer {
+    background-color: #E0E7FF;
+    color: var(--accent);
 }
 
 .card-content {

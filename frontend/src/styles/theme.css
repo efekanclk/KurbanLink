@@ -1,0 +1,316 @@
+/**
+ * KurbanLink Global Theme
+ * Earth/Agriculture Design System
+ * =====================================
+ * Theme Direction: Trustworthy, grounded, accessible
+ * Palette: Earth greens, browns, warm neutrals
+ */
+
+:root {
+    /* Primary Colors - Dark Green */
+    --primary: #1F7A4D;
+    --primary-hover: #16603C;
+    --primary-light: rgba(31, 122, 77, 0.1);
+
+    /* Secondary Colors - Earth Brown */
+    --secondary: #8D6E63;
+    --secondary-hover: #6D4C41;
+
+    /* Accent - Olive */
+    --accent: #556B2F;
+    --accent-hover: #3D4E1F;
+
+    /* Background & Surface */
+    --bg: #FFFFFF;
+    --bg-gray: #F7F7F4;
+    --bg-surface: #FFFFFF;
+
+    /* Text Colors */
+    --text: #111827;
+    --text-muted: #6B7280;
+    --text-light: #9CA3AF;
+
+    /* Borders */
+    --border: #E5E7EB;
+    --border-light: #F3F4F6;
+
+    /* Status Colors */
+    --success: #1F7A4D;
+    --warning: #B45309;
+    --danger: #DC2626;
+    --info: #0284C7;
+
+    /* Focus & Interaction */
+    --focus-ring: rgba(31, 122, 77, 0.35);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Spacing Scale (8px grid) */
+    --space-1: 0.5rem;
+    /* 8px */
+    --space-2: 1rem;
+    /* 16px */
+    --space-3: 1.5rem;
+    /* 24px */
+    --space-4: 2rem;
+    /* 32px */
+    --space-6: 3rem;
+    /* 48px */
+    --space-8: 4rem;
+    /* 64px */
+
+    /* Border Radius */
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-md: 12px;
+    --radius-lg: 14px;
+    --radius-full: 9999px;
+
+    /* Typography */
+    --font-size-xs: 0.75rem;
+    /* 12px */
+    --font-size-sm: 0.875rem;
+    /* 14px */
+    --font-size-base: 1rem;
+    /* 16px */
+    --font-size-lg: 1.125rem;
+    /* 18px */
+    --font-size-xl: 1.25rem;
+    /* 20px */
+    --font-size-2xl: 1.5rem;
+    /* 24px */
+    --font-size-3xl: 1.875rem;
+    /* 30px */
+    --font-size-4xl: 2.25rem;
+    /* 36px */
+}
+
+/* Global Resets */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg-gray);
+    color: var(--text);
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+}
+
+/* Container Utility */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-3);
+}
+
+/* Button Utilities */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1.25rem;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: none;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+    border: 2px solid var(--primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.btn-secondary {
+    background-color: var(--secondary);
+    color: white;
+    border: 2px solid var(--secondary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--secondary-hover);
+    border-color: var(--secondary-hover);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-outline:hover:not(:disabled) {
+    background-color: var(--primary-light);
+}
+
+.btn-danger {
+    background-color: var(--danger);
+    color: white;
+    border: 2px solid var(--danger);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: #B91C1C;
+}
+
+/* Input & Select Utilities */
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+    color: var(--text);
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.form-control:disabled {
+    background-color: var(--bg-gray);
+    cursor: not-allowed;
+}
+
+.form-group {
+    margin-bottom: var(--space-2);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+/* Card Utilities */
+.card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    box-shadow: var(--shadow-sm);
+}
+
+.card-hover {
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.card-hover:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+/* Badge Utilities */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    line-height: 1;
+    border-radius: var(--radius-full);
+}
+
+.badge-yeni {
+    background-color: #D1FAE5;
+    color: var(--primary);
+}
+
+.badge-populer {
+    background-color: #FEF3C7;
+    color: #92400E;
+}
+
+.badge-uygun {
+    background-color: #E0E7FF;
+    color: #3730A3;
+}
+
+.badge-success {
+    background-color: #D1FAE5;
+    color: var(--success);
+}
+
+.badge-warning {
+    background-color: #FEF3C7;
+    color: var(--warning);
+}
+
+.badge-danger {
+    background-color: #FEE2E2;
+    color: var(--danger);
+}
+
+/* Link Utilities */
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+/* Page Layout */
+.page {
+    min-height: 100vh;
+    background-color: var(--bg-gray);
+}
+
+.page__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-4) var(--space-3);
+}
+
+/* Loading State */
+.loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+    color: var(--text-muted);
+}
+
+/* Error State */
+.error-state {
+    padding: var(--space-4);
+    text-align: center;
+    color: var(--danger);
+}

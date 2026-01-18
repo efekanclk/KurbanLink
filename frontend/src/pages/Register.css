@@ -1,6 +1,106 @@
-/* Register page specific styles */
-.page {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+/* Register page - inherits from theme.css */
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-gray);
+    padding: var(--space-3);
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+}
+
+/* Form groups inherit from theme.css .form-group */
+
+.error-text {
+    display: block;
+    color: var(--danger);
+    font-size: var(--font-size-sm);
+    margin-top: 0.25rem;
+}
+
+.help-text {
+    margin-top: 0.5rem;
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.role-selection {
+    margin-bottom: var(--space-3);
+}
+
+.role-selection label {
+    display: block;
+    margin-bottom: var(--space-1);
+    color: var(--text);
+    font-weight: 500;
+}
+
+.role-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.role-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.role-option:hover {
+    border-color: var(--primary);
+    background-color: var(--primary-light);
+}
+
+.role-option input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.5rem;
+    cursor: pointer;
+    accent-color: var(--primary);
+}
+
+.role-label {
+    flex-grow: 1;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.role-description {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+/* Submit button inherits from theme.css .submit-btn */
+
+.login-link {
+    text-align: center;
+    margin-top: var(--space-3);
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.login-link a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
 }
 
 .subtitle {
