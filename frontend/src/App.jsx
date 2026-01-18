@@ -6,3 +6,4 @@ function App() {
 }
 
 export default App;
+// Force HMR update for routing

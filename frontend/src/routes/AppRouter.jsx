@@ -5,9 +5,14 @@ import ProtectedRoute from '../auth/ProtectedRoute';
 import RoleProtectedRoute from '../auth/RoleProtectedRoute';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+
+// Main pages
+import Home from '../pages/Home';
+import SearchPage from '../pages/SearchPage';
 import AnimalsList from '../pages/AnimalsList';
 import AnimalDetail from '../pages/AnimalDetail';
 import Favorites from '../pages/Favorites';
+import ComingSoon from '../pages/ComingSoon';
 
 // Seller pages
 import SellerListings from '../pages/seller/SellerListings';
@@ -43,10 +48,9 @@ const AppRouter = () => {
                         <Route path="/register" element={<Register />} />
 
                         {/* Protected routes */}
-                        <Route path="/" element={<ProtectedRoute><AnimalsList /></ProtectedRoute>} />
-                        <Route path="/animals/:id" element={<ProtectedRoute><AnimalDetail /></ProtectedRoute>
-
-                        } />
+                        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                        <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
+                        <Route path="/coming-soon" element={<ProtectedRoute><ComingSoon /></ProtectedRoute>} />
                         <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
 
                         {/* Messages routes */}

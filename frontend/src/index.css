@@ -5,6 +5,28 @@
   box-sizing: border-box;
 }
 
+/* Phase 5 Design System Variables */
+:root {
+  --accent: #7c3aed;
+  --accent-hover: #6d28d9;
+  --text: #111827;
+  --muted: #6b7280;
+  --bg: #ffffff;
+  --bg-gray: #f9fafb;
+  --border: #e5e7eb;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --radius: 12px;
+  --container-width: 1200px;
+}
+
+/* Global Container */
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
 body {
   width: 100%;
   min-height: 100vh;

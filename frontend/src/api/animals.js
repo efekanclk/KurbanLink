@@ -1,8 +1,10 @@
 import apiClient from './axios';
 
-// Fetch a single page of animals
-export const fetchAnimals = async (page = 1) => {
-    const response = await apiClient.get(`/api/animals/?page=${page}`);
+// Fetch animals with support for filters
+export const fetchAnimals = async (params = {}) => {
+    // params can be { page, animal_type, min_price, max_price, location, ... }
+    const queryString = new URLSearchParams(params).toString();
+    const response = await apiClient.get(`/api/animals/?${queryString}`);
     return response.data;  // Returns { count, next, previous, results }
 };
 

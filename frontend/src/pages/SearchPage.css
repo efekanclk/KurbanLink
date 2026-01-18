@@ -1,0 +1,133 @@
+.search-page {
+    min-height: 100vh;
+    background-color: var(--bg-gray);
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+.search-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.search-sidebar {
+    position: sticky;
+    top: 80px;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+}
+
+.results-header h2 {
+    font-size: 1.5rem;
+    color: var(--text);
+    margin: 0;
+}
+
+.results-count {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.loading-state,
+.error-state,
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--bg);
+    border-radius: var(--radius);
+    color: var(--muted);
+}
+
+.empty-state p {
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+}
+
+.btn-reset {
+    margin-top: 1rem;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    background: transparent;
+    padding: 0.625rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-reset:hover {
+    background: var(--accent);
+    color: white;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    padding: 1.5rem;
+}
+
+.btn-page {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.625rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-page:hover:not(:disabled) {
+    background-color: var(--accent-hover);
+}
+
+.btn-page:disabled {
+    background-color: var(--border);
+    color: var(--muted);
+    cursor: not-allowed;
+}
+
+.page-indicator {
+    font-weight: 600;
+    color: var(--text);
+    min-width: 120px;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .results-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .search-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .search-sidebar {
+        position: static;
+        margin-bottom: 2rem;
+    }
+
+    .results-grid {
+        grid-template-columns: 1fr;
+    }
+}

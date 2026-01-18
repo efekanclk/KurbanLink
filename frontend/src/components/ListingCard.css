@@ -1,0 +1,126 @@
+.listing-card {
+    background: var(--bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.listing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-image-wrapper {
+    position: relative;
+    padding-top: 66.66%;
+    /* 3:2 Aspect Ratio */
+    background-color: var(--bg-gray);
+    overflow: hidden;
+}
+
+.card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.listing-card:hover .card-image {
+    transform: scale(1.05);
+}
+
+.card-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.badge-yeni {
+    background: #10b981;
+}
+
+.badge-uygun {
+    background: #3b82f6;
+}
+
+.badge-populer {
+    background: var(--accent);
+}
+
+.card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-grow: 1;
+}
+
+.card-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.card-meta {
+    display: flex;
+    gap: 16px;
+    color: var(--muted);
+    font-size: 0.875rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.meta-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+}
+
+.card-footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-location {
+    font-size: 0.875rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.location-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.card-price {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--accent);
+}
