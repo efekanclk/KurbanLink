@@ -11,18 +11,46 @@ class AnimalListingFilter(django_filters.FilterSet):
     FilterSet for AnimalListing model.
     
     Provides filtering by:
-    - animal_type (exact match)
+    - animal_type (supports both legacy and Turkish codes, grouping)
     - price range (min_price, max_price)
     - location (case-insensitive partial match)
     - age range (min_age, max_age)
     - weight range (min_weight, max_weight)
     """
     
-    animal_type = django_filters.ChoiceFilter(
-        field_name='animal_type',
-        choices=AnimalListing.ANIMAL_TYPE_CHOICES,
-        help_text="Filter by animal type (SMALL or LARGE)"
+    animal_type = django_filters.CharFilter(
+        method='filter_animal_type',
+        help_text="Filter by animal type (supports KUCUKBAS/BUYUKBAS/SMALL/LARGE/SMALL_GROUP/LARGE_GROUP)"
     )
+    
+    def filter_animal_type(self, queryset, name, value):
+        """
+        Custom filter method for animal_type that handles:
+        - Legacy codes: SMALL, LARGE
+        - Turkish codes: KUCUKBAS, BUYUKBAS
+        - Group codes: SMALL_GROUP, LARGE_GROUP
+        
+        Maps any variant to appropriate __in filter to catch all database values.
+        """
+        if not value:
+            return queryset
+        
+        v = value.upper().strip()
+        print(f"[DEBUG] Animal type filter received: '{value}' → normalized: '{v}'")
+        
+        # Map to small group (Küçükbaş)
+        if v in ('SMALL_GROUP', 'KUCUKBAS', 'SMALL'):
+            print(f"[DEBUG] Filtering for SMALL group: ['SMALL', 'KUCUKBAS']")
+            return queryset.filter(animal_type__in=['SMALL', 'KUCUKBAS'])
+        
+        # Map to large group (Büyükbaş)
+        if v in ('LARGE_GROUP', 'BUYUKBAS', 'LARGE'):
+            print(f"[DEBUG] Filtering for LARGE group: ['LARGE', 'BUYUKBAS']")
+            return queryset.filter(animal_type__in=['LARGE', 'BUYUKBAS'])
+        
+        # Fallback: exact match (shouldn't normally happen)
+        print(f"[DEBUG] Using exact match fallback for: '{v}'")
+        return queryset.filter(animal_type=value)
     
     min_price = django_filters.NumberFilter(
         field_name='price',

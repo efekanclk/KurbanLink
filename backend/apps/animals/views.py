@@ -3,8 +3,10 @@ Views for animals app.
 """
 
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 from apps.accounts.permissions import IsSeller, IsSellerAndOwner
 from .models import AnimalListing
 from .serializers import AnimalListingSerializer
@@ -16,14 +18,6 @@ class AnimalListingViewSet(viewsets.ModelViewSet):
     """
     ViewSet for animal listings.
     
-    - CREATE: Only sellers can create listings
-    - LIST: Any authenticated user can view active listings (with filtering and pagination)
-    - UPDATE: Only the seller who owns the listing can update it
-    - DELETE: Only the seller who owns the listing can delete it (soft delete)
-    
-    Filtering:
-    - animal_type: SMALL or LARGE
-    - price range: min_price, max_price
     - location: partial match (case-insensitive)
     - age range: min_age, max_age
     - weight range: min_weight, max_weight
@@ -36,6 +30,7 @@ class AnimalListingViewSet(viewsets.ModelViewSet):
     serializer_class = AnimalListingSerializer
     queryset = AnimalListing.objects.filter(is_active=True)
     filterset_class = AnimalListingFilter
+    filter_backends = [DjangoFilterBackend]  # CRITICAL: Enable filtering
     pagination_class = AnimalListingPagination
     
     def get_permissions(self):
