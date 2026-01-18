@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { animalTypeLabel } from '../utils/labels';
+import { formatTRY, formatKg, formatAge } from '../utils/format';
 import './ListingCard.css';
 
 const ListingCard = ({ listing, image, badgeText = null }) => {
@@ -11,16 +13,6 @@ const ListingCard = ({ listing, image, badgeText = null }) => {
         'LARGE': 'Büyükbaş',
         'KUCUKBAS': 'Küçükbaş',
         'BUYUKBAS': 'Büyükbaş'
-    };
-
-    // Turkish price formatting
-    const formatPrice = (price) => {
-        const numPrice = typeof price === 'string' ? parseFloat(price) : price;
-        return new Intl.NumberFormat('tr-TR', {
-            style: 'currency',
-            currency: 'TRY',
-            maximumFractionDigits: 0
-        }).format(Math.round(numPrice));
     };
 
     // Image fallback
@@ -51,13 +43,13 @@ const ListingCard = ({ listing, image, badgeText = null }) => {
                         <svg className="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        {listing.age} yaş
+                        {formatAge(listing.age)}
                     </span>
                     <span className="meta-item">
                         <svg className="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
                         </svg>
-                        {listing.weight} kg
+                        {formatKg(listing.weight)}
                     </span>
                 </div>
 
@@ -71,7 +63,7 @@ const ListingCard = ({ listing, image, badgeText = null }) => {
                             {listing.city}
                         </span>
                     )}
-                    <span className="card-price">{formatPrice(listing.price)}</span>
+                    <span className="card-price">{formatTRY(listing.price)}</span>
                 </div>
             </div>
         </div>
