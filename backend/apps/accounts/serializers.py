@@ -54,7 +54,7 @@ class MeSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id', 'email', 'roles']
+        fields = ['id', 'email', 'username', 'phone_number', 'country_code', 'roles']
         read_only_fields = ['id', 'email', 'roles']
     
     def get_roles(self, obj):
@@ -69,14 +69,15 @@ class RegisterSerializer(serializers.Serializer):
     Handles user creation, role assignment, and optional butcher profile creation.
     Always assigns BUYER role automatically.
     """
-    
     email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True, required=True)
+    username = serializers.CharField(required=True, max_length=30)
+    phone_number = serializers.CharField(required=True, max_length=32)
+    country_code = serializers.CharField(required=False, default='TR', max_length=8)
     roles = serializers.ListField(
-        child=serializers.CharField(),
+        child=serializers.ChoiceField(choices=['BUYER', 'SELLER', 'BUTCHER']),
         required=False,
-        allow_empty=True,
-        default=list
+        allow_empty=True
     )
     butcher_profile = serializers.DictField(required=False, allow_null=True)
     
@@ -113,6 +114,27 @@ class RegisterSerializer(serializers.Serializer):
             )
         
         return normalized_roles
+    
+    def validate_username(self, value):
+        """Validate and normalize username."""
+        # Normalize username
+        normalized = User.normalize_username(value)
+        
+        # Check uniqueness
+        if User.objects.filter(username=normalized).exists():
+            raise serializers.ValidationError("Bu kullanıcı adı zaten kullanılıyor.")
+        
+        # Validate length
+        if len(normalized) < 3 or len(normalized) > 30:
+            raise serializers.ValidationError("Kullanıcı adı 3-30 karakter arasında olmalıdır.")
+        
+        return normalized
+    
+    def validate_phone_number(self, value):
+        """Validate phone number is not empty."""
+        if not value or not value.strip():
+            raise serializers.ValidationError("Telefon numarası gereklidir.")
+        return value.strip()
     
     def validate_butcher_profile(self, value):
         """Validate butcher profile structure if provided."""

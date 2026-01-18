@@ -49,7 +49,26 @@ class User(AbstractBaseUser, PermissionsMixin):
     Email is used instead of username for authentication.
     """
     
+    
     email = models.EmailField(unique=True)
+    username = models.CharField(
+        max_length=30,
+        unique=True,
+        null=True,
+        blank=True,
+        help_text="Unique username (lowercase, alphanumeric + underscore)"
+    )
+    phone_number = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        help_text="Contact phone number (free-form)"
+    )
+    country_code = models.CharField(
+        max_length=8,
+        default="TR",
+        help_text="Country code for location context (e.g., TR, DE)"
+    )
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)

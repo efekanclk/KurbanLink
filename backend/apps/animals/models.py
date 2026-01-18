@@ -15,9 +15,22 @@ class AnimalListing(models.Model):
     age, weight, price, and location.
     """
     
+    
     ANIMAL_TYPE_CHOICES = [
-        ('KUCUKBAS', 'Küçükbaş'),
+        ('SMALL', 'Küçükbaş'),
         ('BUYUKBAS', 'Büyükbaş'),
+    ]
+    
+    SPECIES_CHOICES = [
+        ('KOYUN', 'Koyun'),
+        ('KECI', 'Keçi'),
+        ('DANA', 'Dana'),
+        ('INEK', 'İnek'),
+    ]
+    
+    GENDER_CHOICES = [
+        ('ERKEK', 'Erkek'),
+        ('DISI', 'Dişi'),
     ]
     
     seller = models.ForeignKey(
@@ -26,22 +39,55 @@ class AnimalListing(models.Model):
         related_name='animal_listings',
         help_text="User who created this listing"
     )
+    
+    # Species classification (required for new listings)
+    species = models.CharField(
+        max_length=20,
+        choices=SPECIES_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name='Tür',
+        help_text="Hayvan türü: Koyun, Keçi, Dana, İnek"
+    )
+    
+    # Auto-derived from species (for filtering compatibility)
     animal_type = models.CharField(
         max_length=10,
         choices=ANIMAL_TYPE_CHOICES,
-        verbose_name='Hayvan Türü',
-        help_text="Küçükbaş veya Büyükbaş"
+        verbose_name='Hayvan Grubu',
+        help_text="Küçükbaş veya Büyükbaş (otomatik belirlenir)"
     )
+    
     breed = models.CharField(
         max_length=100,
-        verbose_name='Cins',
-        help_text="Hayvanın cinsi (örn: Merinos, Kıvırcık)"
+        blank=True,
+        default="",
+        verbose_name='Irk',
+        help_text="Hayvanın ırkı (opsiyonel, örn: Merinos, Kıvırcık)"
     )
-    age = models.IntegerField(
+    
+    gender = models.CharField(
+        max_length=10,
+        choices=GENDER_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name='Cinsiyet',
+        help_text="Hayvanın cinsiyeti (opsiyonel)"
+    )
+    
+    age_months = models.IntegerField(
         null=True,
         blank=True,
         verbose_name='Yaş (ay)',
         help_text="Hayvanın yaşı (ay cinsinden)"
+    )
+    
+    # Old age field (deprecated, kept for backward compat during migration)
+    age = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name='Yaş (yıl - eski)',
+        help_text="Eski yaş alanı (ay cinsine dönüştürülecek)"
     )
     weight = models.DecimalField(
         max_digits=6,
@@ -59,8 +105,44 @@ class AnimalListing(models.Model):
     )
     location = models.CharField(
         max_length=200,
-        verbose_name='Konum',
-        help_text="İlanın bulunduğu şehir/bölge"
+        null=True,
+        blank=True,
+        verbose_name='Konum (eski)',
+        help_text="İlanın bulunduğu şehir/bölge (backward compat)"
+    )
+    
+    # New structured location fields (required for new listings)
+    city = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True,
+        verbose_name='Şehir',
+        help_text="Şehir (dropdown'dan seçilir)"
+    )
+    
+    district = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True,
+        verbose_name='İlçe',
+        help_text="İlçe (dropdown'dan seçilir)"
+    )
+    
+    ear_tag_no = models.CharField(
+        max_length=50,
+        unique=True,
+        null=True,
+        blank=True,
+        verbose_name='Kulak No',
+        help_text="Hayvanın kulak numarası (opsiyonel, benzersiz)"
+    )
+    
+    company = models.CharField(
+        max_length=200,
+        blank=True,
+        default="",
+        verbose_name='Şirket',
+        help_text="İlan sahibinin şirketi (opsiyonel)"
     )
     description = models.TextField(
         blank=True,
@@ -72,6 +154,20 @@ class AnimalListing(models.Model):
         help_text="Whether this listing is currently active"
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def save(self, *args, **kwargs):
+        """
+        Auto-derive animal_type from species for filtering compatibility.
+        - Koyun/Keçi → SMALL (Küçükbaş)
+        - Dana/İnek → BUYUKBAS (Büyükbaş)
+        """
+        if self.species:
+            if self.species in ['KOYUN', 'KECI']:
+                self.animal_type = 'SMALL'
+            elif self.species in ['DANA', 'INEK']:
+                self.animal_type = 'BUYUKBAS'
+        
+        super().save(*args, **kwargs)
     
     class Meta:
         verbose_name = 'animal listing'
