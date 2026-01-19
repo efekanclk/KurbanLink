@@ -21,13 +21,6 @@ class AnimalListing(models.Model):
         ('BUYUKBAS', 'Büyükbaş'),
     ]
     
-    SPECIES_CHOICES = [
-        ('KOYUN', 'Koyun'),
-        ('KECI', 'Keçi'),
-        ('DANA', 'Dana'),
-        ('INEK', 'İnek'),
-    ]
-    
     GENDER_CHOICES = [
         ('ERKEK', 'Erkek'),
         ('DISI', 'Dişi'),
@@ -40,14 +33,13 @@ class AnimalListing(models.Model):
         help_text="User who created this listing"
     )
     
-    # Species classification (required for new listings)
+    # Species classification (deprecated)
     species = models.CharField(
-        max_length=20,
-        choices=SPECIES_CHOICES,
+        max_length=50,
         null=True,
         blank=True,
         verbose_name='Tür',
-        help_text="Hayvan türü: Koyun, Keçi, Dana, İnek"
+        help_text="(Deprecated) Eski tür alanı - kullanılmamalı"
     )
     
     # Auto-derived from species (for filtering compatibility)
@@ -55,12 +47,21 @@ class AnimalListing(models.Model):
         max_length=10,
         choices=ANIMAL_TYPE_CHOICES,
         verbose_name='Hayvan Grubu',
-        help_text="Küçükbaş veya Büyükbaş (otomatik belirlenir)"
+        help_text="Küçükbaş veya Büyükbaş"
+    )
+    
+    title = models.CharField(
+        max_length=100,
+        blank=True,
+        default="",
+        verbose_name='İlan Başlığı',
+        help_text="İlan başlığı (örn: Satılık Kurbanlık Koç)"
     )
     
     breed = models.CharField(
         max_length=100,
         blank=True,
+        null=True,
         default="",
         verbose_name='Irk',
         help_text="Hayvanın ırkı (opsiyonel, örn: Merinos, Kıvırcık)"
@@ -157,16 +158,8 @@ class AnimalListing(models.Model):
     
     def save(self, *args, **kwargs):
         """
-        Auto-derive animal_type from species for filtering compatibility.
-        - Koyun/Keçi → SMALL (Küçükbaş)
-        - Dana/İnek → BUYUKBAS (Büyükbaş)
+        Save method override.
         """
-        if self.species:
-            if self.species in ['KOYUN', 'KECI']:
-                self.animal_type = 'SMALL'
-            elif self.species in ['DANA', 'INEK']:
-                self.animal_type = 'BUYUKBAS'
-        
         super().save(*args, **kwargs)
     
     class Meta:

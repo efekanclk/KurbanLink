@@ -185,14 +185,14 @@ const AnimalsList = () => {
 
                             <div className="animal-image">
                                 {image ? (
-                                    <img src={image.image_url} alt={`${listing.animal_type} ${listing.breed}`} />
+                                    <img src={image.image_url} alt={`${listing.animal_type} ${listing.title || listing.breed}`} />
                                 ) : (
                                     <div className="image-placeholder">Resim Yok</div>
                                 )}
                             </div>
 
                             <div className="animal-details">
-                                <h3>{listing.animal_type} - {listing.breed}</h3>
+                                <h3>{listing.title || listing.breed || 'İsimsiz İlan'}</h3>
 
                                 {favoriteError[listing.id] && (
                                     <div className="inline-error">{favoriteError[listing.id]}</div>

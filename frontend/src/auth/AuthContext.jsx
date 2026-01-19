@@ -64,7 +64,16 @@ export const AuthProvider = ({ children }) => {
             console.log('[AuthContext] Login success:', userData);
             return true;
         } catch (err) {
-            const errorMsg = err.response?.data?.detail || 'Giriş başarısız';
+            let errorMsg = 'Giriş başarısız';
+
+            if (err.response) {
+                if (err.response.status === 401) {
+                    errorMsg = 'E-posta veya şifre hatalı.';
+                } else if (err.response.data?.detail) {
+                    errorMsg = err.response.data.detail;
+                }
+            }
+
             setError(errorMsg);
             console.error('[AuthContext] Login failed:', err);
             return false;

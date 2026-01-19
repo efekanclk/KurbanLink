@@ -1,0 +1,80 @@
+.home-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    padding: 1rem;
+    height: fit-content;
+    position: sticky;
+    top: 80px;
+    /* Header height + spacing */
+}
+
+.sidebar-section {
+    margin-bottom: 2rem;
+}
+
+.sidebar-section:last-child {
+    margin-bottom: 0;
+}
+
+.sidebar-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #edf2f7;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-list li {
+    margin-bottom: 0.25rem;
+}
+
+.sidebar-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+    color: #4a5568;
+    text-decoration: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sidebar-link:hover {
+    background-color: #f7fafc;
+    color: #2d6a4f;
+}
+
+.sidebar-link.active {
+    background-color: #e6fffa;
+    color: #2d6a4f;
+    font-weight: 500;
+}
+
+.partnership-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+@media (max-width: 900px) {
+    .home-sidebar {
+        display: none;
+        /* Hide on mobile for MVP, or implement collapsible */
+    }
+}

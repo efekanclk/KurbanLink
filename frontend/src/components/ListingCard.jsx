@@ -30,12 +30,12 @@ const ListingCard = ({ listing, image, badgeText = null }) => {
                 {badgeText && (
                     <span className={`card-badge ${badgeClass}`}>{badgeText}</span>
                 )}
-                <img src={displayImage} alt={listing.breed || listing.title} className="card-image" />
+                <img src={displayImage} alt={listing.title || listing.breed || 'İlan'} className="card-image" />
             </div>
 
             <div className="card-content">
                 <h3 className="card-title">
-                    {listing.breed || 'İlan'}
+                    {listing.title || listing.breed || 'İlan'}
                 </h3>
 
                 <div className="card-meta">

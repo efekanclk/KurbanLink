@@ -26,6 +26,7 @@ class AnimalListingSerializer(serializers.ModelSerializer):
             'seller_email',
             'seller_username',
             'seller_phone_number',
+            'title',
             'species',
             'animal_type',
             'breed',
@@ -43,7 +44,7 @@ class AnimalListingSerializer(serializers.ModelSerializer):
             'is_active',
             'created_at',
         ]
-        read_only_fields = ['id', 'seller', 'created_at', 'animal_type']
+        read_only_fields = ['id', 'seller', 'created_at']
     
     def get_age_display(self, obj):
         """
@@ -65,11 +66,7 @@ class AnimalListingSerializer(serializers.ModelSerializer):
         else:
             return f"{years} yaş {months} ay"
     
-    def validate_species(self, value):
-        """Species is required for new listings."""
-        if value is None or value.strip() == '':
-            raise serializers.ValidationError("Hayvan türü seçilmelidir.")
-        return value
+
     
     def validate_age_months(self, value):
         """Age must be non-negative."""
@@ -105,11 +102,10 @@ class AnimalListingSerializer(serializers.ModelSerializer):
         """Cross-field validation for new listings."""
         # For new listings (POST), require certain fields
         if not self.instance:  # Creating new listing
-            required_for_new = ['species', 'age_months', 'city', 'district']
+            required_for_new = ['age_months', 'city', 'district']
             for field in required_for_new:
                 if not attrs.get(field):
                     field_names = {
-                        'species': 'Hayvan türü',
                         'age_months': 'Yaş',
                         'city': 'Şehir',
                         'district': 'İlçe'

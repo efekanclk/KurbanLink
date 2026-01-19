@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchConversations, fetchConversationMessages, sendMessage as sendMessageAPI, markAllRead } from '../api/messages';
+import { useAuth } from '../auth/AuthContext';
 import './FloatingMessages.css';
 
 const FloatingMessages = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const [view, setView] = useState('list'); // 'list' or 'thread'
     const [conversations, setConversations] = useState([]);
@@ -85,8 +87,24 @@ const FloatingMessages = () => {
         return date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
     };
 
+    // ... lines skipped ...
+
     const getCounterparty = (conversation) => {
-        return conversation.other_user?.username || conversation.other_user?.email || 'Kullanıcı';
+        if (!user) return 'Kullanıcı';
+
+        // If I am the buyer, show seller name
+        if (user.id === conversation.buyer) {
+            return conversation.seller_username || (conversation.seller_email ? conversation.seller_email.split('@')[0] : 'Satıcı');
+        }
+        // If I am the seller, show buyer name
+        if (user.id === conversation.seller) {
+            return conversation.buyer_username || (conversation.buyer_email ? conversation.buyer_email.split('@')[0] : 'Alıcı');
+        }
+
+        // Fallback (shouldn't happen if involved)
+        const otherUsername = conversation.other_user?.username;
+        const otherEmail = conversation.other_user?.email;
+        return otherUsername || (otherEmail ? otherEmail.split('@')[0] : 'Kullanıcı');
     };
 
     const totalUnread = conversations.reduce((sum, c) => sum + (c.unread_count || 0), 0);

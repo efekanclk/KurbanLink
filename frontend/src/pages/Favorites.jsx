@@ -170,7 +170,7 @@ const Favorites = () => {
                                     {image ? (
                                         <img
                                             src={`http://localhost:8000${image.image}`}
-                                            alt={listing.breed}
+                                            alt={listing.title || listing.breed}
                                             className="listing-image"
                                         />
                                     ) : (
@@ -182,7 +182,7 @@ const Favorites = () => {
                                     <div className="listing-content">
                                         <div className="listing-header">
                                             <div className="listing-type-breed">
-                                                <h3>{listing.breed}</h3>
+                                                <h3>{listing.title || listing.breed || 'İsimsiz İlan'}</h3>
                                                 <span className="type">{listing.animal_type}</span>
                                             </div>
                                         </div>

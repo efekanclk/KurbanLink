@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import './Login.css';
 
 const Login = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const { login, loading, error } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,7 +14,8 @@ const Login = () => {
         e.preventDefault();
         const success = await login(email, password);
         if (success) {
-            navigate('/');
+            const nextPath = searchParams.get('next') || '/';
+            navigate(nextPath);
         }
     };
 

@@ -20,35 +20,21 @@ apiClient.interceptors.request.use(config => {
 /**
  * Fetch listings owned by current user (seller)
  */
-export const fetchMyListings = async (userId) => {
-    // Backend may support ?seller={userId} filter
-    // If not, fetch all and filter client-side
+export const fetchMyListings = async (userId, options = {}) => {
+    // Backend supports ?mine=true filter
     try {
-        const response = await apiClient.get('/api/animals/', {
-            params: { seller: userId }
-        });
+        const params = { seller: userId };
+        if (options.mine) {
+            params.mine = 'true';
+        }
+        if (options.deleted) {
+            params.deleted = 'true';
+        }
+
+        const response = await apiClient.get('/api/animals/', { params });
         return response.data;
     } catch (error) {
-        // If filter not supported, fetch all pages and filter
-        if (error.response?.status === 400) {
-            const allListings = [];
-            let page = 1;
-            let hasMore = true;
-
-            while (hasMore) {
-                const response = await apiClient.get('/api/animals/', {
-                    params: { page }
-                });
-                allListings.push(...response.data.results);
-                hasMore = response.data.next !== null;
-                page++;
-            }
-
-            return {
-                results: allListings.filter(listing => listing.seller === userId),
-                count: allListings.filter(listing => listing.seller === userId).length
-            };
-        }
+        // Fallback or error handling
         throw error;
     }
 };
@@ -71,9 +57,20 @@ export const updateListing = async (id, data) => {
 
 /**
  * Delete (or deactivate) a listing
+ * Standard delete is Soft Delete (Trash)
  */
 export const deleteListing = async (id) => {
     const response = await apiClient.delete(`/api/animals/${id}/`);
+    return response.data;
+};
+
+/**
+ * Permanently delete a listing (Hard Delete)
+ */
+export const permanentlyDeleteListing = async (id) => {
+    const response = await apiClient.delete(`/api/animals/${id}/`, {
+        params: { force: 'true' }
+    });
     return response.data;
 };
 

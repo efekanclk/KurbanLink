@@ -58,7 +58,7 @@ const SearchFilters = ({ initialFilters = {}, onApply, onReset }) => {
             <h3>Filtreler</h3>
 
             <div className="filter-section">
-                <label>Tür</label>
+                <label>Hayvan Grubu</label>
                 <select name="animal_type" value={filters.animal_type} onChange={handleChange}>
                     <option value="">Hepsi</option>
                     <option value="KUCUKBAS">Küçükbaş</option>

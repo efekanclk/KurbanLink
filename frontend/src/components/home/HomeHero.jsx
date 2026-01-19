@@ -47,7 +47,7 @@ const HomeHero = ({ onSearch, breeds = [] }) => {
 
                 <div className="filter-bar">
                     <div className="filter-group">
-                        <label>Tür</label>
+                        <label>Hayvan Grubu</label>
                         <select name="animalType" value={filters.animalType} onChange={handleChange}>
                             <option value="">Hepsi</option>
                             <option value="KUCUKBAS">Küçükbaş</option>

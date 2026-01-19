@@ -1,21 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createListing, uploadListingImages } from '../../api/sellers';
+import { cities, getDistrictsForCity } from '../../data/locations';
 import './Seller.css';
 
 const NewListing = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        species: 'KOYUN',
+        animal_type: 'SMALL',
+        title: '',
         breed: '',
         gender: '',
-        age_months: '',
+        age: '',
         weight: '',
         price: '',
         city: '',
         district: '',
-        ear_tag_no: '',
-        company: '',
         description: ''
     });
     const [selectedImages, setSelectedImages] = useState([]);
@@ -23,9 +23,28 @@ const NewListing = () => {
     const [loading, setLoading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState([]);
 
+    // Cleanup object URLs to avoid memory leaks
+    useEffect(() => {
+        return () => {
+            selectedImages.forEach(img => {
+                if (img.preview) URL.revokeObjectURL(img.preview);
+            });
+        };
+    }, [selectedImages]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+
+        if (name === 'city') {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value,
+                district: '' // Reset district when city changes
+            }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
+
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: null }));
         }
@@ -33,18 +52,38 @@ const NewListing = () => {
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
-        if (files.length > 5) {
+
+        // Create objects with preview URLs
+        const newImages = files.map(file => ({
+            file,
+            preview: URL.createObjectURL(file)
+        }));
+
+        const updatedImages = [...selectedImages, ...newImages].slice(0, 5);
+
+        if (updatedImages.length > 5) {
             alert('En fazla 5 resim yükleyebilirsiniz');
             return;
         }
-        setSelectedImages(files);
+        setSelectedImages(updatedImages);
+        e.target.value = '';
+    };
+
+    const handleRemoveImage = (index) => {
+        setSelectedImages(prev => {
+            const newImages = [...prev];
+            URL.revokeObjectURL(newImages[index].preview);
+            newImages.splice(index, 1);
+            return newImages;
+        });
     };
 
     const validate = () => {
         const newErrors = {};
 
-        if (!formData.species) newErrors.species = 'Hayvan türü gereklidir';
-        if (!formData.age_months) newErrors.age_months = 'Yaş gereklidir';
+        if (!formData.title.trim()) newErrors.title = 'İlan başlığı gereklidir';
+        if (!formData.animal_type) newErrors.animal_type = 'Hayvan grubu gereklidir';
+        if (!formData.age) newErrors.age = 'Yaş gereklidir';
         if (!formData.weight) newErrors.weight = 'Ağırlık gereklidir';
         if (!formData.price) newErrors.price = 'Fiyat gereklidir';
         if (!formData.city) newErrors.city = 'Şehir gereklidir';
@@ -65,13 +104,15 @@ const NewListing = () => {
         try {
             // Create listing
             const listingData = {
+                title: formData.title,
                 animal_type: formData.animal_type,
                 breed: formData.breed,
                 price: parseFloat(formData.price),
-                location: formData.location,
+                city: formData.city,
+                district: formData.district,
             };
 
-            if (formData.age && formData.age !== '') listingData.age = parseInt(formData.age);
+            if (formData.age && formData.age !== '') listingData.age_months = parseInt(formData.age); // Map 'age' to 'age_months'
             if (formData.weight && formData.weight !== '') listingData.weight = parseFloat(formData.weight);
             if (formData.description && formData.description !== '') listingData.description = formData.description;
 
@@ -80,7 +121,10 @@ const NewListing = () => {
             // Upload images if any
             if (selectedImages.length > 0) {
                 setUploadStatus([{ message: 'Resimler yükleniyor...' }]);
-                const results = await uploadListingImages(newListing.id, selectedImages);
+
+                const filesToUpload = selectedImages.map(item => item.file);
+                const results = await uploadListingImages(newListing.id, filesToUpload);
+
                 setUploadStatus(results);
 
                 // Wait a moment to show upload results
@@ -93,11 +137,21 @@ const NewListing = () => {
             if (err.response?.data) {
                 const backendErrors = err.response.data;
                 const newErrors = {};
-                Object.keys(backendErrors).forEach(key => {
-                    newErrors[key] = Array.isArray(backendErrors[key])
-                        ? backendErrors[key][0]
-                        : backendErrors[key];
-                });
+
+                if (Array.isArray(backendErrors)) {
+                    // Handle list errors (e.g. ["Internal Error..."])
+                    newErrors.general = backendErrors.join(', ');
+                } else if (backendErrors.detail) {
+                    // Handle specific detail (e.g. { detail: "..." })
+                    newErrors.general = backendErrors.detail;
+                } else {
+                    // Handle field errors object
+                    Object.keys(backendErrors).forEach(key => {
+                        newErrors[key] = Array.isArray(backendErrors[key])
+                            ? backendErrors[key][0]
+                            : backendErrors[key];
+                    });
+                }
                 setErrors(newErrors);
             } else {
                 setErrors({ general: 'İlan oluşturulamadı' });
@@ -106,6 +160,8 @@ const NewListing = () => {
             setLoading(false);
         }
     };
+
+    const districts = formData.city ? getDistrictsForCity('TR', formData.city) : [];
 
     return (
         <div className="seller-container">
@@ -123,7 +179,7 @@ const NewListing = () => {
                     <div className="form-card">
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <label htmlFor="animal_type">Hayvan Türü *</label>
+                                <label htmlFor="animal_type">Hayvan Grubu *</label>
                                 <select
                                     id="animal_type"
                                     name="animal_type"
@@ -136,23 +192,25 @@ const NewListing = () => {
                                 </select>
                             </div>
 
+
+
                             <div className="form-group">
-                                <label htmlFor="breed">Cins *</label>
+                                <label htmlFor="title">İlan Başlığı *</label>
                                 <input
                                     type="text"
-                                    id="breed"
-                                    name="breed"
-                                    value={formData.breed}
+                                    id="title"
+                                    name="title"
+                                    value={formData.title}
                                     onChange={handleChange}
-                                    placeholder="örn: Merinos, Kıvırcık"
+                                    placeholder="örn: Satılık Kurbanlık Koç"
                                     required
                                 />
-                                {errors.breed && <span className="error-text">{errors.breed}</span>}
+                                {errors.title && <span className="error-text">{errors.title}</span>}
                             </div>
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label htmlFor="age">Yaş (ay)</label>
+                                    <label htmlFor="age">Yaş (ay) *</label>
                                     <input
                                         type="number"
                                         id="age"
@@ -160,12 +218,13 @@ const NewListing = () => {
                                         value={formData.age}
                                         onChange={handleChange}
                                         min="0"
+                                        required
                                     />
                                     {errors.age && <span className="error-text">{errors.age}</span>}
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="weight">Ağırlık (kg)</label>
+                                    <label htmlFor="weight">Ağırlık (kg) *</label>
                                     <input
                                         type="number"
                                         id="weight"
@@ -174,6 +233,7 @@ const NewListing = () => {
                                         onChange={handleChange}
                                         min="0"
                                         step="0.01"
+                                        required
                                     />
                                     {errors.weight && <span className="error-text">{errors.weight}</span>}
                                 </div>
@@ -194,18 +254,41 @@ const NewListing = () => {
                                 {errors.price && <span className="error-text">{errors.price}</span>}
                             </div>
 
-                            <div className="form-group">
-                                <label htmlFor="location">Konum *</label>
-                                <input
-                                    type="text"
-                                    id="location"
-                                    name="location"
-                                    value={formData.location}
-                                    onChange={handleChange}
-                                    placeholder="örn: Ankara, Çankaya"
-                                    required
-                                />
-                                {errors.location && <span className="error-text">{errors.location}</span>}
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label htmlFor="city">Şehir *</label>
+                                    <select
+                                        id="city"
+                                        name="city"
+                                        value={formData.city}
+                                        onChange={handleChange}
+                                        required
+                                    >
+                                        <option value="">Seçiniz</option>
+                                        {cities.map(city => (
+                                            <option key={city} value={city}>{city}</option>
+                                        ))}
+                                    </select>
+                                    {errors.city && <span className="error-text">{errors.city}</span>}
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="district">İlçe *</label>
+                                    <select
+                                        id="district"
+                                        name="district"
+                                        value={formData.district}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={!formData.city}
+                                    >
+                                        <option value="">Seçiniz</option>
+                                        {districts.map(dist => (
+                                            <option key={dist} value={dist}>{dist}</option>
+                                        ))}
+                                    </select>
+                                    {errors.district && <span className="error-text">{errors.district}</span>}
+                                </div>
                             </div>
 
                             <div className="form-group">
@@ -231,12 +314,21 @@ const NewListing = () => {
                                 />
                                 {selectedImages.length > 0 && (
                                     <div className="image-preview">
-                                        <p>{selectedImages.length} resim seçildi</p>
-                                        <ul>
-                                            {selectedImages.map((file, idx) => (
-                                                <li key={idx}>{file.name}</li>
+                                        <p>{selectedImages.length} resim seçildi (Maks: 5)</p>
+                                        <div className="image-grid">
+                                            {selectedImages.map((item, idx) => (
+                                                <div key={idx} className="image-card">
+                                                    <img src={item.preview} alt={`Preview ${idx}`} />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleRemoveImage(idx)}
+                                                        className="remove-image-btn"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
                                             ))}
-                                        </ul>
+                                        </div>
                                     </div>
                                 )}
                             </div>

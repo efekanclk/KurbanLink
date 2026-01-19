@@ -33,7 +33,7 @@ const FilterBar = () => {
     return (
         <div className="filter-bar">
             <div className="filter-group">
-                <label>Tür</label>
+                <label>Hayvan Grubu</label>
                 <select name="animal_type" value={filters.animal_type} onChange={handleChange}>
                     <option value="">Hepsi</option>
                     <option value="KUCUKBAS">Küçükbaş</option>

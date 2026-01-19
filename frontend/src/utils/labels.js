@@ -11,15 +11,7 @@ export const animalTypeLabel = (type) => {
     return map[type] || type;
 };
 
-export const speciesLabel = (species) => {
-    const map = {
-        KOYUN: 'Koyun',
-        KECI: 'Keçi',
-        DANA: 'Dana',
-        INEK: 'İnek',
-    };
-    return map[species] || 'Bilinmiyor';
-};
+
 
 export const genderLabel = (gender) => {
     const map = {

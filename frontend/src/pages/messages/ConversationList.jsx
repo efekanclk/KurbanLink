@@ -102,7 +102,7 @@ const ConversationList = () => {
                             >
                                 <div className="conversation-info">
                                     <div className="conversation-listing">
-                                        <strong>{conversation.listing_details.breed}</strong>
+                                        <strong>{conversation.listing_details.title || conversation.listing_details.breed || 'İsimsiz İlan'}</strong>
                                         <span className="type-badge">{conversation.listing_details.animal_type}</span>
                                     </div>
                                     <div className="conversation-details">

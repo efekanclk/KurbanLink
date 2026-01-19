@@ -61,6 +61,13 @@ class MeSerializer(serializers.ModelSerializer):
             'profile_image': {'write_only': True},
         }
     
+    def to_representation(self, instance):
+        """Fallback to email prefix if username is missing."""
+        ret = super().to_representation(instance)
+        if not ret.get('username') and instance.email:
+            ret['username'] = instance.email.split('@')[0]
+        return ret
+    
     def get_roles(self, obj):
         """Extract role codes from active UserRole relationships"""
         return [ur.role.code for ur in obj.user_roles.filter(is_active=True)]
@@ -90,6 +97,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'email', 'password', 'username', 'phone_number', 'country_code',
+            'city', 'district',
             'is_butcher', 'butcher_profile'
         ]
         extra_kwargs = {
@@ -135,10 +143,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return value.strip()
     
     def validate(self, attrs):
-        attrs['final_roles'] = final_roles
-        
         # Butcher profile is optional - can be added later in profile settings
-        
         return attrs
     
     def create(self, validated_data):

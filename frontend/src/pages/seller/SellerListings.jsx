@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
-import { fetchMyListings, deleteListing } from '../../api/sellers';
+import { fetchMyListings, deleteListing, permanentlyDeleteListing } from '../../api/sellers';
 import { getUserIdFromToken } from '../../utils/jwt';
 import './Seller.css';
 
@@ -11,6 +11,7 @@ const SellerListings = () => {
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [viewMode, setViewMode] = useState('active'); // 'active' or 'deleted'
 
     const loadListings = async () => {
         setLoading(true);
@@ -20,7 +21,13 @@ const SellerListings = () => {
             const token = localStorage.getItem('access_token');
             const userId = getUserIdFromToken(token);
 
-            const data = await fetchMyListings(userId);
+            // Pass userId and options based on viewMode
+            const options = { mine: true };
+            if (viewMode === 'deleted') {
+                options.deleted = true;
+            }
+
+            const data = await fetchMyListings(userId, options);
             setListings(data.results || data);
         } catch (err) {
             console.error('Failed to load listings:', err);
@@ -32,7 +39,7 @@ const SellerListings = () => {
 
     useEffect(() => {
         loadListings();
-    }, []);
+    }, [viewMode]); // Reload when viewMode changes
 
     const handleDelete = async (id) => {
         if (!window.confirm('Bu ilanı silmek istediğinize emin misiniz?')) {
@@ -48,41 +55,32 @@ const SellerListings = () => {
         }
     };
 
-    if (loading) {
+    const handlePermanentDelete = async (id) => {
+        if (!window.confirm('Bu ilanı KALICI olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz ve tüm fotoğraflar silinir.')) {
+            return;
+        }
+
+        try {
+            await permanentlyDeleteListing(id);
+            await loadListings(); // Refresh list
+        } catch (err) {
+            console.error('Delete failed:', err);
+            alert('Silme işlemi başarısız: ' + (err.response?.data?.detail || 'Bilinmeyen hata'));
+        }
+    };
+
+    if (loading && listings.length === 0) {
         return (
             <div className="seller-container">
                 <div className="seller-header">
                     <h1>İlanlarım</h1>
                     <div className="header-actions">
                         <button onClick={() => navigate('/')} className="back-btn">← Geri</button>
-                        <button onClick={logout} className="logout-btn">Çıkış</button>
                     </div>
                 </div>
                 <div className="page">
                     <div className="page__container">
                         <div className="loading">Yükleniyor...</div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="seller-container">
-                <div className="seller-header">
-                    <h1>İlanlarım</h1>
-                    <div className="header-actions">
-                        <button onClick={() => navigate('/')} className="back-btn">← Geri</button>
-                        <button onClick={logout} className="logout-btn">Çıkış</button>
-                    </div>
-                </div>
-                <div className="page">
-                    <div className="page__container">
-                        <div className="form-card">
-                            <p className="error-message">{error}</p>
-                            <button onClick={loadListings} className="retry-btn">Tekrar Dene</button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -102,62 +100,96 @@ const SellerListings = () => {
                 </div>
             </div>
 
-            <div className="page">
-                <div className="page__container listings-container">
+            <div className="page seller-page-layout">
+                {/* Sidebar */}
+                <div className="seller-sidebar">
+                    <button
+                        className={`sidebar-item ${viewMode === 'active' ? 'active' : ''}`}
+                        onClick={() => setViewMode('active')}
+                    >
+                        📋 Aktif İlanlar
+                    </button>
+                    <button
+                        className={`sidebar-item ${viewMode === 'deleted' ? 'active' : ''}`}
+                        onClick={() => setViewMode('deleted')}
+                    >
+                        🗑️ Silinen İlanlar
+                    </button>
+                </div>
+
+                {/* Main Content */}
+                <div className="seller-content">
                     {listings.length === 0 ? (
                         <div className="form-card">
-                            <p className="empty-message">Henüz ilannız yok.</p>
-                            <button
-                                onClick={() => navigate('/seller/listings/new')}
-                                className="create-btn-large"
-                            >
-                                İlk İlanınızı Oluşturun
-                            </button>
+                            <p className="empty-message">
+                                {viewMode === 'active' ? 'Henüz ilanınız yok.' : 'Çöp kutusu boş.'}
+                            </p>
+                            {viewMode === 'active' && (
+                                <button
+                                    onClick={() => navigate('/seller/listings/new')}
+                                    className="create-btn-large"
+                                >
+                                    İlk İlanınızı Oluşturun
+                                </button>
+                            )}
                         </div>
                     ) : (
                         <div className="listings-grid">
                             {listings.map(listing => (
-                                <div key={listing.id} className="listing-card">
+                                <div key={listing.id} className={`listing-card ${viewMode === 'deleted' ? 'deleted-card' : ''}`}>
                                     <div
                                         className="listing-info"
-                                        onClick={() => navigate(`/animals/${listing.id}`)}
-                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => viewMode === 'active' && navigate(`/animals/${listing.id}`)}
+                                        style={{ cursor: viewMode === 'active' ? 'pointer' : 'default' }}
                                     >
-                                        <h3>{listing.breed}</h3>
+                                        <h3>{listing.title || listing.breed || 'İsimsiz İlan'}</h3>
                                         <span className="type-badge">{listing.animal_type}</span>
                                         <div className="details">
                                             <p><strong>Fiyat:</strong> {listing.price} TL</p>
                                             <p><strong>Konum:</strong> {listing.location}</p>
                                             {listing.age && <p><strong>Yaş:</strong> {listing.age} ay</p>}
-                                            {listing.weight && <p><strong>Ağırlık:</strong> {listing.weight} kg</p>}
                                         </div>
                                         <div className="status">
                                             {listing.is_active ? (
                                                 <span className="active">Aktif</span>
                                             ) : (
-                                                <span className="inactive">Pasif</span>
+                                                <span className="inactive">Silindi</span>
                                             )}
                                         </div>
                                     </div>
                                     <div className="listing-actions">
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                navigate(`/seller/listings/${listing.id}/edit`);
-                                            }}
-                                            className="edit-btn"
-                                        >
-                                            Düzenle
-                                        </button>
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleDelete(listing.id);
-                                            }}
-                                            className="delete-btn"
-                                        >
-                                            Sil
-                                        </button>
+                                        {viewMode === 'active' ? (
+                                            <>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        navigate(`/seller/listings/${listing.id}/edit`);
+                                                    }}
+                                                    className="edit-btn"
+                                                >
+                                                    Düzenle
+                                                </button>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDelete(listing.id);
+                                                    }}
+                                                    className="delete-btn"
+                                                >
+                                                    Sil
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handlePermanentDelete(listing.id);
+                                                }}
+                                                className="delete-btn permanent-delete-btn"
+                                            >
+                                                Kalıcı Olarak Sil
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             ))}

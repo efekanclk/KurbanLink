@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import HomeHero from '../components/home/HomeHero';
 import FeaturedSection from '../components/home/FeaturedSection';
+import HomeSidebar from '../components/home/HomeSidebar';
 import { fetchAnimals, fetchAnimalImages } from '../api/animals';
 import { useAuth } from '../auth/AuthContext';
 import './Home.css';
@@ -54,28 +55,34 @@ const Home = () => {
 
     return (
         <div className="home-page">
-            <HomeHero breeds={breeds} />
+            <div className="home-container">
+                <HomeSidebar />
 
-            {/* CTAs - only show after auth initialization to prevent flicker */}
-            {!isInitializing && user && (
-                <div className="cta-banner">
-                    <div className="cta-item">
-                        <h2>🎯 İlan Oluştur</h2>
-                        <p>Kurban hayvanınızı satışa çıkarın</p>
-                        <Link to="/seller/listings/new" className="cta-button">
-                            Yeni İlan Oluştur
-                        </Link>
-                    </div>
-                </div>
-            )}
+                <main className="home-content">
+                    <HomeHero breeds={breeds} />
 
-            {loading ? (
-                <div className="container loading-container">
-                    <div className="loading-state">Yükleniyor...</div>
-                </div>
-            ) : (
-                <FeaturedSection listings={featuredListings} images={images} />
-            )}
+                    {/* CTAs - only show after auth initialization */}
+                    {!isInitializing && user && (
+                        <div className="cta-banner">
+                            <div className="cta-item">
+                                <h2>🎯 İlan Oluştur</h2>
+                                <p>Kurban hayvanınızı satışa çıkarın</p>
+                                <Link to="/seller/listings/new" className="cta-button">
+                                    Yeni İlan Oluştur
+                                </Link>
+                            </div>
+                        </div>
+                    )}
+
+                    {loading ? (
+                        <div className="container loading-container">
+                            <div className="loading-state">Yükleniyor...</div>
+                        </div>
+                    ) : (
+                        <FeaturedSection listings={featuredListings} images={images} />
+                    )}
+                </main>
+            </div>
         </div>
     );
 };

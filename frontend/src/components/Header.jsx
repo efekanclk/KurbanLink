@@ -43,7 +43,7 @@ const Header = ({ onMenuClick }) => {
                 </Link>
 
                 {/* Right Actions */}
-                {user && (
+                {user ? (
                     <div className="header-actions">
                         {/* User Profile Dropdown */}
                         <div className="user-menu-container" ref={profileRef}>
@@ -93,6 +93,11 @@ const Header = ({ onMenuClick }) => {
                         >
                             ☰
                         </button>
+                    </div>
+                ) : (
+                    <div className="header-actions public-actions">
+                        <Link to="/login" className="login-btn">Giriş Yap</Link>
+                        <Link to="/register" className="register-btn">Kayıt Ol</Link>
                     </div>
                 )}
             </div>

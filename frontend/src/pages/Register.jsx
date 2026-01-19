@@ -167,18 +167,41 @@ const Register = () => {
                 if (result.errors) {
                     const backendErrors = result.errors;
                     const newFieldErrors = {};
+                    let generalError = null;
 
-                    if (backendErrors.email) newFieldErrors.email = backendErrors.email[0];
-                    if (backendErrors.username) newFieldErrors.username = backendErrors.username[0];
-                    if (backendErrors.phone_number) newFieldErrors.phone_number = backendErrors.phone_number[0];
-                    if (backendErrors.city) newFieldErrors.city = backendErrors.city[0];
-                    if (backendErrors.password) newFieldErrors.password = backendErrors.password.join(' ');
+                    Object.keys(backendErrors).forEach(key => {
+                        const errorMsg = Array.isArray(backendErrors[key])
+                            ? backendErrors[key][0]
+                            : backendErrors[key];
 
-                    if (backendErrors.butcher_profile) {
-                        setErrors({ butcher_profile: backendErrors.butcher_profile });
-                    }
+                        // Map field errors
+                        if (['email', 'username', 'phone_number', 'city', 'district', 'password', 'country_code'].includes(key)) {
+                            newFieldErrors[key] = errorMsg;
+                        }
+                        // Map butcher profile errors
+                        else if (key === 'butcher_profile') {
+                            setErrors({ butcher_profile: errorMsg });
+                        }
+                        // Handle butcher specific fields flattened
+                        else if (key.startsWith('butcher_')) {
+                            // Backend might return butcher_profile nested errors?
+                            // Or if we flatten them? 
+                            // Let's just put them in general or try to map if we knew the field name
+                            newFieldErrors[key] = errorMsg;
+                        }
+                        // Everything else is general
+                        else {
+                            generalError = errorMsg;
+                        }
+                    });
 
                     setFieldErrors(newFieldErrors);
+                    if (generalError) {
+                        setErrors(prev => ({ ...prev, general: generalError }));
+                    } else if (Object.keys(newFieldErrors).length === 0) {
+                        // Fallback if no specific fields matched but we have errors
+                        setErrors({ general: 'Giriş bilgilerinizi kontrol ediniz.' });
+                    }
                 } else {
                     setErrors({ general: result.error || 'Kayıt başarısız oldu.' });
                 }
@@ -243,6 +266,8 @@ const Register = () => {
                                     <option value="FR">🇫🇷 +33</option>
                                     <option value="GB">🇬🇧 +44</option>
                                     <option value="US">🇺🇸 +1</option>
+                                    <option value="IQ">🇮🇶 +964</option>
+                                    <option value="SA">🇸🇦 +966</option>
                                 </select>
                                 <input
                                     type="tel"
@@ -290,7 +315,7 @@ const Register = () => {
                                     disabled={!formData.city}
                                 >
                                     <option value="">Seçiniz</option>
-                                    {formData.city && getDistrictsForCity(formData.city).map(dist => (
+                                    {formData.city && getDistrictsForCity(formData.country_code, formData.city).map(dist => (
                                         <option key={dist} value={dist}>{dist}</option>
                                     ))}
                                 </select>

@@ -73,7 +73,18 @@ const AnimalDetail = () => {
         loadListing();
     }, [id]); // Critical: id dependency ensures fresh load on navigation
 
+    const handleAuthAction = (action) => {
+        if (!user) {
+            alert('Bu işlem için giriş yapmalısınız.');
+            navigate(`/login?next=${encodeURIComponent(window.location.pathname)}`);
+            return false;
+        }
+        return true;
+    };
+
     const handleFavoriteToggle = async () => {
+        if (!handleAuthAction()) return;
+
         setFavoriteError(null);
         const result = await toggleFavorite(parseInt(id));
         if (!result.success) {
@@ -83,10 +94,7 @@ const AnimalDetail = () => {
     };
 
     const handleStartConversation = async () => {
-        if (!user) {
-            navigate('/login');
-            return;
-        }
+        if (!handleAuthAction()) return;
 
         setMessagingLoading(true);
         setMessagingError(null);
@@ -171,7 +179,7 @@ const AnimalDetail = () => {
                 <div className="detail-gallery">
                     <div className="main-image">
                         {selectedImage ? (
-                            <img src={selectedImage.image_url} alt={`${listing.animal_type} ${listing.breed}`} />
+                            <img src={selectedImage.image_url} alt={`${listing.animal_type} ${listing.title || listing.breed}`} />
                         ) : (
                             <div className="image-placeholder-large">Resim Yok</div>
                         )}
@@ -194,7 +202,7 @@ const AnimalDetail = () => {
 
                 <div className="detail-info">
                     <div className="title-actions">
-                        <h1>{listing.animal_type} - {listing.breed}</h1>
+                        <h1>{listing.title || listing.breed || 'İsimsiz İlan'}</h1>
                         <div className="action-buttons">
                             <button
                                 className={`favorite-btn-large ${favorited ? 'favorited' : ''}`}
@@ -204,14 +212,14 @@ const AnimalDetail = () => {
                             >
                                 {favorited ? '★ Favorilerde' : '☆ Favorilere Ekle'}
                             </button>
-                            {user?.email !== listing.seller && (
+                            {(!user || user.email !== listing.seller) && (
                                 <button
                                     className="messaging-btn"
                                     onClick={handleStartConversation}
                                     disabled={messagingLoading}
                                     title="Satıcı ile mesajlaş"
                                 >
-                                    {messagingLoading ? 'Yüklen iyor...' : '💬 Mesajlaş'}
+                                    {messagingLoading ? 'Yükleniyor...' : '💬 Mesajlaş'}
                                 </button>
                             )}
                             {user?.email === listing.seller && (

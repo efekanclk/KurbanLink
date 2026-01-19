@@ -27,6 +27,10 @@ class ConversationSerializer(serializers.ModelSerializer):
     listing_details = AnimalListingBasicSerializer(source='listing', read_only=True)
     buyer_email = serializers.EmailField(source='buyer.email', read_only=True)
     seller_email = serializers.EmailField(source='seller.email', read_only=True)
+    # Add usernames with fallback
+    buyer_username = serializers.SerializerMethodField()
+    seller_username = serializers.SerializerMethodField()
+    
     last_message = serializers.SerializerMethodField()
     unread_count = serializers.SerializerMethodField()
     
@@ -38,8 +42,10 @@ class ConversationSerializer(serializers.ModelSerializer):
             'listing_details',
             'buyer',
             'buyer_email',
+            'buyer_username',
             'seller',
             'seller_email',
+            'seller_username',
             'last_message',
             'unread_count',
             'created_at'
@@ -53,14 +59,31 @@ class ConversationSerializer(serializers.ModelSerializer):
             'created_at': 'Başlangıç Tarihi'
         }
         read_only_fields = ['id', 'buyer', 'seller', 'created_at']
+
+    def get_buyer_username(self, obj):
+        """Return username or fallback to email prefix."""
+        if obj.buyer.username:
+            return obj.buyer.username
+        return obj.buyer.email.split('@')[0] if obj.buyer.email else None
+
+    def get_seller_username(self, obj):
+        """Return username or fallback to email prefix."""
+        if obj.seller.username:
+            return obj.seller.username
+        return obj.seller.email.split('@')[0] if obj.seller.email else None
     
     def get_last_message(self, obj):
         """Get the most recent message in this conversation."""
         last_msg = obj.messages.order_by('-created_at').first()
         if last_msg:
+            sender_username = last_msg.sender.username
+            if not sender_username and last_msg.sender.email:
+                sender_username = last_msg.sender.email.split('@')[0]
+                
             return {
                 'content': last_msg.content,
                 'sender_id': last_msg.sender.id,
+                'sender_username': sender_username,
                 'created_at': last_msg.created_at
             }
         return None
@@ -116,6 +139,7 @@ class MessageSerializer(serializers.ModelSerializer):
     """
     
     sender_email = serializers.EmailField(source='sender.email', read_only=True)
+    sender_username = serializers.SerializerMethodField()
     
     class Meta:
         model = Message
@@ -124,10 +148,17 @@ class MessageSerializer(serializers.ModelSerializer):
             'conversation',
             'sender',
             'sender_email',
+            'sender_username',
             'content',
             'created_at'
         ]
         read_only_fields = ['id', 'sender', 'sender_email', 'created_at']
+
+    def get_sender_username(self, obj):
+        """Return username or fallback to email prefix."""
+        if obj.sender.username:
+            return obj.sender.username
+        return obj.sender.email.split('@')[0] if obj.sender.email else None
     
     def validate_content(self, value: str) -> str:
         """

@@ -182,17 +182,23 @@ const ProfileEdit = () => {
                         />
                     </div>
 
-                    {/* Country Code */}
+                    {/* Country Code for Phone */}
                     <div className="form-group">
-                        <label htmlFor="country_code">Ülke</label>
+                        <label htmlFor="country_code">Telefon Ülke Kodu</label>
                         <select
                             id="country_code"
                             name="country_code"
                             value={formData.country_code}
                             onChange={handleChange}
                         >
-                            <option value="TR">Türkiye</option>
-                            <option value="DE">Almanya</option>
+                            <option value="TR">🇹🇷 Türkiye (+90)</option>
+                            <option value="DE">🇩🇪 Almanya (+49)</option>
+                            <option value="NL">🇳🇱 Hollanda (+31)</option>
+                            <option value="FR">🇫🇷 Fransa (+33)</option>
+                            <option value="GB">🇬🇧 İngiltere (+44)</option>
+                            <option value="US">🇺🇸 ABD (+1)</option>
+                            <option value="IQ">🇮🇶 Irak (+964)</option>
+                            <option value="SA">🇸🇦 S. Arabistan (+966)</option>
                         </select>
                     </div>
 
