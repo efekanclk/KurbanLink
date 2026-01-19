@@ -52,6 +52,29 @@ class AnimalListingFilter(django_filters.FilterSet):
         print(f"[DEBUG] Using exact match fallback for: '{v}'")
         return queryset.filter(animal_type=value)
     
+    # New filters for Home Redesign
+    gender = django_filters.CharFilter(lookup_expr='iexact')
+    city = django_filters.CharFilter(lookup_expr='icontains')
+    district = django_filters.CharFilter(lookup_expr='icontains')
+    
+    date_posted = django_filters.CharFilter(method='filter_date_posted')
+    
+    def filter_date_posted(self, queryset, name, value):
+        from django.utils import timezone
+        from datetime import timedelta
+        
+        now = timezone.now()
+        if value == 'today':
+            return queryset.filter(created_at__date=now.date())
+        elif value == 'week':
+            return queryset.filter(created_at__gte=now - timedelta(days=7))
+        elif value == 'month':
+            return queryset.filter(created_at__gte=now - timedelta(days=30))
+        elif value == 'year':
+            return queryset.filter(created_at__gte=now - timedelta(days=365))
+        return queryset
+
+    # Existing filters...
     min_price = django_filters.NumberFilter(
         field_name='price',
         lookup_expr='gte',
@@ -70,12 +93,12 @@ class AnimalListingFilter(django_filters.FilterSet):
     )
     
     min_age = django_filters.NumberFilter(
-        field_name='age',
+        field_name='age_months', # Updated to age_months
         lookup_expr='gte',
         help_text="Minimum age in months"
     )
     max_age = django_filters.NumberFilter(
-        field_name='age',
+        field_name='age_months', # Updated to age_months
         lookup_expr='lte',
         help_text="Maximum age in months"
     )
@@ -94,12 +117,7 @@ class AnimalListingFilter(django_filters.FilterSet):
     class Meta:
         model = AnimalListing
         fields = [
-            'animal_type',
-            'min_price',
-            'max_price',
-            'location',
-            'min_age',
-            'max_age',
-            'min_weight',
-            'max_weight'
+            'animal_type', 'min_price', 'max_price', 'location', 
+            'city', 'district', 'gender', 'date_posted',
+            'min_age', 'max_age', 'min_weight', 'max_weight'
         ]

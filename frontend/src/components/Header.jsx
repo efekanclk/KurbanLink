@@ -42,9 +42,37 @@ const Header = ({ onMenuClick }) => {
                     Kurban<span className="brand-accent">Link</span>
                 </Link>
 
+                {/* Search Bar - Center/Right */}
+                <div className="header-search">
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        const term = e.target.search.value.trim();
+                        if (term) {
+                            navigate(`/?search=${encodeURIComponent(term)}`);
+                        } else {
+                            navigate('/');
+                        }
+                    }}>
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Kelime, ilan no veya şehir ile ara"
+                            className="search-input"
+                            autoComplete="off"
+                        />
+                        <button type="submit" className="search-btn">
+                            🔍
+                        </button>
+                    </form>
+                </div>
+
                 {/* Right Actions */}
                 {user ? (
                     <div className="header-actions">
+                        <Link to="/seller/listings/new" className="create-listing-header-btn">
+                            + İlan Ver
+                        </Link>
+
                         {/* User Profile Dropdown */}
                         <div className="user-menu-container" ref={profileRef}>
                             <button

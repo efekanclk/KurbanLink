@@ -22,6 +22,8 @@ const NewListing = () => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState([]);
+    const [draggedIndex, setDraggedIndex] = useState(null);
+    const [isDraggingOver, setIsDraggingOver] = useState(false);
 
     // Cleanup object URLs to avoid memory leaks
     useEffect(() => {
@@ -59,10 +61,10 @@ const NewListing = () => {
             preview: URL.createObjectURL(file)
         }));
 
-        const updatedImages = [...selectedImages, ...newImages].slice(0, 5);
+        const updatedImages = [...selectedImages, ...newImages].slice(0, 20);
 
-        if (updatedImages.length > 5) {
-            alert('En fazla 5 resim yükleyebilirsiniz');
+        if (updatedImages.length > 20) {
+            alert('En fazla 20 resim yükleyebilirsiniz');
             return;
         }
         setSelectedImages(updatedImages);
@@ -72,10 +74,91 @@ const NewListing = () => {
     const handleRemoveImage = (index) => {
         setSelectedImages(prev => {
             const newImages = [...prev];
-            URL.revokeObjectURL(newImages[index].preview);
+            if (newImages[index].preview) {
+                URL.revokeObjectURL(newImages[index].preview);
+            }
             newImages.splice(index, 1);
             return newImages;
         });
+    };
+
+    const handleDragStart = (e, index) => {
+        setDraggedIndex(index);
+        e.dataTransfer.effectAllowed = "move";
+        // Ghost image usually handled by browser, but we can set it if needed
+    };
+
+    const handleDragOver = (e, index) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+    };
+
+    const handleDrop = (e, targetIndex) => {
+        e.preventDefault();
+        if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+        const newImages = [...selectedImages];
+        const draggedItem = newImages[draggedIndex];
+
+        // Remove dragged item
+        newImages.splice(draggedIndex, 1);
+        // Insert at new position
+        newImages.splice(targetIndex, 0, draggedItem);
+
+        setSelectedImages(newImages);
+        setDraggedIndex(null);
+    };
+
+    // File drop handlers (for dropping files from desktop)
+    const handleFileDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDraggingOver(false);
+
+        // If dragging an existing image (reordering), don't process as file drop
+        if (draggedIndex !== null) {
+            return;
+        }
+
+        const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+
+        if (files.length === 0) return;
+
+        const newImages = files.map(file => ({
+            file,
+            preview: URL.createObjectURL(file)
+        }));
+
+        const updatedImages = [...selectedImages, ...newImages].slice(0, 20);
+
+        if (selectedImages.length + files.length > 20) {
+            alert('En fazla 20 resim yükleyebilirsiniz');
+        }
+
+        setSelectedImages(updatedImages);
+    };
+
+    const handleDragEnter = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // Only show drag-over state if dragging files from desktop
+        if (draggedIndex === null) {
+            setIsDraggingOver(true);
+        }
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // Only set to false if leaving the drop zone itself
+        if (e.currentTarget === e.target) {
+            setIsDraggingOver(false);
+        }
+    };
+
+    const handleDragOverDropZone = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
     };
 
     const validate = () => {
@@ -100,35 +183,48 @@ const NewListing = () => {
 
         setLoading(true);
         setErrors({});
+        setUploadStatus([]);
 
         try {
-            // Create listing
+            // 1. Create listing with clean payload
             const listingData = {
                 title: formData.title,
                 animal_type: formData.animal_type,
-                breed: formData.breed,
-                price: parseFloat(formData.price),
+                breed: formData.breed || '',
+                price: parseFloat(formData.price), // Ensure number
                 city: formData.city,
                 district: formData.district,
+                description: formData.description || '',
+                age_months: parseInt(formData.age, 10), // Ensure integer
+                weight: parseFloat(formData.weight) // Ensure number
             };
-
-            if (formData.age && formData.age !== '') listingData.age_months = parseInt(formData.age); // Map 'age' to 'age_months'
-            if (formData.weight && formData.weight !== '') listingData.weight = parseFloat(formData.weight);
-            if (formData.description && formData.description !== '') listingData.description = formData.description;
 
             const newListing = await createListing(listingData);
 
-            // Upload images if any
+            // 2. Upload images if any
             if (selectedImages.length > 0) {
-                setUploadStatus([{ message: 'Resimler yükleniyor...' }]);
+                setUploadStatus([{ message: 'Resimler yükleniyor...', success: true }]);
 
-                const filesToUpload = selectedImages.map(item => item.file);
-                const results = await uploadListingImages(newListing.id, filesToUpload);
+                // Prepare images with is_primary flag (first one is primary)
+                const imagesToUpload = selectedImages.map((item, index) => ({
+                    file: item.file,
+                    is_primary: index === 0
+                }));
 
+                const results = await uploadListingImages(newListing.id, imagesToUpload);
                 setUploadStatus(results);
 
-                // Wait a moment to show upload results
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                // Check if any failed
+                const failed = results.filter(r => !r.success);
+
+                if (failed.length > 0) {
+                    setErrors({ general: `${failed.length} resim yüklenemedi. İlanınız oluşturuldu, düzenleme sayfasından tekrar deneyebilirsiniz.` });
+                    // Provide a link or way to proceed? For now, just show error.
+                    // If some succeeded, we still proceed after a delay?
+                }
+
+                // Wait a moment to show success/status before redirecting
+                await new Promise(resolve => setTimeout(resolve, 1500));
             }
 
             navigate('/seller/listings');
@@ -139,22 +235,21 @@ const NewListing = () => {
                 const newErrors = {};
 
                 if (Array.isArray(backendErrors)) {
-                    // Handle list errors (e.g. ["Internal Error..."])
                     newErrors.general = backendErrors.join(', ');
                 } else if (backendErrors.detail) {
-                    // Handle specific detail (e.g. { detail: "..." })
                     newErrors.general = backendErrors.detail;
                 } else {
-                    // Handle field errors object
                     Object.keys(backendErrors).forEach(key => {
-                        newErrors[key] = Array.isArray(backendErrors[key])
-                            ? backendErrors[key][0]
-                            : backendErrors[key];
+                        const val = backendErrors[key];
+                        newErrors[key] = Array.isArray(val) ? val[0] : val;
                     });
                 }
                 setErrors(newErrors);
+
+                // Scroll to top to see errors
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                setErrors({ general: 'İlan oluşturulamadı' });
+                setErrors({ general: 'Bir hata oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyin.' });
             }
         } finally {
             setLoading(false);
@@ -304,34 +399,71 @@ const NewListing = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="images">Resimler (En fazla 5)</label>
-                                <input
-                                    type="file"
-                                    id="images"
-                                    accept="image/*"
-                                    multiple
-                                    onChange={handleImageChange}
-                                />
-                                {selectedImages.length > 0 && (
-                                    <div className="image-preview">
-                                        <p>{selectedImages.length} resim seçildi (Maks: 5)</p>
-                                        <div className="image-grid">
-                                            {selectedImages.map((item, idx) => (
-                                                <div key={idx} className="image-card">
-                                                    <img src={item.preview} alt={`Preview ${idx}`} />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => handleRemoveImage(idx)}
-                                                        className="remove-image-btn"
-                                                    >
-                                                        ✕
-                                                    </button>
-                                                </div>
-                                            ))}
-                                        </div>
+                                <label className="form-label">Resimler (En fazla 20)</label>
+
+                                <div
+                                    className={`image-uploader ${isDraggingOver ? 'drag-over' : ''}`}
+                                    onDrop={handleFileDrop}
+                                    onDragOver={handleDragOverDropZone}
+                                    onDragEnter={handleDragEnter}
+                                    onDragLeave={handleDragLeave}
+                                >
+                                    <div className="image-uploader__input">
+                                        <input
+                                            type="file"
+                                            id="images"
+                                            accept="image/*"
+                                            multiple
+                                            onChange={handleImageChange}
+                                            className="file-input"
+                                        />
+                                        <span className="image-uploader__hint">
+                                            Ekle ya da sürükle
+                                        </span>
                                     </div>
-                                )}
+
+                                    {selectedImages.length > 0 && (
+                                        <>
+                                            <div className="image-uploader__info">
+                                                <span>{selectedImages.length}/20 resim seçildi</span>
+                                            </div>
+
+                                            <div className="image-uploader__grid">
+                                                {selectedImages.map((item, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className={`image-uploader__item ${idx === 0 ? 'is-primary' : ''} ${draggedIndex === idx ? 'dragging' : ''}`}
+                                                        draggable
+                                                        onDragStart={(e) => handleDragStart(e, idx)}
+                                                        onDragOver={(e) => handleDragOver(e, idx)}
+                                                        onDrop={(e) => handleDrop(e, idx)}
+                                                    >
+                                                        <img
+                                                            src={item.preview}
+                                                            alt={`Preview ${idx}`}
+                                                            className="image-uploader__thumb"
+                                                        />
+
+                                                        {idx === 0 && (
+                                                            <div className="image-uploader__badge">Ana Görsel</div>
+                                                        )}
+
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleRemoveImage(idx)}
+                                                            className="image-uploader__remove"
+                                                            aria-label="Remove image"
+                                                        >
+                                                            ✕
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
                             </div>
+
 
                             {uploadStatus.length > 0 && (
                                 <div className="upload-status">

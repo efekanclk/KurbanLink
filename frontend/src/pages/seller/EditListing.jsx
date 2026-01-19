@@ -20,6 +20,8 @@ const EditListing = () => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [draggedIndex, setDraggedIndex] = useState(null);
+    const [isDraggingOver, setIsDraggingOver] = useState(false);
 
     // Cleanup object URLs on unmount
     useEffect(() => {
@@ -73,10 +75,10 @@ const EditListing = () => {
             preview: URL.createObjectURL(file)
         }));
 
-        const updatedImages = [...selectedImages, ...newImages].slice(0, 5);
+        const updatedImages = [...selectedImages, ...newImages].slice(0, 20);
 
-        if (updatedImages.length > 5) {
-            alert('En fazla 5 resim yükleyebilirsiniz');
+        if (updatedImages.length > 20) {
+            alert('En fazla 20 resim yükleyebilirsiniz');
             return;
         }
         setSelectedImages(updatedImages);
@@ -90,6 +92,79 @@ const EditListing = () => {
             newImages.splice(index, 1);
             return newImages;
         });
+    };
+
+    const handleDragStart = (e, index) => {
+        setDraggedIndex(index);
+        e.dataTransfer.effectAllowed = "move";
+    };
+
+    const handleDragOver = (e, index) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+    };
+
+    const handleDrop = (e, targetIndex) => {
+        e.preventDefault();
+        if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+        const newImages = [...selectedImages];
+        const draggedItem = newImages[draggedIndex];
+
+        newImages.splice(draggedIndex, 1);
+        newImages.splice(targetIndex, 0, draggedItem);
+
+        setSelectedImages(newImages);
+        setDraggedIndex(null);
+    };
+
+    const handleFileDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDraggingOver(false);
+
+        // If dragging an existing image (reordering), don't process as file drop
+        if (draggedIndex !== null) {
+            return;
+        }
+
+        const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+
+        if (files.length === 0) return;
+
+        const newImages = files.map(file => ({
+            file,
+            preview: URL.createObjectURL(file)
+        }));
+
+        const updatedImages = [...selectedImages, ...newImages].slice(0, 20);
+
+        if (selectedImages.length + files.length > 20) {
+            alert('En fazla 20 resim yükleyebilirsiniz');
+        }
+
+        setSelectedImages(updatedImages);
+    };
+
+    const handleDragEnter = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (draggedIndex === null) {
+            setIsDraggingOver(true);
+        }
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.currentTarget === e.target) {
+            setIsDraggingOver(false);
+        }
+    };
+
+    const handleDragOverDropZone = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
     };
 
     const validate = () => {
@@ -282,33 +357,65 @@ const EditListing = () => {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="images">Yeni Resimler Ekle (Opsiyonel)</label>
-                                <input
-                                    type="file"
-                                    id="images"
-                                    accept="image/*"
-                                    multiple
-                                    onChange={handleImageChange}
-                                />
-                                {selectedImages.length > 0 && (
-                                    <div className="image-preview">
-                                        <p>{selectedImages.length} yeni resim seçildi (Maks: 5)</p>
-                                        <div className="image-grid">
-                                            {selectedImages.map((item, idx) => (
-                                                <div key={idx} className="image-card">
-                                                    <img src={item.preview} alt={`Preview ${idx}`} />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => handleRemoveImage(idx)}
-                                                        className="remove-image-btn"
-                                                    >
-                                                        ✕
-                                                    </button>
-                                                </div>
-                                            ))}
-                                        </div>
+                                <label className="form-label">Yeni Resimler Ekle (En fazla 20)</label>
+
+
+                                <div
+                                    className={`image-uploader ${isDraggingOver ? 'drag-over' : ''}`}
+                                    onDrop={handleFileDrop}
+                                    onDragOver={handleDragOverDropZone}
+                                    onDragEnter={handleDragEnter}
+                                    onDragLeave={handleDragLeave}
+                                >
+                                    <div className="image-uploader__input">
+                                        <input
+                                            type="file"
+                                            id="images"
+                                            accept="image/*"
+                                            multiple
+                                            onChange={handleImageChange}
+                                            className="file-input"
+                                        />
+                                        <span className="image-uploader__hint">
+                                            Ekle ya da sürükle
+                                        </span>
                                     </div>
-                                )}
+
+                                    {selectedImages.length > 0 && (
+                                        <>
+                                            <div className="image-uploader__info">
+                                                <span>{selectedImages.length}/20 yeni resim seçildi</span>
+                                            </div>
+
+                                            <div className="image-uploader__grid">
+                                                {selectedImages.map((item, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className={`image-uploader__item ${draggedIndex === idx ? 'dragging' : ''}`}
+                                                        draggable
+                                                        onDragStart={(e) => handleDragStart(e, idx)}
+                                                        onDragOver={(e) => handleDragOver(e, idx)}
+                                                        onDrop={(e) => handleDrop(e, idx)}
+                                                    >
+                                                        <img
+                                                            src={item.preview}
+                                                            alt={`Preview ${idx}`}
+                                                            className="image-uploader__thumb"
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleRemoveImage(idx)}
+                                                            className="image-uploader__remove"
+                                                            aria-label="Remove image"
+                                                        >
+                                                            ✕
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
                             </div>
 
                             {errors.general && <div className="error-message">{errors.general}</div>}

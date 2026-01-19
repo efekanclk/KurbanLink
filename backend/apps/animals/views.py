@@ -2,7 +2,7 @@
 Views for animals app.
 """
 
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -25,7 +25,8 @@ class AnimalListingViewSet(viewsets.ModelViewSet):
     serializer_class = AnimalListingSerializer
     queryset = AnimalListing.objects.filter(is_active=True)
     filterset_class = AnimalListingFilter
-    filter_backends = [DjangoFilterBackend]  # CRITICAL: Enable filtering
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['title', 'description', 'breed', 'city', 'district', 'ear_tag_no']
     pagination_class = AnimalListingPagination
     
     def get_permissions(self):
@@ -70,6 +71,17 @@ class AnimalListingViewSet(viewsets.ModelViewSet):
         return AnimalListing.objects.filter(is_active=True)
     
     # ... (perform_create, update, partial_update methods remain same) ...
+    def perform_create(self, serializer):
+        """Set the seller to the current user."""
+        serializer.save(seller=self.request.user)
+        
+    def perform_update(self, serializer):
+        """Update the listing."""
+        serializer.save()
+        
+    def perform_partial_update(self, serializer):
+        """Partial update the listing."""
+        serializer.save()
 
     def destroy(self, request, *args, **kwargs):
         """

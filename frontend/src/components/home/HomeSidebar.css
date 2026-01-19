@@ -72,6 +72,61 @@
     gap: 0.5rem;
 }
 
+/* FILTER STYLES */
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+
+.filter-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #4a5568;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #2d3748;
+    cursor: pointer;
+}
+
+.radio-label input {
+    accent-color: var(--primary-color, #2d6a4f);
+}
+
+.filter-select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 0.9rem;
+    color: #2d3748;
+}
+
+.filter-select:focus {
+    border-color: var(--primary-color, #2d6a4f);
+    outline: none;
+}
+
+/* Make link active state more visible */
+.sidebar-link.active {
+    background-color: #f0fdf4;
+    color: #2d6a4f;
+    font-weight: 600;
+    border-right: 3px solid #2d6a4f;
+}
+
 @media (max-width: 900px) {
     .home-sidebar {
         display: none;

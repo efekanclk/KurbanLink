@@ -81,10 +81,15 @@ export const permanentlyDeleteListing = async (id) => {
 export const uploadListingImages = async (listingId, images) => {
     const uploadResults = [];
 
-    for (const image of images) {
+    for (const imageItem of images) {
         const formData = new FormData();
-        formData.append('image', image);
+        // Handle both raw File objects and objects with { file, is_primary }
+        const file = imageItem.file || imageItem;
+        const isPrimary = imageItem.is_primary || false;
+
+        formData.append('image', file);
         formData.append('listing', listingId);
+        formData.append('is_primary', isPrimary.toString());
 
         try {
             const response = await apiClient.post(
@@ -96,12 +101,12 @@ export const uploadListingImages = async (listingId, images) => {
                     }
                 }
             );
-            uploadResults.push({ success: true, data: response.data, file: image.name });
+            uploadResults.push({ success: true, data: response.data, file: file.name });
         } catch (error) {
             uploadResults.push({
                 success: false,
                 error: error.response?.data?.detail || 'Upload failed',
-                file: image.name
+                file: file.name
             });
         }
     }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import HomeHero from '../components/home/HomeHero';
+import { Link, useSearchParams } from 'react-router-dom';
 import FeaturedSection from '../components/home/FeaturedSection';
 import HomeSidebar from '../components/home/HomeSidebar';
 import { fetchAnimals, fetchAnimalImages } from '../api/animals';
@@ -9,31 +8,32 @@ import './Home.css';
 
 const Home = () => {
     const { user, isInitializing } = useAuth();
+    const [searchParams] = useSearchParams();
     const [featuredListings, setFeaturedListings] = useState([]);
     const [images, setImages] = useState({});
-    const [breeds, setBreeds] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Re-fetch when URL params change
     useEffect(() => {
-        const loadFeatured = async () => {
+        const loadListings = async () => {
+            setLoading(true);
             try {
-                // Fetch first page
-                const data = await fetchAnimals({ page: 1 });
-                // Take first 8 for featured
-                const listings = data.results.slice(0, 8);
-                setFeaturedListings(listings);
+                // Convert URL params to object for API
+                // Filter out empty params manually or rely on backend handling empty strings (usually fine, but cleaner to remove)
+                const filters = {};
+                for (const [key, value] of searchParams.entries()) {
+                    if (value && value !== 'undefined' && value !== 'null') {
+                        filters[key] = value;
+                    }
+                }
 
-                // Extract unique breeds
-                const uniqueBreeds = [...new Set(
-                    listings
-                        .map(l => l.breed)
-                        .filter(breed => breed && breed.trim())
-                )];
-                setBreeds(uniqueBreeds);
+                // Fetch listings with filters
+                const data = await fetchAnimals({ page: 1, ...filters });
+                setFeaturedListings(data.results || []);
 
                 // Fetch images
                 const imageMap = {};
-                for (const listing of listings) {
+                for (const listing of (data.results || [])) {
                     try {
                         const imgs = await fetchAnimalImages(listing.id);
                         const primary = imgs.find(img => img.is_primary) || imgs[0];
@@ -44,14 +44,14 @@ const Home = () => {
                 }
                 setImages(imageMap);
             } catch (error) {
-                console.error("Failed to load featured listings", error);
+                console.error("Failed to load listings", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        loadFeatured();
-    }, []);
+        loadListings();
+    }, [searchParams]);
 
     return (
         <div className="home-page">
@@ -59,27 +59,28 @@ const Home = () => {
                 <HomeSidebar />
 
                 <main className="home-content">
-                    <HomeHero breeds={breeds} />
+                    {/* Header for listings */}
+                    <div className="listings-header">
+                        <h2>Tüm İlanlar</h2>
+                        {searchParams.get('search') && (
+                            <p className="search-result-text">
+                                "{searchParams.get('search')}" için sonuçlar
+                            </p>
+                        )}
+                    </div>
 
-                    {/* CTAs - only show after auth initialization */}
-                    {!isInitializing && user && (
-                        <div className="cta-banner">
-                            <div className="cta-item">
-                                <h2>🎯 İlan Oluştur</h2>
-                                <p>Kurban hayvanınızı satışa çıkarın</p>
-                                <Link to="/seller/listings/new" className="cta-button">
-                                    Yeni İlan Oluştur
-                                </Link>
-                            </div>
-                        </div>
-                    )}
+
 
                     {loading ? (
                         <div className="container loading-container">
                             <div className="loading-state">Yükleniyor...</div>
                         </div>
-                    ) : (
+                    ) : featuredListings.length > 0 ? (
                         <FeaturedSection listings={featuredListings} images={images} />
+                    ) : (
+                        <div className="no-results">
+                            <p>Aradığınız kriterlere uygun ilan bulunamadı.</p>
+                        </div>
                     )}
                 </main>
             </div>

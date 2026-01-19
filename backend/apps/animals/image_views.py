@@ -11,6 +11,11 @@ from .models import AnimalListing, AnimalImage
 from .image_serializers import AnimalImageSerializer
 
 
+from django.shortcuts import get_object_or_404
+import logging
+
+logger = logging.getLogger(__name__)
+
 class AnimalImageViewSet(viewsets.ModelViewSet):
     """
     ViewSet for animal listing images.
@@ -50,18 +55,25 @@ class AnimalImageViewSet(viewsets.ModelViewSet):
             201 Created if successful
             403 Forbidden if not the seller
         """
-        listing_id = self.kwargs.get('listing_pk')
-        listing = get_object_or_404(AnimalListing, pk=listing_id)
-        
-        # Check ownership via IsSellerAndOwner permission
-        self.check_object_permissions(request, listing)
-        
-        # Create serializer with listing
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(listing=listing)
-        
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            listing_id = self.kwargs.get('listing_pk')
+            listing = get_object_or_404(AnimalListing, pk=listing_id)
+            
+            # Check ownership via IsSellerAndOwner permission
+            self.check_object_permissions(request, listing)
+            
+            # Create serializer with listing
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(listing=listing)
+            
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            logger.error(f"Image upload failed: {str(e)}", exc_info=True)
+            return Response(
+                {'detail': f"Upload failed: {str(e)}"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
     
     def destroy(self, request, *args, **kwargs):
         """
