@@ -61,6 +61,14 @@ const HamburgerDrawer = ({ isOpen, onClose }) => {
                         👤 Profilim
                     </Link>
 
+                    <Link
+                        to="/seller/listings"
+                        className="drawer-nav-item"
+                        onClick={handleLinkClick}
+                    >
+                        📋 İlanlarım
+                    </Link>
+
                     {isButcher && (
                         <Link
                             to="/butcher/appointments"

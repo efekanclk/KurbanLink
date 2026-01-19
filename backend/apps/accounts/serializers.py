@@ -55,8 +55,11 @@ class MeSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'phone_number', 'country_code', 'city', 'district', 'profile_image_url', 'roles']
+        fields = ['id', 'email', 'username', 'phone_number', 'country_code', 'city', 'district', 'profile_image', 'profile_image_url', 'roles']
         read_only_fields = ['id', 'email', 'roles']
+        extra_kwargs = {
+            'profile_image': {'write_only': True},
+        }
     
     def get_roles(self, obj):
         """Extract role codes from active UserRole relationships"""

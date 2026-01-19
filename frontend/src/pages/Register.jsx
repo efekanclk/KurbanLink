@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import { cities, getDistrictsForCity } from '../data/locations';
 import './Register.css';
 
 const Register = () => {
@@ -14,11 +15,13 @@ const Register = () => {
         username: '',
         phone_number: '',
         country_code: 'TR',
+        city: '',
+        district: '',
         is_butcher: false,
         butcher_profile: {
             first_name: '',
             last_name: '',
-            city: '',
+            city: '', // Still kept for backward compatibility if needed, but main user city is primary
             district: '',
             services: '',
             price_range: ''
@@ -58,19 +61,19 @@ const Register = () => {
             ...prev,
             [name]: value
         }));
+
+        // Special handling for main city change to reset district
+        if (name === 'city') {
+            setFormData(prev => ({
+                ...prev,
+                city: value,
+                district: ''
+            }));
+        }
+
         if (fieldErrors[name]) {
             setFieldErrors(prev => ({ ...prev, [name]: null }));
         }
-    };
-
-    const handleRoleToggle = (role) => {
-        setFormData(prev => ({
-            ...prev,
-            roles: {
-                ...prev.roles,
-                [role]: !prev.roles[role]
-            }
-        }));
     };
 
     const validateForm = () => {
@@ -88,6 +91,9 @@ const Register = () => {
         if (!formData.phone_number.trim()) {
             newErrors.phone_number = 'Telefon numarası gereklidir';
         }
+        if (!formData.city) {
+            newErrors.city = 'Şehir seçimi zorunludur';
+        }
         if (!formData.password) {
             newErrors.password = 'Şifre gereklidir';
         } else if (formData.password.length < 8) {
@@ -104,9 +110,6 @@ const Register = () => {
             }
             if (!formData.butcher_profile.last_name.trim()) {
                 newErrors.butcher_last_name = 'Soyad gereklidir';
-            }
-            if (!formData.butcher_profile.city.trim()) {
-                newErrors.butcher_city = 'Şehir gereklidir';
             }
         }
 
@@ -130,6 +133,8 @@ const Register = () => {
                 username: formData.username,
                 phone_number: formData.phone_number,
                 country_code: formData.country_code,
+                city: formData.city,
+                district: formData.district,
                 is_butcher: formData.is_butcher
             };
 
@@ -138,8 +143,15 @@ const Register = () => {
                 payload.butcher_profile = {
                     first_name: formData.butcher_profile.first_name,
                     last_name: formData.butcher_profile.last_name,
-                    city: formData.butcher_profile.city,
-                    district: formData.butcher_profile.district || '',
+                    // Use main city/district for butcher profile as well by default if not specified separately
+                    // But here we just send what's in the profile object? 
+                    // Let's assume user wants to use same location. 
+                    // Actually, let's keep it simple: butcher fields specific to business.
+                    // But we removed city/district from butcher form UI below, so we should map main city/district to butcher profile too?
+                    // The backend RegisterView expects butcher_profile data.
+                    // Let's copy main city/district to butcher profile if empty?
+                    city: formData.city,
+                    district: formData.district,
                     services: formData.butcher_profile.services
                         ? formData.butcher_profile.services.split(',').map(s => s.trim())
                         : [],
@@ -156,26 +168,12 @@ const Register = () => {
                     const backendErrors = result.errors;
                     const newFieldErrors = {};
 
-                    if (backendErrors.email) {
-                        newFieldErrors.email = Array.isArray(backendErrors.email)
-                            ? backendErrors.email[0]
-                            : backendErrors.email;
-                    }
-                    if (backendErrors.username) {
-                        newFieldErrors.username = Array.isArray(backendErrors.username)
-                            ? backendErrors.username[0]
-                            : backendErrors.username;
-                    }
-                    if (backendErrors.phone_number) {
-                        newFieldErrors.phone_number = Array.isArray(backendErrors.phone_number)
-                            ? backendErrors.phone_number[0]
-                            : backendErrors.phone_number;
-                    }
-                    if (backendErrors.password) {
-                        newFieldErrors.password = Array.isArray(backendErrors.password)
-                            ? backendErrors.password.join(' ')
-                            : backendErrors.password;
-                    }
+                    if (backendErrors.email) newFieldErrors.email = backendErrors.email[0];
+                    if (backendErrors.username) newFieldErrors.username = backendErrors.username[0];
+                    if (backendErrors.phone_number) newFieldErrors.phone_number = backendErrors.phone_number[0];
+                    if (backendErrors.city) newFieldErrors.city = backendErrors.city[0];
+                    if (backendErrors.password) newFieldErrors.password = backendErrors.password.join(' ');
+
                     if (backendErrors.butcher_profile) {
                         setErrors({ butcher_profile: backendErrors.butcher_profile });
                     }
@@ -242,21 +240,9 @@ const Register = () => {
                                     <option value="TR">🇹🇷 +90</option>
                                     <option value="DE">🇩🇪 +49</option>
                                     <option value="NL">🇳🇱 +31</option>
-                                    <option value="BE">🇧🇪 +32</option>
                                     <option value="FR">🇫🇷 +33</option>
-                                    <option value="CH">🇨🇭 +41</option>
-                                    <option value="AT">🇦🇹 +43</option>
                                     <option value="GB">🇬🇧 +44</option>
-                                    <option value="IT">🇮🇹 +39</option>
-                                    <option value="ES">🇪🇸 +34</option>
-                                    <option value="SE">🇸🇪 +46</option>
-                                    <option value="NO">🇳🇴 +47</option>
-                                    <option value="DK">🇩🇰 +45</option>
-                                    <option value="IQ">🇮🇶 +964</option>
-                                    <option value="SA">🇸🇦 +966</option>
-                                    <option value="AE">🇦🇪 +971</option>
                                     <option value="US">🇺🇸 +1</option>
-                                    <option value="CA">🇨🇦 +1</option>
                                 </select>
                                 <input
                                     type="tel"
@@ -271,6 +257,44 @@ const Register = () => {
                             {(errors.phone_number || fieldErrors.phone_number) && (
                                 <span className="error-text">{errors.phone_number || fieldErrors.phone_number}</span>
                             )}
+                        </div>
+
+                        {/* City & District Dropdowns */}
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label htmlFor="city">Şehir *</label>
+                                <select
+                                    id="city"
+                                    name="city"
+                                    value={formData.city}
+                                    onChange={handleChange}
+                                    className={errors.city || fieldErrors.city ? 'error' : ''}
+                                >
+                                    <option value="">Seçiniz</option>
+                                    {cities.map(city => (
+                                        <option key={city} value={city}>{city}</option>
+                                    ))}
+                                </select>
+                                {(errors.city || fieldErrors.city) && (
+                                    <span className="error-text">{errors.city || fieldErrors.city}</span>
+                                )}
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="district">İlçe</label>
+                                <select
+                                    id="district"
+                                    name="district"
+                                    value={formData.district}
+                                    onChange={handleChange}
+                                    disabled={!formData.city}
+                                >
+                                    <option value="">Seçiniz</option>
+                                    {formData.city && getDistrictsForCity(formData.city).map(dist => (
+                                        <option key={dist} value={dist}>{dist}</option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
 
                         <div className="form-group">
@@ -311,16 +335,17 @@ const Register = () => {
                                     checked={formData.is_butcher}
                                     onChange={handleChange}
                                 />
-                                <span>Kasaplık yapacak mısınız?</span>
+                                <span>Kasap mısınız?</span>
                             </label>
                         </div>
 
                         {formData.is_butcher && (
                             <div className="butcher-fields">
                                 <h3>Kasap Bilgileri</h3>
+                                <p className="hint-text">İşletme adınız ve diğer detaylar</p>
 
                                 <div className="form-group">
-                                    <label htmlFor="butcher_first_name">Ad *</label>
+                                    <label htmlFor="butcher_first_name">Ad / İşletme Adı *</label>
                                     <input
                                         type="text"
                                         id="butcher_first_name"
@@ -349,33 +374,7 @@ const Register = () => {
                                     )}
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="butcher_city">Şehir *</label>
-                                    <input
-                                        type="text"
-                                        id="butcher_city"
-                                        name="butcher_city"
-                                        value={formData.butcher_profile.city}
-                                        onChange={handleChange}
-                                        className={errors.butcher_city ? 'error' : ''}
-                                        placeholder="Ankara"
-                                    />
-                                    {errors.butcher_city && (
-                                        <span className="error-text">{errors.butcher_city}</span>
-                                    )}
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="butcher_district">İlçe (Opsiyonel)</label>
-                                    <input
-                                        type="text"
-                                        id="butcher_district"
-                                        name="butcher_district"
-                                        value={formData.butcher_profile.district}
-                                        onChange={handleChange}
-                                        placeholder="Çankaya"
-                                    />
-                                </div>
+                                {/* Removed duplicate city/district from butcher section since we catch it globally now */}
 
                                 <div className="form-group">
                                     <label htmlFor="butcher_services">Hizmetler (Opsiyonel, virgülle ayırın)</label>
@@ -385,7 +384,7 @@ const Register = () => {
                                         name="butcher_services"
                                         value={formData.butcher_profile.services}
                                         onChange={handleChange}
-                                        placeholder="Kurban kesimi, Deri işleme"
+                                        placeholder="Kurban kesimi, Parçalama, Pay etme"
                                     />
                                 </div>
 

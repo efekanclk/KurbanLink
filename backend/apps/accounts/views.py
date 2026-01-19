@@ -71,13 +71,30 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class MeAPIView(generics.RetrieveAPIView):
+from rest_framework.parsers import MultiPartParser, JSONParser
+
+class MeAPIView(generics.RetrieveUpdateAPIView):
     """
     GET /api/auth/me/
     Returns current authenticated user's id, email, and active roles.
+    
+    PATCH /api/auth/me/
+    Update user profile (profile_image, city, district, etc.)
     """
     serializer_class = MeSerializer
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, JSONParser]
     
     def get_object(self):
         return self.request.user
+        
+    def partial_update(self, request, *args, **kwargs):
+        """
+        Handle partial updates including file uploads.
+        """
+        user = self.get_object()
+        
+        # If profile_image is in data (even if empty/null), it might be an attempt to clear it
+        # But for now standard partial_update should handle it if serializer is correct
+        
+        return super().partial_update(request, *args, **kwargs)

@@ -27,7 +27,15 @@ export const fetchNotifications = async () => {
 /**
  * Mark a notification as read
  */
-export const markAsRead = async (notificationId) => {
+export const markNotificationRead = async (notificationId) => {
     const response = await apiClient.post(`/api/notifications/${notificationId}/mark_as_read/`);
+    return response.data;
+};
+
+/**
+ * Mark all notifications as read
+ */
+export const markAllRead = async () => {
+    const response = await apiClient.post('/api/notifications/mark_all_read/');
     return response.data;
 };

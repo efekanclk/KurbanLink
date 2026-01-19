@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { fetchNotifications, markAsRead } from '../api/notifications';
+import { fetchNotifications, markNotificationRead } from '../api/notifications';
 import './Notifications.css';
 
 const Notifications = () => {
@@ -36,7 +36,7 @@ const Notifications = () => {
         // Mark as read if unread
         if (!notification.is_read) {
             try {
-                await markAsRead(notification.id);
+                await markNotificationRead(notification.id);
                 // Update local state
                 setNotifications(prev =>
                     prev.map(n => n.id === notification.id ? { ...n, is_read: true } : n)

@@ -49,3 +49,13 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
         
         serializer = self.get_serializer(notification)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['post'])
+    def mark_all_read(self, request):
+        """
+        Mark all notifications for the current user as read.
+        
+        POST /api/notifications/mark_all_read/
+        """
+        self.get_queryset().update(is_read=True)
+        return Response({'status': 'success', 'message': 'All notifications marked as read'})

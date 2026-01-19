@@ -9,84 +9,206 @@
 
 .profile-header h1 {
     margin: 0;
+    color: #2c3e50;
+    font-size: 1.8rem;
 }
 
-.profile-card {
+.profile-main-card {
     background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.profile-section {
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     margin-bottom: 2rem;
-}
-
-.profile-section:last-child {
-    margin-bottom: 0;
-}
-
-.profile-section h2 {
-    margin: 0 0 1rem 0;
-    font-size: 1.2rem;
-    color: #333;
-}
-
-.profile-info {
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    align-items: center;
+    gap: 2rem;
 }
 
-.info-item {
+@media (max-width: 768px) {
+    .profile-main-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+}
+
+.profile-avatar-section {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #f0f2f5;
+    background-color: #e2e8f0;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.profile-info-section {
+    flex: 1;
+}
+
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0 0 0.5rem 0;
+}
+
+.profile-location {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
     gap: 0.5rem;
 }
 
-.info-item strong {
-    min-width: 80px;
-    color: #666;
+@media (max-width: 768px) {
+    .profile-location {
+        justify-content: center;
+    }
 }
 
-.info-item span {
-    color: #333;
-}
-
-.quick-links {
+.profile-contact {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.5rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4a5568;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .contact-item {
+        justify-content: center;
+    }
+}
+
+.profile-actions-section {
+    display: flex;
+    flex-direction: column;
     gap: 0.75rem;
+    min-width: 160px;
 }
 
-.link-btn {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    padding: 0.75rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    text-align: left;
-    transition: background 0.2s, border-color 0.2s;
+@media (max-width: 768px) {
+    .profile-actions-section {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+    }
 }
 
-.link-btn:hover {
-    background: #e9ecef;
-    border-color: #adb5bd;
-}
-
-.logout-btn {
-    background: #dc3545;
+.edit-profile-btn {
+    background: #3b82f6;
     color: white;
     border: none;
-    padding: 0.75rem 2rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
     font-weight: 600;
-    width: 100%;
-    max-width: 300px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
-.logout-btn:hover {
-    background: #c82333;
+.edit-profile-btn:hover {
+    background: #2563eb;
+    text-decoration: none;
+}
+
+.quick-links-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 0.75rem;
+}
+
+.links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.action-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-align: left;
+}
+
+.action-card:hover {
+    background: white;
+    border-color: #cbd5e0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.action-icon {
+    font-size: 1.5rem;
+}
+
+.action-text h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #2d3748;
+}
+
+.action-text p {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.85rem;
+    color: #718096;
+}
+
+.logout-section {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.logout-btn-text {
+    background: none;
+    border: none;
+    color: #e53e3e;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.logout-btn-text:hover {
+    background: #fff5f5;
 }

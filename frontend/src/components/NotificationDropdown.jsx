@@ -1,19 +1,30 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchNotifications } from '../api/notifications';
+import { fetchNotifications, markNotificationRead, markAllRead } from '../api/notifications';
+import { useAuth } from '../auth/AuthContext';
 import './NotificationDropdown.css';
 
 const NotificationDropdown = () => {
     const navigate = useNavigate();
-    const [notifications, setNotifications] = useState([]);
+    const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [loading, setLoading] = useState(false);
     const dropdownRef = useRef(null);
 
+    // Initial load and polling
     useEffect(() => {
-        loadNotifications();
+        if (user) {
+            loadNotifications();
+            // Optional: Poll every 30s
+            const interval = setInterval(loadNotifications, 30000);
+            return () => clearInterval(interval);
+        }
+    }, [user]);
 
-        // Click outside to close
+    // Close on click outside
+    useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setIsOpen(false);
@@ -27,53 +38,147 @@ const NotificationDropdown = () => {
     const loadNotifications = async () => {
         try {
             const data = await fetchNotifications();
-            const sorted = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-            setNotifications(sorted);
-            setUnreadCount(data.filter(n => !n.is_read).length);
-        } catch (err) {
-            console.error('Failed to load notifications:', err);
+            const notifs = Array.isArray(data) ? data : data.results || [];
+            setNotifications(notifs.slice(0, 5)); // Show last 5
+
+            // Calculate unread count (assuming API returns all notifications)
+            // Ideally API should provide unread_count
+            const count = notifs.filter(n => !n.is_read).length;
+            setUnreadCount(count);
+        } catch (error) {
+            console.error('Failed to load notifications', error);
         }
     };
 
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
-        if (!isOpen) {
-            loadNotifications(); // Refresh when opening
+    const handleNotificationClick = async (notification) => {
+        // Mark as read if needed
+        if (!notification.is_read) {
+            try {
+                await markNotificationRead(notification.id);
+                setUnreadCount(prev => Math.max(0, prev - 1));
+                setNotifications(prev =>
+                    prev.map(n => n.id === notification.id ? { ...n, is_read: true } : n)
+                );
+            } catch (error) {
+                console.error('Failed to mark read', error);
+            }
         }
+
+        // Navigate based on type
+        setIsOpen(false);
+        switch (notification.type) {
+            case 'NEW_MESSAGE':
+                // Assuming related_object_id is conversation_id or similar
+                navigate('/messages');
+                break;
+            case 'FAVORITED_LISTING':
+                if (notification.related_object_id) {
+                    navigate(`/animals/${notification.related_object_id}`);
+                }
+                break;
+            case 'APPOINTMENT_REQUESTED':
+            case 'APPOINTMENT_APPROVED':
+            case 'APPOINTMENT_REJECTED':
+            case 'APPOINTMENT_CANCELLED':
+                navigate(user.roles.includes('BUTCHER') ? '/butcher/appointments' : '/butcher/appointments');
+                break;
+            default:
+                // Fallback
+                navigate('/notifications');
+        }
+    };
+
+    const handleMarkAllRead = async (e) => {
+        e.stopPropagation();
+        try {
+            await markAllRead();
+            setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+            setUnreadCount(0);
+        } catch (error) {
+            console.error('Failed to mark all read', error);
+        }
+    };
+
+    const getIcon = (type) => {
+        switch (type) {
+            case 'NEW_MESSAGE': return '💬';
+            case 'FAVORITED_LISTING': return '❤️';
+            case 'APPOINTMENT_REQUESTED': return '📅';
+            case 'APPOINTMENT_APPROVED': return '✅';
+            case 'APPOINTMENT_REJECTED': return '❌';
+            case 'APPOINTMENT_CANCELLED': return '🚫';
+            default: return '📢';
+        }
+    };
+
+    const formatTime = (dateStr) => {
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
+
+        if (diffInSeconds < 60) return 'Az önce';
+        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}dk önce`;
+        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}s önce`;
+        return date.toLocaleDateString('tr-TR');
     };
 
     return (
-        <div className="notification-dropdown" ref={dropdownRef}>
-            <button className="notification-bell" onClick={toggleDropdown}>
+        <div className="notification-dropdown-container" ref={dropdownRef}>
+            <button
+                className={`notification-btn ${isOpen ? 'active' : ''}`}
+                onClick={() => setIsOpen(!isOpen)}
+                title="Bildirimler"
+            >
                 🔔
-                {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
+                {unreadCount > 0 && (
+                    <span className="notification-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
+                )}
             </button>
 
             {isOpen && (
-                <div className="dropdown-menu">
+                <div className="notification-dropdown">
                     <div className="dropdown-header">
-                        <span>Bildirimler</span>
-                        <button onClick={() => { navigate('/notifications'); setIsOpen(false); }}>
+                        <h3>Bildirimler</h3>
+                        {unreadCount > 0 && (
+                            <button className="mark-read-btn" onClick={handleMarkAllRead}>
+                                Tümünü okundu işaretle
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="dropdown-body">
+                        {loading ? (
+                            <div className="dropdown-empty">Yükleniyor...</div>
+                        ) : notifications.length === 0 ? (
+                            <div className="dropdown-empty">Bildiriminiz yok</div>
+                        ) : (
+                            <ul className="notification-list">
+                                {notifications.map(notification => (
+                                    <li
+                                        key={notification.id}
+                                        className={`notification-item ${!notification.is_read ? 'unread' : ''}`}
+                                        onClick={() => handleNotificationClick(notification)}
+                                    >
+                                        <div className="notification-icon">
+                                            {getIcon(notification.type)}
+                                        </div>
+                                        <div className="notification-content">
+                                            <p className="notification-text">{notification.message}</p>
+                                            <span className="notification-time">{formatTime(notification.created_at)}</span>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+
+                    <div className="dropdown-footer">
+                        <button className="view-all-btn" onClick={() => {
+                            setIsOpen(false);
+                            navigate('/notifications');
+                        }}>
                             Tümünü Gör
                         </button>
-                    </div>
-                    <div className="dropdown-list">
-                        {notifications.length === 0 ? (
-                            <div className="dropdown-empty">Bildirim yok</div>
-                        ) : (
-                            notifications.slice(0, 5).map(notification => (
-                                <div
-                                    key={notification.id}
-                                    className={`dropdown-item ${!notification.is_read ? 'unread' : ''}`}
-                                    onClick={() => { navigate('/notifications'); setIsOpen(false); }}
-                                >
-                                    <div className="dropdown-message">{notification.message}</div>
-                                    <div className="dropdown-time">
-                                        {new Date(notification.created_at).toLocaleDateString('tr-TR')}
-                                    </div>
-                                </div>
-                            ))
-                        )}
                     </div>
                 </div>
             )}
