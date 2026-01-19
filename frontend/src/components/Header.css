@@ -1,0 +1,70 @@
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #fff;
+    border-bottom: 1px solid var(--border, #e0e0e0);
+    height: 64px;
+}
+
+.header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Brand - Always Left */
+.header-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--primary, #2d6a4f);
+    transition: color 0.2s;
+}
+
+.header-brand:hover {
+    color: var(--primary-dark, #1b4332);
+}
+
+.brand-accent {
+    color: var(--accent, #52b788);
+}
+
+/* Right Actions */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.header-icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm, 4px);
+    transition: background 0.2s;
+}
+
+.header-icon-btn:hover {
+    background: var(--bg-gray, #f5f5f5);
+}
+
+.hamburger-btn {
+    font-size: 1.75rem;
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        padding: 0 1rem;
+    }
+
+    .header-brand {
+        font-size: 1.25rem;
+    }
+}
