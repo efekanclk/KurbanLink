@@ -48,7 +48,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MeSerializer(serializers.ModelSerializer):
     """
     Serializer for current user identity.
-    Returns id, email, and active roles.
+    Returns id, email, username, phone, country, and active roles.
     """
     roles = serializers.SerializerMethodField()
     
@@ -62,24 +62,29 @@ class MeSerializer(serializers.ModelSerializer):
         return [ur.role.code for ur in obj.user_roles.filter(is_active=True)]
 
 
-class RegisterSerializer(serializers.Serializer):
+class RegisterSerializer(serializers.ModelSerializer):
     """
-    Serializer for user registration with role selection.
+    Serializer for user registration.
     
-    Handles user creation, role assignment, and optional butcher profile creation.
-    Always assigns BUYER role automatically.
+    Phase 10: Uses is_butcher checkbox instead of role selection.
+    All users get BUYER role. BUTCHER role assigned if is_butcher=True.
     """
-    email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True, required=True)
-    username = serializers.CharField(required=True, max_length=30)
-    phone_number = serializers.CharField(required=True, max_length=32)
-    country_code = serializers.CharField(required=False, default='TR', max_length=8)
-    roles = serializers.ListField(
-        child=serializers.ChoiceField(choices=['BUYER', 'SELLER', 'BUTCHER']),
-        required=False,
-        allow_empty=True
-    )
-    butcher_profile = serializers.DictField(required=False, allow_null=True)
+    is_butcher = serializers.BooleanField(required=False, default=False, write_only=True)
+    butcher_profile = serializers.DictField(required=False, allow_null=True, write_only=True)
+    
+    class Meta:
+        model = User
+        fields = [
+            'id', 'email', 'password', 'username', 'phone_number', 'country_code',
+            'is_butcher', 'butcher_profile'
+        ]
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'username': {'required': True},
+            'phone_number': {'required': True},
+            'country_code': {'required': False, 'default': 'TR'},
+        }
     
     def validate_email(self, value):
         """Validate email is unique."""
@@ -94,26 +99,6 @@ class RegisterSerializer(serializers.Serializer):
         except DjangoValidationError as e:
             raise serializers.ValidationError(list(e.messages))
         return value
-    
-    def validate_roles(self, value):
-        """Validate and normalize roles."""
-        if not value:
-            return []
-        
-        # Normalize to uppercase
-        normalized_roles = [role.upper() for role in value]
-        
-        # Validate against allowed roles
-        allowed_roles = {'BUYER', 'SELLER', 'BUTCHER'}
-        invalid_roles = set(normalized_roles) - allowed_roles
-        
-        if invalid_roles:
-            raise serializers.ValidationError(
-                f"Geçersiz rol(ler): {', '.join(invalid_roles)}. "
-                f"İzin verilen roller: {', '.join(allowed_roles)}"
-            )
-        
-        return normalized_roles
     
     def validate_username(self, value):
         """Validate and normalize username."""
@@ -136,43 +121,7 @@ class RegisterSerializer(serializers.Serializer):
             raise serializers.ValidationError("Telefon numarası gereklidir.")
         return value.strip()
     
-    def validate_butcher_profile(self, value):
-        """Validate butcher profile structure if provided."""
-        if not value:
-            return value
-        
-        # Validate required fields
-        if 'business_name' not in value or not value['business_name'].strip():
-            raise serializers.ValidationError({
-                'business_name': 'İşletme adı zorunludur.'
-            })
-        
-        if 'city' not in value or not value['city'].strip():
-            raise serializers.ValidationError({
-                'city': 'Şehir zorunludur.'
-            })
-        
-        # Validate services if provided
-        if 'services' in value:
-            if not isinstance(value['services'], list):
-                raise serializers.ValidationError({
-                    'services': 'Hizmetler bir liste olmalıdır.'
-                })
-            # Ensure all services are strings
-            if not all(isinstance(s, str) for s in value['services']):
-                raise serializers.ValidationError({
-                    'services': 'Tüm hizmetler metin olmalıdır.'
-                })
-        
-        return value
-    
     def validate(self, attrs):
-        """Cross-field validation."""
-        roles = attrs.get('roles', [])
-        
-        # Build final roles (always include BUYER)
-        final_roles = set(roles)
-        final_roles.add('BUYER')
         attrs['final_roles'] = final_roles
         
         # Butcher profile is optional - can be added later in profile settings
@@ -180,52 +129,39 @@ class RegisterSerializer(serializers.Serializer):
         return attrs
     
     def create(self, validated_data):
-        """Create user, assign roles, and create butcher profile if needed."""
-        email = validated_data['email']
-        password = validated_data['password']
-        final_roles = validated_data['final_roles']
-        butcher_profile_data = validated_data.get('butcher_profile')
+        """
+        Create user with USER role, and optionally BUTCHER role + profile.
+        """
+        is_butcher = validated_data.pop('is_butcher', False)
+        butcher_profile_data = validated_data.pop('butcher_profile', None)
+        
+        # Extract password
+        password = validated_data.pop('password')
         
         # Create user
-        user = User.objects.create(
-            email=email,
-            is_active=True
-        )
+        user = User.objects.create(**validated_data)
         user.set_password(password)
         user.save()
         
-        # Assign roles
-        for role_code in final_roles:
-            role, _ = Role.objects.get_or_create(
-                code=role_code,
-                defaults={'name': role_code.capitalize()}
-            )
-            UserRole.objects.create(
-                user=user,
-                role=role,
-                is_active=True
-            )
+        # Always assign USER role
+        user_role, _ = Role.objects.get_or_create(code='USER', defaults={'name': 'Kullanıcı'})
+        UserRole.objects.create(user=user, role=user_role, is_active=True)
         
-        # Create butcher profile if BUTCHER role
-        if 'BUTCHER' in final_roles and butcher_profile_data:
+        # If butcher, assign BUTCHER role and create profile
+        if is_butcher and butcher_profile_data:
+            butcher_role, _ = Role.objects.get_or_create(code='BUTCHER', defaults={'name': 'Kasap'})
+            UserRole.objects.create(user=user, role=butcher_role, is_active=True)
+            
+            # Create butcher profile
+            from apps.butchers.models import ButcherProfile
             ButcherProfile.objects.create(
                 user=user,
-                business_name=butcher_profile_data['business_name'].strip(),
-                city=butcher_profile_data['city'].strip(),
+                first_name=butcher_profile_data['first_name'],
+                last_name=butcher_profile_data['last_name'],
+                city=butcher_profile_data['city'],
+                district=butcher_profile_data.get('district', ''),
                 services=butcher_profile_data.get('services', []),
-                price_range=butcher_profile_data.get('price_range', '').strip() or ''
+                price_range=butcher_profile_data.get('price_range', ''),
             )
         
-        # Generate tokens
-        refresh = RefreshToken.for_user(user)
-        
-        # Get roles for response
-        role_codes = list(final_roles)
-        
-        return {
-            'id': user.id,
-            'email': user.email,
-            'roles': role_codes,
-            'access': str(refresh.access_token),
-            'refresh': str(refresh)
-        }
+        return user

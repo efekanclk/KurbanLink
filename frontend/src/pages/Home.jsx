@@ -59,19 +59,14 @@ const Home = () => {
             <HomeHero breeds={breeds} />
 
             {/* Seller CTAs - only show after auth initialization to prevent flicker */}
-            {!isInitializing && user?.roles?.includes('SELLER') && (
-                <section className="seller-ctas">
-                    <div className="container">
-                        <div className="cta-buttons">
-                            <Link to="/seller/listings/new" className="btn-primary btn-cta">
-                                ➕ İlan Oluştur
-                            </Link>
-                            <Link to="/seller/listings" className="btn-secondary btn-cta">
-                                📋 İlanlarım
-                            </Link>
-                        </div>
-                    </div>
-                </section>
+            {!isInitializing && user && (
+                <div className="cta-banner">
+                    <h2>🎯 İlan Oluştur</h2>
+                    <p>Kurban hayvanınızı satışa çıkarın</p>
+                    <Link to="/seller/listings/new" className="cta-button">
+                        Yeni İlan Oluştur
+                    </Link>
+                </div>
             )}
 
             {loading ? (

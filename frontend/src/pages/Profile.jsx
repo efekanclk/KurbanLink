@@ -45,17 +45,13 @@ const Profile = () => {
                                 🔔 Bildirimler
                             </button>
 
-                            {/* Seller links */}
-                            {user?.roles?.includes('SELLER') && (
-                                <>
-                                    <button onClick={() => navigate('/seller/listings')} className="link-btn">
-                                        📋 İlanlarım
-                                    </button>
-                                    <button onClick={() => navigate('/seller/listings/new')} className="link-btn">
-                                        ➕ Yeni İlan Oluştur
-                                    </button>
-                                </>
-                            )}
+                            {/* Listing links - available to all users */}
+                            <button onClick={() => navigate('/seller/listings')} className="link-btn">
+                                📋 İlanlarım
+                            </button>
+                            <button onClick={() => navigate('/seller/listings/new')} className="link-btn">
+                                ➕ Yeni İlan Oluştur
+                            </button>
 
                             {/* Butcher links */}
                             {user?.roles?.includes('BUTCHER') && (

@@ -20,13 +20,27 @@ class ButcherProfile(models.Model):
         related_name='butcher_profile',
         help_text="User with BUTCHER role"
     )
-    business_name = models.CharField(
-        max_length=255,
-        help_text="Business or butcher name"
+    first_name = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True,
+        help_text="Kasabın adı"
+    )
+    last_name = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True,
+        help_text="Kasabın soyadı"
     )
     city = models.CharField(
         max_length=100,
-        help_text="City where butcher operates"
+        help_text="Şehir (zorunlu)"
+    )
+    district = models.CharField(
+        max_length=100,
+        blank=True,
+        default="",
+        help_text="İlçe (opsiyonel)"
     )
     services = models.JSONField(
         default=list,
@@ -35,11 +49,8 @@ class ButcherProfile(models.Model):
     price_range = models.CharField(
         max_length=50,
         blank=True,
+        default="",
         help_text="Price range (e.g., '500-1000')"
-    )
-    experience_years = models.PositiveIntegerField(
-        default=1,
-        help_text="Years of experience"
     )
     rating = models.FloatField(
         default=0.0,
@@ -57,7 +68,7 @@ class ButcherProfile(models.Model):
         ordering = ['-rating', '-created_at']
     
     def __str__(self) -> str:
-        return f"{self.business_name} ({self.city})"
+        return f"{self.first_name} {self.last_name} ({self.city})"
     
     def clean(self):
         """
@@ -143,7 +154,8 @@ class Appointment(models.Model):
         ]
     
     def __str__(self) -> str:
-        return f"Appointment with {self.butcher.business_name} on {self.date}"
+        butcher_name = f"{self.butcher.first_name} {self.butcher.last_name}"
+        return f"Appointment with {butcher_name} on {self.date}"
     
     def clean(self):
         """

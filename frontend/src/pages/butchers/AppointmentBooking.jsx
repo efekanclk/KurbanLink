@@ -42,7 +42,7 @@ const AppointmentBooking = () => {
             setButcher(butcherData);
 
             // Load seller's listings if applicable
-            if (user?.roles?.includes('SELLER')) {
+            if (user) {
                 try {
                     const listingsData = await fetchMyListings(user.id);
                     setListings(listingsData.results || listingsData);
@@ -156,7 +156,7 @@ const AppointmentBooking = () => {
                 <div className="booking-header">
                     <h1>Randevu Talebi Oluştur</h1>
                     <p className="butcher-info">
-                        Kasap: <strong>{butcher.business_name}</strong> - {butcher.city}
+                        Kasap: <strong>{butcher.butcher_name}</strong> - {butcher.city}
                     </p>
                 </div>
 
@@ -196,7 +196,7 @@ const AppointmentBooking = () => {
                         </select>
                     </div>
 
-                    {user?.roles?.includes('SELLER') && listings.length > 0 && (
+                    {user && listings.length > 0 && (
                         <div className="form-group">
                             <label htmlFor="listing">İlan (Opsiyonel)</label>
                             <select

@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
-from apps.accounts.permissions import IsSeller, IsSellerAndOwner
+from apps.accounts.permissions import IsOwner
 from .models import AnimalListing
 from .serializers import AnimalListingSerializer
 from .filters import AnimalListingFilter
@@ -18,13 +18,8 @@ class AnimalListingViewSet(viewsets.ModelViewSet):
     """
     ViewSet for animal listings.
     
-    - location: partial match (case-insensitive)
-    - age range: min_age, max_age
-    - weight range: min_weight, max_weight
-    
-    Pagination:
-    - Default page size: 10
-    - Configurable with ?page_size= (max 50)
+    All authenticated users can create listings.
+    Only owners can update/delete their listings.
     """
     
     serializer_class = AnimalListingSerializer
@@ -37,18 +32,17 @@ class AnimalListingViewSet(viewsets.ModelViewSet):
         """
         Set different permissions for different actions.
         
-        - create: Requires IsSeller
-        - update/partial_update/destroy: Requires IsSellerAndOwner
-        - list/retrieve: Requires IsAuthenticated only
+        - list/retrieve: IsAuthenticated
+        - create: IsAuthenticated (any user can create)
+        - update/partial_update/destroy: IsAuthenticated + IsOwner
         """
-        from rest_framework.permissions import IsAuthenticated
-        
-        if self.action == 'create':
-            return [IsAuthenticated(), IsSeller()]
-        elif self.action in ['update', 'partial_update', 'destroy']:
-            return [IsAuthenticated(), IsSellerAndOwner()]
-        else:
+        if self.action in ['list', 'retrieve']:
             return [IsAuthenticated()]
+        elif self.action == 'create':
+            return [IsAuthenticated()]
+        elif self.action in ['update', 'partial_update', 'destroy']:
+            return [IsAuthenticated(), IsOwner()]
+        return [IsAuthenticated()]
     
     def get_queryset(self):
         """

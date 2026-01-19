@@ -143,10 +143,10 @@ const AnimalsList = () => {
                     <button onClick={() => navigate('/profile')} className="favorites-link-btn">
                         👤 Profilim
                     </button>
-                    {user?.roles && user.roles.includes('SELLER') && (
-                        <button onClick={() => navigate('/seller/listings')} className="favorites-link-btn">
-                            📋 İlanlarım
-                        </button>
+                    {user && ( // Show to all authenticated users
+                        <Link to="/seller/listings/new" className="favorites-link-btn">
+                            + Yeni İlan Oluştur
+                        </Link>
                     )}
                     {user?.roles && user.roles.includes('BUTCHER') && (
                         <>

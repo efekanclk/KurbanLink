@@ -63,7 +63,7 @@ const ButcherDetail = () => {
             <div className="container detail-content">
                 <div className="detail-header">
                     <div>
-                        <h1>{butcher.business_name}</h1>
+                        <h1>{butcher.butcher_name}</h1>
                         <p className="location">📍 {butcher.city}</p>
                     </div>
                     <button onClick={() => navigate('/butchers')} className="btn-secondary">

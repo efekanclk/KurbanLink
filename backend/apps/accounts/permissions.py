@@ -10,44 +10,6 @@ from rest_framework.request import Request
 from typing import Any
 
 
-class IsSeller(BasePermission):
-    """
-    Permission class that allows access only to users with the SELLER role.
-    
-    This permission checks the 'roles' field in the JWT access token payload.
-    If the user is not authenticated or does not have the SELLER role,
-    access is denied with a 403 Forbidden response.
-    
-    Usage:
-        permission_classes = [IsAuthenticated, IsSeller]
-    """
-    
-    def has_permission(self, request: Request, view: Any) -> bool:
-        """
-        Check if the user has the SELLER role in their JWT token.
-        
-        Args:
-            request: The request object containing authentication data
-            view: The view being accessed
-            
-        Returns:
-            True if user is authenticated and has SELLER role, False otherwise
-        """
-        # Deny access if user is not authenticated
-        if not request.user or not request.user.is_authenticated:
-            return False
-        
-        # Get roles from JWT token payload
-        # request.auth contains the validated token payload when using JWT
-        if not request.auth:
-            return False
-        
-        roles = request.auth.get('roles', [])
-        
-        # Check if SELLER role is present
-        return 'SELLER' in roles
-
-
 class IsButcher(BasePermission):
     """
     Permission class that allows access only to users with the BUTCHER role.
@@ -86,55 +48,30 @@ class IsButcher(BasePermission):
         return 'BUTCHER' in roles
 
 
-class IsSellerAndOwner(BasePermission):
+class IsOwner(BasePermission):
     """
-    Permission class that allows access only to sellers who own the object.
+    Permission class that allows access only to the owner of an object.
     
-    This permission combines two checks:
-    1. User must have the SELLER role in their JWT token
-    2. User must be the owner of the object (object.seller == request.user)
-    
-    Used for update and delete operations on seller-owned resources.
+    Works with any model that has a 'seller' or 'user' ForeignKey field.
+    Checks if request.user matches the owner.
     
     Usage:
-        permission_classes = [IsAuthenticated, IsSellerAndOwner]
+        permission_classes = [IsAuthenticated, IsOwner]
     """
-    
-    def has_permission(self, request: Request, view: Any) -> bool:
-        """
-        Check if the user has the SELLER role.
-        
-        Args:
-            request: The request object containing authentication data
-            view: The view being accessed
-            
-        Returns:
-            True if user is authenticated and has SELLER role, False otherwise
-        """
-        # Deny access if user is not authenticated
-        if not request.user or not request.user.is_authenticated:
-            return False
-        
-        # Get roles from JWT token payload
-        if not request.auth:
-            return False
-        
-        roles = request.auth.get('roles', [])
-        
-        # Check if SELLER role is present
-        return 'SELLER' in roles
     
     def has_object_permission(self, request: Request, view: Any, obj: Any) -> bool:
         """
-        Check if the user is the owner of the object.
+        Check if the requesting user is the owner of the object.
         
-        Args:
-            request: The request object containing authentication data
-            view: The view being accessed
-            obj: The object being accessed (must have a 'seller' attribute)
-            
-        Returns:
-            True if the object's seller is the requesting user, False otherwise
+        Checks 'seller' field first (for listings), then 'user' field.
         """
-        # Check if user is the owner (seller)
-        return obj.seller == request.user
+        # Check seller field (for AnimalListing)
+        if hasattr(obj, 'seller'):
+            return obj.seller == request.user
+        
+        # Check user field (for other models)
+        if hasattr(obj, 'user'):
+            return obj.user == request.user
+        
+        # If no owner field found, deny access
+        return False

@@ -3,39 +3,31 @@ Views for animal images.
 """
 
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from apps.accounts.permissions import IsSellerAndOwner
+from rest_framework.permissions import IsAuthenticated
+from apps.accounts.permissions import IsOwner
 from .models import AnimalListing, AnimalImage
 from .image_serializers import AnimalImageSerializer
 
 
 class AnimalImageViewSet(viewsets.ModelViewSet):
     """
-    ViewSet for animal images.
+    ViewSet for animal listing images.
     
-    - CREATE: Upload image (seller only, via nested route)
-    - LIST: Get all images for listing
-    - DESTROY: Delete image (seller only)
-    - No UPDATE allowed
+    Permissions:
+        - list/retrieve: IsAuthenticated
+        - create/destroy: IsOwner (via listing)
     """
-    
     serializer_class = AnimalImageSerializer
-    http_method_names = ['get', 'post', 'delete', 'head', 'options']  # Disable PUT/PATCH
+    queryset = AnimalImage.objects.all()
     
     def get_permissions(self):
-        """
-        Set permissions based on action.
-        
-        - create/destroy: IsSellerAndOwner (via listing)
-        - list: IsAuthenticated
-        """
+        """Owner can manage images of their listings."""
         if self.action in ['create', 'destroy']:
-            permission_classes = [IsAuthenticated, IsSellerAndOwner]
+            permission_classes = [IsAuthenticated, IsOwner]
         else:
             permission_classes = [IsAuthenticated]
-        
         return [permission() for permission in permission_classes]
     
     def get_queryset(self):

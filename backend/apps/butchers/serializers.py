@@ -10,9 +10,11 @@ from .models import ButcherProfile, Appointment
 class ButcherProfileSerializer(serializers.ModelSerializer):
     """
     Serializer for ButcherProfile model.
+    Phase 10: Uses first_name, last_name instead of business_name.
     """
     
     user_email = serializers.EmailField(source='user.email', read_only=True)
+    butcher_name = serializers.SerializerMethodField()
     
     class Meta:
         model = ButcherProfile
@@ -20,25 +22,32 @@ class ButcherProfileSerializer(serializers.ModelSerializer):
             'id',
             'user',
             'user_email',
-            'business_name',
+            'first_name',
+            'last_name',
+            'butcher_name',  # Computed field for display
             'city',
+            'district',
             'services',
             'price_range',
-            'experience_years',
             'rating',
             'is_active'
         ]
         labels = {
             'user': 'Kullanıcı',
-            'business_name': 'İşletme Adı',
+            'first_name': 'Ad',
+            'last_name': 'Soyad',
             'city': 'Şehir',
+            'district': 'İlçe',
             'services': 'Hizmetler',
             'price_range': 'Fiyat Aralığı',
-            'experience_years': 'Deneyim Yılı',
             'rating': 'Değerlendirme',
             'is_active': 'Aktif'
         }
-        read_only_fields = ['id', 'user', 'rating', 'created_at']
+        read_only_fields = ['id', 'user', 'rating', 'created_at', 'butcher_name']
+    
+    def get_butcher_name(self, obj):
+        """Return full name for display."""
+        return f"{obj.first_name} {obj.last_name}"
     
     def validate(self, attrs):
         """
@@ -63,9 +72,13 @@ class AppointmentSerializer(serializers.ModelSerializer):
     Serializer for Appointment model.
     """
     
-    butcher_name = serializers.CharField(source='butcher.business_name', read_only=True)
+    butcher_name = serializers.SerializerMethodField()
     user_email = serializers.EmailField(source='user.email', read_only=True)
     listing_title = serializers.CharField(source='listing.title', read_only=True, required=False)
+    
+    def get_butcher_name(self, obj):
+        """Return butcher's full name."""
+        return f"{obj.butcher.first_name} {obj.butcher.last_name}"
     
     class Meta:
         model = Appointment

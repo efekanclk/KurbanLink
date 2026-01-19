@@ -40,11 +40,12 @@ def notify_on_appointment_change(sender, instance, created, **kwargs):
         
         if instance.status == Appointment.APPROVED:
             # Appointment approved → notify user
+            butcher_name = f"{instance.butcher.first_name} {instance.butcher.last_name}"
             Notification.objects.create(
                 user=instance.user,
                 type=Notification.APPOINTMENT_APPROVED,
                 title='Appointment Approved',
-                message=f'Your appointment with {instance.butcher.business_name} has been approved',
+                message=f'Your appointment with {butcher_name} has been approved',
                 data={
                     'appointment_id': instance.id,
                     'butcher_id': instance.butcher.id,
@@ -55,11 +56,12 @@ def notify_on_appointment_change(sender, instance, created, **kwargs):
         
         elif instance.status == Appointment.REJECTED:
             # Appointment rejected → notify user
+            butcher_name = f"{instance.butcher.first_name} {instance.butcher.last_name}"
             Notification.objects.create(
                 user=instance.user,
                 type=Notification.APPOINTMENT_REJECTED,
                 title='Appointment Rejected',
-                message=f'Your appointment with {instance.butcher.business_name} has been rejected',
+                message=f'Your appointment with {butcher_name} has been rejected',
                 data={
                     'appointment_id': instance.id,
                     'butcher_id': instance.butcher.id,

@@ -39,8 +39,7 @@ export const partnershipStatusLabel = (status) => {
 
 export const roleLabel = (role) => {
     const map = {
-        BUYER: 'Alıcı',
-        SELLER: 'Satıcı',
+        USER: 'Kullanıcı',
         BUTCHER: 'Kasap',
     };
     return map[role] || role;

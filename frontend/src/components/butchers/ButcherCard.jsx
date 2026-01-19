@@ -8,7 +8,7 @@ const ButcherCard = ({ butcher }) => {
     return (
         <div className="butcher-card">
             <div className="butcher-header">
-                <h3>{butcher.business_name}</h3>
+                <h3>{butcher.butcher_name}</h3>
                 <p className="city">{butcher.city}</p>
             </div>
 
