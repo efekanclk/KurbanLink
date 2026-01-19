@@ -42,3 +42,4 @@ export const getCitiesForCountry = (countryCode) => {
 export const getDistrictsForCity = (countryCode, city) => {
     return LOCATIONS[countryCode]?.[city] || [];
 };
+export const cities = Object.keys(LOCATIONS.TR);

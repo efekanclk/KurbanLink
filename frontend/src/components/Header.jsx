@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ onMenuClick }) => {
     const { user } = useAuth();
 
     return (
@@ -20,7 +20,11 @@ const Header = () => {
                         <button className="header-icon-btn" title="Bildirimler">
                             🔔
                         </button>
-                        <button className="header-icon-btn hamburger-btn" title="Menü">
+                        <button
+                            className="header-icon-btn hamburger-btn"
+                            title="Menü"
+                            onClick={onMenuClick}
+                        >
                             ☰
                         </button>
                     </div>

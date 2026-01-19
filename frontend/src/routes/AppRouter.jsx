@@ -39,6 +39,7 @@ import Notifications from '../pages/Notifications';
 
 // Profile
 import Profile from '../pages/Profile';
+import ProfileEdit from '../pages/ProfileEdit';
 
 const AppRouter = () => {
     return (
@@ -66,6 +67,7 @@ const AppRouter = () => {
 
                         {/* Profile */}
                         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                        <Route path="/profile/edit" element={<ProtectedRoute><ProfileEdit /></ProtectedRoute>} />
 
                         {/* Seller routes */}
                         <Route path="/seller/listings" element={<ProtectedRoute><SellerListings /></ProtectedRoute>} />
