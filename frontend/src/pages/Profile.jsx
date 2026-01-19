@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { roleLabel } from '../utils/labels';
 import './Profile.css';
 
 const Profile = () => {
@@ -23,10 +22,6 @@ const Profile = () => {
                             <div className="info-item">
                                 <strong>E-posta:</strong>
                                 <span>{user?.email || 'Bilinmiyor'}</span>
-                            </div>
-                            <div className="info-item">
-                                <strong>Roller:</strong>
-                                <span>{user?.roles?.map(roleLabel).join(', ') || 'Yok'}</span>
                             </div>
                         </div>
                     </div>

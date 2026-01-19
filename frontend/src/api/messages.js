@@ -50,3 +50,13 @@ export const sendMessage = async (conversationId, content) => {
     });
     return response.data;
 };
+
+/**
+ * Create or get existing conversation for a listing
+ */
+export const createConversation = async (listingId) => {
+    const response = await apiClient.post('/api/messages/conversations/', {
+        listing: listingId
+    });
+    return response.data;
+};

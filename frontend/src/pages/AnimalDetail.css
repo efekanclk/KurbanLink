@@ -301,3 +301,44 @@
     line-height: 1.6;
     white-space: pre-wrap;
 }
+/* Action buttons container (favorite + messaging) */
+.action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Messaging button */
+.messaging-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.messaging-btn:hover:not(:disabled) {
+    background-color: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.messaging-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Self-listing note */
+.self-listing-note {
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-style: italic;
+    padding: 0.5rem 1rem;
+    background-color: var(--bg-gray);
+    border-radius: 4px;
+}
+

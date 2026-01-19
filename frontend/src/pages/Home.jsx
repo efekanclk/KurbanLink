@@ -58,14 +58,23 @@ const Home = () => {
             <Navbar />
             <HomeHero breeds={breeds} />
 
-            {/* Seller CTAs - only show after auth initialization to prevent flicker */}
+            {/* CTAs - only show after auth initialization to prevent flicker */}
             {!isInitializing && user && (
                 <div className="cta-banner">
-                    <h2>🎯 İlan Oluştur</h2>
-                    <p>Kurban hayvanınızı satışa çıkarın</p>
-                    <Link to="/seller/listings/new" className="cta-button">
-                        Yeni İlan Oluştur
-                    </Link>
+                    <div className="cta-item">
+                        <h2>🎯 İlan Oluştur</h2>
+                        <p>Kurban hayvanınızı satışa çıkarın</p>
+                        <Link to="/seller/listings/new" className="cta-button">
+                            Yeni İlan Oluştur
+                        </Link>
+                    </div>
+                    <div className="cta-item">
+                        <h2>💬 Mesajlaşma</h2>
+                        <p>Alıcılar ve satıcılarla iletişime geçin</p>
+                        <Link to="/messages" className="cta-button cta-secondary">
+                            Mesajlar
+                        </Link>
+                    </div>
                 </div>
             )}
 

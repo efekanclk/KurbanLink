@@ -27,6 +27,12 @@ const Navbar = () => {
                     <Link to="/" className="nav-link">Ana Sayfa</Link>
                     <Link to="/partnerships" className="nav-link">Kurban Ortaklığı</Link>
                     <Link to="/butchers" className="nav-link">Kasap Bul</Link>
+                    {user && (
+                        <Link to="/messages" className="nav-link">Mesajlar</Link>
+                    )}
+                    {user?.roles?.includes('BUTCHER') && (
+                        <Link to="/butcher/appointments" className="nav-link">Randevularım</Link>
+                    )}
                 </div>
 
                 {/* Right: Auth Actions */}

@@ -3,12 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { fetchAnimal, fetchAnimalImages } from '../api/animals';
+import { createConversation } from '../api/messages';
 import './AnimalDetail.css';
 
 const AnimalDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { logout } = useAuth();
+    const { user, logout } = useAuth();
     const { isFavorited, toggleFavorite, toggleLoading } = useFavorites();
 
     const [listing, setListing] = useState(null);
@@ -18,6 +19,8 @@ const AnimalDetail = () => {
     const [error, setError] = useState(null);
     const [notFound, setNotFound] = useState(false);
     const [favoriteError, setFavoriteError] = useState(null);
+    const [messagingLoading, setMessagingLoading] = useState(false);
+    const [messagingError, setMessagingError] = useState(null);
 
     // Use ref to track latest request ID to prevent race conditions
     const requestIdRef = useRef(0);
@@ -76,6 +79,26 @@ const AnimalDetail = () => {
         if (!result.success) {
             setFavoriteError(result.error);
             setTimeout(() => setFavoriteError(null), 3000);
+        }
+    };
+
+    const handleStartConversation = async () => {
+        if (!user) {
+            navigate('/login');
+            return;
+        }
+
+        setMessagingLoading(true);
+        setMessagingError(null);
+
+        try {
+            const conversation = await createConversation(parseInt(id));
+            navigate(`/messages/${conversation.id}`);
+        } catch (err) {
+            setMessagingError(err.response?.data?.detail || 'Konuşma başlatılamadı. Lütfen tekrar deneyin.');
+            setTimeout(() => setMessagingError(null), 5000);
+        } finally {
+            setMessagingLoading(false);
         }
     };
 
@@ -172,18 +195,36 @@ const AnimalDetail = () => {
                 <div className="detail-info">
                     <div className="title-actions">
                         <h1>{listing.animal_type} - {listing.breed}</h1>
-                        <button
-                            className={`favorite-btn-large ${favorited ? 'favorited' : ''}`}
-                            onClick={handleFavoriteToggle}
-                            disabled={isTogglingFavorite}
-                            title={favorited ? 'Favorilerden çıkar' : 'Favorilere ekle'}
-                        >
-                            {favorited ? '★ Favorilerde' : '☆ Favorilere Ekle'}
-                        </button>
+                        <div className="action-buttons">
+                            <button
+                                className={`favorite-btn-large ${favorited ? 'favorited' : ''}`}
+                                onClick={handleFavoriteToggle}
+                                disabled={isTogglingFavorite}
+                                title={favorited ? 'Favorilerden çıkar' : 'Favorilere ekle'}
+                            >
+                                {favorited ? '★ Favorilerde' : '☆ Favorilere Ekle'}
+                            </button>
+                            {user?.email !== listing.seller && (
+                                <button
+                                    className="messaging-btn"
+                                    onClick={handleStartConversation}
+                                    disabled={messagingLoading}
+                                    title="Satıcı ile mesajlaş"
+                                >
+                                    {messagingLoading ? 'Yüklen iyor...' : '💬 Mesajlaş'}
+                                </button>
+                            )}
+                            {user?.email === listing.seller && (
+                                <div className="self-listing-note">Kendi ilanınıza mesaj gönderemezsiniz.</div>
+                            )}
+                        </div>
                     </div>
 
                     {favoriteError && (
                         <div className="inline-error">{favoriteError}</div>
+                    )}
+                    {messagingError && (
+                        <div className="inline-error">{messagingError}</div>
                     )}
 
                     <div className="info-grid">
