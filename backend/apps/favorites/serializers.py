@@ -15,7 +15,7 @@ class AnimalListingBasicSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = AnimalListing
-        fields = ['id', 'animal_type', 'breed', 'price', 'location', 'is_active']
+        fields = ['id', 'title', 'animal_type', 'breed', 'price', 'location', 'is_active']
         read_only_fields = fields
 
 

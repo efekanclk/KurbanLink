@@ -278,7 +278,12 @@ const Partnerships = () => {
                         ) : (
                             <div className="partnerships-grid">
                                 {partnerships.map(partnership => (
-                                    <div key={partnership.id} className="partnership-card">
+                                    <div
+                                        key={partnership.id}
+                                        className="partnership-card"
+                                        onClick={() => navigate(`/partnerships/${partnership.id}`)}
+                                        style={{ cursor: 'pointer' }}
+                                    >
                                         <div className="card-header">
                                             <h3>
                                                 <MapPin size={18} style={{ marginRight: '0.5rem' }} />
@@ -310,17 +315,6 @@ const Partnerships = () => {
                                                 <small>{formatDateTR(partnership.created_at)}</small>
                                             </p>
                                         </div>
-
-                                        {partnership.status === 'OPEN' && partnership.creator_email && (
-                                            <div className="card-footer">
-                                                <button
-                                                    onClick={() => handleClose(partnership.id)}
-                                                    className="btn-close"
-                                                >
-                                                    İlanı Kapat
-                                                </button>
-                                            </div>
-                                        )}
                                     </div>
                                 ))}
                             </div>

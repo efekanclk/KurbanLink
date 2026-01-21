@@ -228,7 +228,49 @@
 
 .messages-widget__message.theirs {
     align-self: flex-start;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.messages-widget__message-sender-info {
+    flex-shrink: 0;
+    margin-bottom: 4px;
+}
+
+.messages-widget__sender-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.messages-widget__sender-avatar-placeholder {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.messages-widget__message-content-wrapper {
+    display: flex;
+    flex-direction: column;
     align-items: flex-start;
+    max-width: 100%;
+}
+
+.messages-widget__sender-name {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: 4px;
+    margin-bottom: 2px;
+    font-weight: 500;
 }
 
 .messages-widget__message-bubble {

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { fetchMyListings, deleteListing, permanentlyDeleteListing } from '../../api/sellers';
 import { getUserIdFromToken } from '../../utils/jwt';
+import { ClipboardList, Trash2 } from '../../ui/icons';
 import './Seller.css';
 
 const SellerListings = () => {

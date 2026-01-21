@@ -4,8 +4,9 @@ import { useAuth } from '../auth/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { fetchAnimal, fetchAnimalImages } from '../api/animals';
 import { createConversation } from '../api/messages';
+import { deleteListing } from '../api/sellers';
 import './AnimalDetail.css';
-import { Edit3, Eye, MessageCircle, Heart } from '../ui/icons';
+import { Edit3, Eye, MessageCircle, Heart, Trash2 } from '../ui/icons';
 
 const AnimalDetail = () => {
     const { id } = useParams();
@@ -102,7 +103,7 @@ const AnimalDetail = () => {
 
         try {
             const conversation = await createConversation(parseInt(id));
-            navigate(`/messages/${conversation.id}`);
+            navigate(`/messages?conversation=${conversation.id}`);
         } catch (err) {
             setMessagingError(err.response?.data?.detail || 'Konuşma başlatılamadı. Lütfen tekrar deneyin.');
             setTimeout(() => setMessagingError(null), 5000);
@@ -166,6 +167,22 @@ const AnimalDetail = () => {
     const favorited = isFavorited(parseInt(id));
     const isTogglingFavorite = toggleLoading[id];
 
+    const handleDelete = async () => {
+        if (!window.confirm('Bu ilanı silmek istediğinize emin misiniz?')) {
+            return;
+        }
+
+        try {
+            setLoading(true);
+            await deleteListing(id);
+            navigate('/');
+        } catch (err) {
+            console.error('Delete failed:', err);
+            alert('İlan silinemedi: ' + (err.response?.data?.detail || 'Bilinmeyen hata'));
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="detail-container">
             <div className="detail-header">
@@ -216,6 +233,15 @@ const AnimalDetail = () => {
                                     >
                                         <Edit3 size={16} style={{ marginRight: '0.5rem' }} />
                                         Düzenle
+                                    </button>
+                                    <button
+                                        className="delete-btn"
+                                        onClick={handleDelete}
+                                        title="İlanı sil"
+                                        style={{ backgroundColor: '#ff4d4f', color: 'white', border: 'none', marginLeft: '8px' }}
+                                    >
+                                        <Trash2 size={16} style={{ marginRight: '0.5rem' }} />
+                                        Sil
                                     </button>
                                     <div className="view-count">
                                         <Eye size={16} style={{ marginRight: '0.5rem' }} />

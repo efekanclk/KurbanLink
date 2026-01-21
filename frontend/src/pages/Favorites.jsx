@@ -169,7 +169,7 @@ const Favorites = () => {
                                 >
                                     {image ? (
                                         <img
-                                            src={`http://localhost:8000${image.image}`}
+                                            src={image.image_url || (image.image?.startsWith('http') ? image.image : `http://localhost:8000${image.image}`)}
                                             alt={listing.title || listing.breed}
                                             className="listing-image"
                                         />

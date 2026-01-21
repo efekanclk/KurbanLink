@@ -191,6 +191,7 @@ const NewListing = () => {
                 title: formData.title,
                 animal_type: formData.animal_type,
                 breed: formData.breed || '',
+                gender: formData.gender || null,
                 price: parseFloat(formData.price), // Ensure number
                 city: formData.city,
                 district: formData.district,
@@ -301,6 +302,34 @@ const NewListing = () => {
                                     required
                                 />
                                 {errors.title && <span className="error-text">{errors.title}</span>}
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label htmlFor="breed">Irk</label>
+                                    <input
+                                        type="text"
+                                        id="breed"
+                                        name="breed"
+                                        value={formData.breed}
+                                        onChange={handleChange}
+                                        placeholder="örn: Merinos, Kıvırcık"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="gender">Cinsiyet</label>
+                                    <select
+                                        id="gender"
+                                        name="gender"
+                                        value={formData.gender}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Seçiniz</option>
+                                        <option value="ERKEK">Erkek</option>
+                                        <option value="DISI">Dişi</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div className="form-row">

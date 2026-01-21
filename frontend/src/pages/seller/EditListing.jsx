@@ -14,6 +14,7 @@ const EditListing = () => {
         animal_type: 'SMALL',
         title: '',
         breed: '',
+        gender: '',
         age: '',
         weight: '',
         price: '',
@@ -46,6 +47,7 @@ const EditListing = () => {
                     animal_type: listing.animal_type || 'SMALL',
                     title: listing.title || listing.breed || '',
                     breed: listing.breed || '',
+                    gender: listing.gender || '',
                     age: listing.age || '',
                     weight: listing.weight || '',
                     price: listing.price || '',
@@ -224,6 +226,34 @@ const EditListing = () => {
                                     required
                                 />
                                 {errors.title && <span className="error-text">{errors.title}</span>}
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label htmlFor="breed">Irk</label>
+                                    <input
+                                        type="text"
+                                        id="breed"
+                                        name="breed"
+                                        value={formData.breed}
+                                        onChange={handleChange}
+                                        placeholder="örn: Merinos, Kıvırcık"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="gender">Cinsiyet</label>
+                                    <select
+                                        id="gender"
+                                        name="gender"
+                                        value={formData.gender}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Seçiniz</option>
+                                        <option value="ERKEK">Erkek</option>
+                                        <option value="DISI">Dişi</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div className="form-row">

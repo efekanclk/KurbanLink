@@ -56,3 +56,69 @@ class PartnershipListing(models.Model):
     
     def __str__(self):
         return f"{self.city} - {self.person_count} kişi (by {self.creator.email})"
+
+
+class PartnershipMembership(models.Model):
+    """
+    Represents membership in a partnership.
+    Creator is automatically a member. Others join via approval.
+    """
+    
+    partnership = models.ForeignKey(
+        PartnershipListing,
+        on_delete=models.CASCADE,
+        related_name='memberships'
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='partnership_memberships'
+    )
+    joined_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    
+    class Meta:
+        unique_together = [['partnership', 'user']]
+        ordering = ['joined_at']
+    
+    def __str__(self):
+        status = "active" if self.is_active else "inactive"
+        return f"{self.user.email} in {self.partnership.city} ({status})"
+
+
+class PartnershipJoinRequest(models.Model):
+    """
+    Represents a request to join a partnership.
+    Creator must approve/reject.
+    """
+    
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('APPROVED', 'Approved'),
+        ('REJECTED', 'Rejected'),
+    ]
+    
+    partnership = models.ForeignKey(
+        PartnershipListing,
+        on_delete=models.CASCADE,
+        related_name='join_requests'
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='partnership_join_requests'
+    )
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='PENDING'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    decided_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        unique_together = [['partnership', 'user']]
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.user.email} -> {self.partnership.city} ({self.status})"

@@ -25,6 +25,9 @@ export {
   ClipboardList,
   Scissors,
   Maximize2,
+  Check,
+  UserPlus,
+  UserMinus,
 
   // Content
   Heart,

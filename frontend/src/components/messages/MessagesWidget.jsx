@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
-import { fetchConversations, fetchConversationMessages, sendMessage, markAllRead } from '../../api/messages';
+import { fetchInbox, fetchConversationMessages, fetchGroupMessages, sendMessage, sendGroupMessage, markAllRead, markGroupAllRead } from '../../api/messages';
 import { MessageCircle, Maximize2, X, ArrowLeft, Send } from '../../ui/icons';
 import './MessagesWidget.css';
 
@@ -55,7 +55,7 @@ const MessagesWidget = () => {
     const loadConversations = async () => {
         setLoading(true);
         try {
-            const data = await fetchConversations();
+            const data = await fetchInbox(); // Use unified inbox
             setConversations(data);
         } catch (error) {
             console.error('Failed to load conversations:', error);
@@ -64,19 +64,25 @@ const MessagesWidget = () => {
         }
     };
 
-    const loadMessages = async (conversationId) => {
+    const loadMessages = async (conversation) => {
         setLoading(true);
         try {
-            const data = await fetchConversationMessages(conversationId);
+            let data;
+            if (conversation.type === 'GROUP') {
+                data = await fetchGroupMessages(conversation.id);
+                await markGroupAllRead(conversation.id);
+            } else {
+                data = await fetchConversationMessages(conversation.id);
+                await markAllRead(conversation.id);
+            }
             setMessages(data);
-
-            // Mark as read
-            await markAllRead(conversationId);
 
             // Update local unread count
             setConversations(prev =>
                 prev.map(conv =>
-                    conv.id === conversationId ? { ...conv, unread_count: 0 } : conv
+                    conv.id === conversation.id && conv.type === conversation.type
+                        ? { ...conv, unread_count: 0 }
+                        : conv
                 )
             );
         } catch (error) {
@@ -88,7 +94,7 @@ const MessagesWidget = () => {
 
     const handleConversationClick = (conversation) => {
         setSelectedConversation(conversation);
-        loadMessages(conversation.id);
+        loadMessages(conversation);
     };
 
     const handleBack = () => {
@@ -97,7 +103,11 @@ const MessagesWidget = () => {
     };
 
     const handleExpand = () => {
-        const query = selectedConversation ? `?conversation=${selectedConversation.id}` : '';
+        const query = selectedConversation
+            ? selectedConversation.type === 'GROUP'
+                ? `?group=${selectedConversation.id}`
+                : `?conversation=${selectedConversation.id}`
+            : '';
         navigate(`/messages${query}`);
         setIsOpen(false);
     };
@@ -108,15 +118,20 @@ const MessagesWidget = () => {
 
         setSending(true);
         try {
-            const newMessage = await sendMessage(selectedConversation.id, messageInput.trim());
+            let newMessage;
+            if (selectedConversation.type === 'GROUP') {
+                newMessage = await sendGroupMessage(selectedConversation.id, messageInput.trim());
+            } else {
+                newMessage = await sendMessage(selectedConversation.id, messageInput.trim());
+            }
             setMessages(prev => [...prev, newMessage]);
             setMessageInput('');
 
             // Update last message in conversations list
             setConversations(prev =>
                 prev.map(conv =>
-                    conv.id === selectedConversation.id
-                        ? { ...conv, last_message: newMessage }
+                    conv.id === selectedConversation.id && conv.type === selectedConversation.type
+                        ? { ...conv, last_message: { ...newMessage, created_at: newMessage.created_at } }
                         : conv
                 )
             );
@@ -127,10 +142,8 @@ const MessagesWidget = () => {
         }
     };
 
-    const getCounterpartyName = (conversation) => {
-        return user.id === conversation.buyer
-            ? conversation.seller_username
-            : conversation.buyer_username;
+    const getConversationTitle = (conversation) => {
+        return conversation.title;
     };
 
     const formatTime = (dateStr) => {
@@ -177,7 +190,7 @@ const MessagesWidget = () => {
                             </button>
                         )}
                         <h3 className="messages-widget__title">
-                            {selectedConversation ? getCounterpartyName(selectedConversation) : 'Mesajlar'}
+                            {selectedConversation ? getConversationTitle(selectedConversation) : 'Mesajlar'}
                         </h3>
                         <div className="messages-widget__actions">
                             <button className="messages-widget__action" onClick={handleExpand} title="Genişlet">
@@ -201,17 +214,17 @@ const MessagesWidget = () => {
                                 ) : (
                                     conversations.map(conv => (
                                         <div
-                                            key={conv.id}
+                                            key={`${conv.type}-${conv.id}`}
                                             className={`messages-widget__conversation ${conv.unread_count > 0 ? 'unread' : ''}`}
                                             onClick={() => handleConversationClick(conv)}
                                         >
                                             <div className="messages-widget__conversation-avatar">
-                                                {getCounterpartyName(conv)?.charAt(0)?.toUpperCase()}
+                                                {conv.type === 'GROUP' ? '👥' : getConversationTitle(conv)?.charAt(0)?.toUpperCase()}
                                             </div>
                                             <div className="messages-widget__conversation-content">
                                                 <div className="messages-widget__conversation-header">
                                                     <span className="messages-widget__conversation-name">
-                                                        {getCounterpartyName(conv)}
+                                                        {getConversationTitle(conv)}
                                                     </span>
                                                     {conv.last_message && (
                                                         <span className="messages-widget__conversation-time">
@@ -244,11 +257,31 @@ const MessagesWidget = () => {
                                                 key={msg.id}
                                                 className={`messages-widget__message ${msg.sender === user.id ? 'mine' : 'theirs'}`}
                                             >
-                                                <div className="messages-widget__message-bubble">
-                                                    {msg.content}
-                                                </div>
-                                                <div className="messages-widget__message-time">
-                                                    {formatTime(msg.created_at)}
+                                                {selectedConversation.type === 'GROUP' && msg.sender !== user.id && (
+                                                    <div className="messages-widget__message-sender-info">
+                                                        {msg.sender_profile_image ? (
+                                                            <img
+                                                                src={msg.sender_profile_image}
+                                                                alt={msg.sender_username}
+                                                                className="messages-widget__sender-avatar"
+                                                            />
+                                                        ) : (
+                                                            <div className="messages-widget__sender-avatar-placeholder">
+                                                                {msg.sender_username?.charAt(0).toUpperCase()}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                                <div className="messages-widget__message-content-wrapper">
+                                                    {selectedConversation.type === 'GROUP' && msg.sender !== user.id && (
+                                                        <span className="messages-widget__sender-name">{msg.sender_username}</span>
+                                                    )}
+                                                    <div className="messages-widget__message-bubble">
+                                                        {msg.content}
+                                                    </div>
+                                                    <div className="messages-widget__message-time">
+                                                        {formatTime(msg.created_at)}
+                                                    </div>
                                                 </div>
                                             </div>
                                         ))

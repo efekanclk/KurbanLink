@@ -16,6 +16,7 @@ import ComingSoon from '../pages/ComingSoon';
 
 // Partnerships
 import Partnerships from '../pages/partnerships/Partnerships';
+import PartnershipDetail from '../pages/partnerships/PartnershipDetail';
 
 // Seller pages
 import SellerListings from '../pages/seller/SellerListings';
@@ -32,7 +33,7 @@ import AppointmentBooking from '../pages/butchers/AppointmentBooking';
 
 // Messages
 import MessagesPage from '../pages/messages/MessagesPage';
-import ConversationDetail from '../pages/messages/ConversationDetail';
+import NavigateToConversation from '../components/common/NavigateToConversation';
 
 // Notifications
 import Notifications from '../pages/Notifications';
@@ -57,7 +58,7 @@ const AppRouter = () => {
 
             {/* Messages routes */}
             <Route path="/messages" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
-            <Route path="/messages/:conversationId" element={<ProtectedRoute><ConversationDetail /></ProtectedRoute>} />
+            <Route path="/messages/:conversationId" element={<NavigateToConversation />} />
 
             {/* Notifications */}
             <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
@@ -81,6 +82,7 @@ const AppRouter = () => {
 
             {/* Partnerships route */}
             <Route path="/partnerships" element={<ProtectedRoute><Partnerships /></ProtectedRoute>} />
+            <Route path="/partnerships/:id" element={<ProtectedRoute><PartnershipDetail /></ProtectedRoute>} />
 
             {/* Catch all */}
             <Route path="*" element={<Navigate to="/" replace />} />

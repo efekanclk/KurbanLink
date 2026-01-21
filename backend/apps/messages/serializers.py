@@ -4,7 +4,7 @@ Serializers for messages app.
 
 from rest_framework import serializers
 from django.db import IntegrityError
-from .models import Conversation, Message
+from .models import Conversation, Message, GroupConversation, GroupMessage, GroupConversationParticipant
 from apps.animals.models import AnimalListing
 
 
@@ -196,3 +196,57 @@ class MessageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("You are not part of this conversation.")
         
         return value
+
+
+class GroupMessageSerializer(serializers.ModelSerializer):
+    """
+    Serializer for group messages.
+    """
+    
+    sender_username = serializers.SerializerMethodField()
+    sender_profile_image = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = GroupMessage
+        fields = [
+            'id',
+            'conversation',
+            'sender',
+            'sender_username',
+            'sender_profile_image',
+            'content',
+            'created_at'
+        ]
+        read_only_fields = ['id', 'sender', 'created_at']
+    
+    def get_sender_username(self, obj):
+        """Return username or fallback to email prefix."""
+        if obj.sender.username:
+            return obj.sender.username
+        return obj.sender.email.split('@')[0] if obj.sender.email else None
+
+    def get_sender_profile_image(self, obj):
+        """Return profile image URL."""
+        if obj.sender.profile_image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.sender.profile_image.url)
+            return obj.sender.profile_image.url
+        return None
+
+
+class InboxItemSerializer(serializers.Serializer):
+    """
+    Unified inbox item for both direct and group conversations.
+    """
+    
+    TYPE_DIRECT = 'DIRECT'
+    TYPE_GROUP = 'GROUP'
+    
+    type = serializers.CharField()
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+    partnership_id = serializers.IntegerField(required=False, allow_null=True)
+    last_message = serializers.DictField(required=False, allow_null=True)
+    unread_count = serializers.IntegerField()
+    updated_at = serializers.DateTimeField()

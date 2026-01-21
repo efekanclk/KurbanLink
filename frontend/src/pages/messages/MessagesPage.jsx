@@ -1,18 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
-import { fetchConversations, fetchConversationMessages, sendMessage, markAllRead } from '../../api/messages';
-import { Send } from '../../ui/icons';
+import {
+  fetchInbox,
+  fetchConversationMessages,
+  fetchGroupMessages,
+  sendMessage,
+  sendGroupMessage,
+  markAllRead,
+  markGroupAllRead
+} from '../../api/messages';
+import { Send, User as UserIcon, Users as UsersIcon } from '../../ui/icons';
 import './MessagesPage.css';
 
 const MessagesPage = () => {
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [messagesLoading, setMessagesLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef(null);
 
@@ -21,13 +31,28 @@ const MessagesPage = () => {
     loadConversations();
   }, []);
 
-  // Handle conversation ID from URL
+  // Handle URL params
   useEffect(() => {
-    const conversationId = searchParams.get('conversation');
-    if (conversationId && conversations.length > 0) {
-      const conv = conversations.find(c => c.id === parseInt(conversationId));
-      if (conv) {
-        handleConversationSelect(conv);
+    if (conversations.length > 0) {
+      const groupId = searchParams.get('group');
+      const conversationId = searchParams.get('conversation');
+
+      let targetConv = null;
+
+      if (groupId) {
+        // Find group conversation by partnership ID or conversation ID (fallback)
+        targetConv = conversations.find(c =>
+          c.type === 'GROUP' && (c.partnership_id === parseInt(groupId) || c.id === parseInt(groupId))
+        );
+      } else if (conversationId) {
+        // Find direct conversation
+        targetConv = conversations.find(c =>
+          c.type === 'DIRECT' && c.id === parseInt(conversationId)
+        );
+      }
+
+      if (targetConv && targetConv.id !== selectedConversation?.id) {
+        handleConversationSelect(targetConv, false);
       }
     }
   }, [searchParams, conversations]);
@@ -44,7 +69,7 @@ const MessagesPage = () => {
   const loadConversations = async () => {
     setLoading(true);
     try {
-      const data = await fetchConversations();
+      const data = await fetchInbox();
       setConversations(data);
     } catch (error) {
       console.error('Failed to load conversations:', error);
@@ -53,32 +78,44 @@ const MessagesPage = () => {
     }
   };
 
-  const loadMessages = async (conversationId) => {
-    setLoading(true);
+  const loadMessages = async (conversation) => {
+    setMessagesLoading(true);
     try {
-      const data = await fetchConversationMessages(conversationId);
+      let data;
+      if (conversation.type === 'GROUP') {
+        data = await fetchGroupMessages(conversation.id);
+        await markGroupAllRead(conversation.id);
+      } else {
+        data = await fetchConversationMessages(conversation.id);
+        await markAllRead(conversation.id);
+      }
       setMessages(data);
-
-      // Mark as read
-      await markAllRead(conversationId);
 
       // Update local unread count
       setConversations(prev =>
         prev.map(conv =>
-          conv.id === conversationId ? { ...conv, unread_count: 0 } : conv
+          conv.id === conversation.id && conv.type === conversation.type
+            ? { ...conv, unread_count: 0 }
+            : conv
         )
       );
     } catch (error) {
       console.error('Failed to load messages:', error);
     } finally {
-      setLoading(false);
+      setMessagesLoading(false);
     }
   };
 
-  const handleConversationSelect = (conversation) => {
+  const handleConversationSelect = (conversation, updateUrl = true) => {
     setSelectedConversation(conversation);
-    setSearchParams({ conversation: conversation.id });
-    loadMessages(conversation.id);
+    if (updateUrl) {
+      if (conversation.type === 'GROUP') {
+        setSearchParams({ group: conversation.partnership_id || conversation.id });
+      } else {
+        setSearchParams({ conversation: conversation.id });
+      }
+    }
+    loadMessages(conversation);
   };
 
   const handleSendMessage = async (e) => {
@@ -87,29 +124,37 @@ const MessagesPage = () => {
 
     setSending(true);
     try {
-      const newMessage = await sendMessage(selectedConversation.id, messageInput.trim());
+      let newMessage;
+      if (selectedConversation.type === 'GROUP') {
+        newMessage = await sendGroupMessage(selectedConversation.id, messageInput.trim());
+      } else {
+        newMessage = await sendMessage(selectedConversation.id, messageInput.trim());
+      }
+
       setMessages(prev => [...prev, newMessage]);
       setMessageInput('');
 
       // Update last message in conversations list
       setConversations(prev =>
         prev.map(conv =>
-          conv.id === selectedConversation.id
-            ? { ...conv, last_message: newMessage }
+          conv.id === selectedConversation.id && conv.type === selectedConversation.type
+            ? {
+              ...conv,
+              last_message: {
+                content: newMessage.content,
+                created_at: newMessage.created_at,
+                sender_username: user.username
+              },
+              updated_at: newMessage.created_at
+            }
             : conv
-        )
+        ).sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
       );
     } catch (error) {
       console.error('Failed to send message:', error);
     } finally {
       setSending(false);
     }
-  };
-
-  const getCounterpartyName = (conversation) => {
-    return user.id === conversation.buyer
-      ? conversation.seller_username
-      : conversation.buyer_username;
   };
 
   const formatTime = (dateStr) => {
@@ -125,9 +170,9 @@ const MessagesPage = () => {
 
   return (
     <div className="messages-page">
-      < div className="messages-container" >
+      <div className="messages-container">
         {/* Left Column - Conversation List */}
-        < div className="messages-sidebar" >
+        <div className="messages-sidebar">
           <div className="messages-sidebar__header">
             <h2>Mesajlar</h2>
           </div>
@@ -139,26 +184,29 @@ const MessagesPage = () => {
             ) : (
               conversations.map(conv => (
                 <div
-                  key={conv.id}
-                  className={`messages-sidebar__item ${selectedConversation?.id === conv.id ? 'active' : ''} ${conv.unread_count > 0 ? 'unread' : ''}`}
+                  key={`${conv.type}-${conv.id}`}
+                  className={`messages-sidebar__item ${selectedConversation?.id === conv.id && selectedConversation?.type === conv.type ? 'active' : ''} ${conv.unread_count > 0 ? 'unread' : ''}`}
                   onClick={() => handleConversationSelect(conv)}
                 >
                   <div className="messages-sidebar__avatar">
-                    {getCounterpartyName(conv)?.charAt(0)?.toUpperCase()}
+                    {conv.type === 'GROUP' ? <UsersIcon size={20} /> : (conv.title?.charAt(0)?.toUpperCase() || <UserIcon size={20} />)}
                   </div>
                   <div className="messages-sidebar__content">
                     <div className="messages-sidebar__header-row">
                       <span className="messages-sidebar__name">
-                        {getCounterpartyName(conv)}
+                        {conv.title}
                       </span>
                       {conv.last_message && (
                         <span className="messages-sidebar__time">
-                          {formatTime(conv.last_message.created_at)}
+                          {formatTime(conv.updated_at)}
                         </span>
                       )}
                     </div>
                     {conv.last_message && (
                       <div className="messages-sidebar__preview">
+                        {conv.type === 'GROUP' && conv.last_message.sender_username && (
+                          <span className="sender-prefix">{conv.last_message.sender_username}: </span>
+                        )}
                         {conv.last_message.content}
                       </div>
                     )}
@@ -170,10 +218,10 @@ const MessagesPage = () => {
               ))
             )}
           </div>
-        </div >
+        </div>
 
         {/* Right Column - Thread View */}
-        < div className="messages-main" >
+        <div className="messages-main">
           {!selectedConversation ? (
             <div className="messages-main__empty">
               <h3>Bir konuşma seçin</h3>
@@ -184,29 +232,58 @@ const MessagesPage = () => {
               {/* Thread Header */}
               <div className="messages-main__header">
                 <div className="messages-main__header-avatar">
-                  {getCounterpartyName(selectedConversation)?.charAt(0)?.toUpperCase()}
+                  {selectedConversation.type === 'GROUP' ? <UsersIcon size={24} /> : (selectedConversation.title?.charAt(0)?.toUpperCase() || <UserIcon size={24} />)}
                 </div>
-                <h3>{getCounterpartyName(selectedConversation)}</h3>
+                <h3>{selectedConversation.title}</h3>
               </div>
 
               {/* Messages */}
               <div className="messages-main__body">
-                {loading && messages.length === 0 ? (
+                {messagesLoading ? (
                   <div className="messages-main__loading">Yükleniyor...</div>
                 ) : (
-                  messages.map(msg => (
-                    <div
-                      key={msg.id}
-                      className={`message ${msg.sender === user.id ? 'mine' : 'theirs'}`}
-                    >
-                      <div className="message__bubble">
-                        {msg.content}
+                  messages.map(msg => {
+                    const isMine = (msg.sender === user.id) || (msg.sender?.id === user.id) || (selectedConversation.type === 'DIRECT' && !msg.sender_username); // simplistic check
+                    // Adjust sender check based on API response structure
+                    // For unified structure, direct messages might have sender as ID, group as Object or ID.
+                    // The backend serializers:
+                    // MessageSerializer: sender is serializer (object)
+                    // GroupMessageSerializer: sender is serializer (object)
+                    const senderId = typeof msg.sender === 'object' ? msg.sender.id : msg.sender;
+                    const isMe = senderId === user.id;
+
+                    return (
+                      <div
+                        key={msg.id}
+                        className={`message ${isMe ? 'mine' : 'theirs'}`}
+                      >
+                        {selectedConversation.type === 'GROUP' && !isMe && (
+                          <div className="message__sender-info">
+                            {msg.sender_profile_image ? (
+                              <img
+                                src={msg.sender_profile_image}
+                                alt={msg.sender_username}
+                                className="message__sender-avatar"
+                              />
+                            ) : (
+                              <div className="message__sender-avatar-placeholder">
+                                {msg.sender_username?.charAt(0).toUpperCase()}
+                              </div>
+                            )}
+                            <div className="message__sender-name-content">
+                              <span className="message__sender-name">{msg.sender_username}</span>
+                            </div>
+                          </div>
+                        )}
+                        <div className="message__bubble">
+                          {msg.content}
+                        </div>
+                        <div className="message__time">
+                          {formatTime(msg.created_at)}
+                        </div>
                       </div>
-                      <div className="message__time">
-                        {formatTime(msg.created_at)}
-                      </div>
-                    </div>
-                  ))
+                    );
+                  })
                 )}
                 <div ref={messagesEndRef} />
               </div>
@@ -226,9 +303,9 @@ const MessagesPage = () => {
               </form>
             </>
           )}
-        </div >
-      </div >
-    </div >
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -105,3 +105,73 @@ class Message(models.Model):
         
         if self.conversation and self.sender not in [self.conversation.buyer, self.conversation.seller]:
             raise ValidationError("Sender must be either the buyer or seller of this conversation.")
+
+
+class GroupConversation(models.Model):
+    """
+    Represents a group conversation for a partnership.
+    """
+    
+    partnership = models.OneToOneField(
+        'partnerships.PartnershipListing',
+        on_delete=models.CASCADE,
+        related_name='group_conversation'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = 'group conversation'
+        verbose_name_plural = 'group conversations'
+    
+    def __str__(self):
+        return f"Group chat for partnership in {self.partnership.city}"
+
+
+class GroupConversationParticipant(models.Model):
+    """
+    Represents a participant in a group conversation.
+    """
+    
+    conversation = models.ForeignKey(
+        GroupConversation,
+        on_delete=models.CASCADE,
+        related_name='participants'
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    joined_at = models.DateTimeField(auto_now_add=True)
+    last_read_at = models.DateTimeField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    
+    class Meta:
+        unique_together = [['conversation', 'user']]
+        ordering = ['joined_at']
+    
+    def __str__(self):
+        return f"{self.user.email} in {self.conversation}"
+
+
+class GroupMessage(models.Model):
+    """
+    Represents a message in a group conversation.
+    """
+    
+    conversation = models.ForeignKey(
+        GroupConversation,
+        on_delete=models.CASCADE,
+        related_name='messages'
+    )
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['created_at']
+    
+    def __str__(self):
+        return f"Group message from {self.sender.email} at {self.created_at}"

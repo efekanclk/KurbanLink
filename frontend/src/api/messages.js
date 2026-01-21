@@ -60,3 +60,37 @@ export const createConversation = async (listingId) => {
     });
     return response.data;
 };
+
+/**
+ * Fetch unified inbox (direct + group conversations)
+ */
+export const fetchInbox = async () => {
+    const response = await apiClient.get('/api/messages/inbox/');
+    return response.data;
+};
+
+/**
+ * Fetch group conversation messages
+ */
+export const fetchGroupMessages = async (groupId) => {
+    const response = await apiClient.get(`/api/messages/groups/${groupId}/messages/`);
+    return response.data;
+};
+
+/**
+ * Send message to group conversation
+ */
+export const sendGroupMessage = async (groupId, content) => {
+    const response = await apiClient.post(`/api/messages/groups/${groupId}/messages/send/`, {
+        content
+    });
+    return response.data;
+};
+
+/**
+ * Mark all group messages as read
+ */
+export const markGroupAllRead = async (groupId) => {
+    const response = await apiClient.post(`/api/messages/groups/${groupId}/mark_all_read/`);
+    return response.data;
+};
