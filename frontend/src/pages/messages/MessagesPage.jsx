@@ -193,6 +193,9 @@ const MessagesPage = () => {
         {/* Left Column - Conversation List */}
         <div className={`messages-sidebar ${isMobileView && selectedConversation ? 'hidden' : ''}`}>
           <div className="messages-sidebar__header">
+            <button onClick={() => navigate('/')} className="back-btn" style={{ background: 'transparent', color: '#64748b', border: 'none', marginRight: '0.5rem', padding: '0.25rem' }}>
+              <ArrowLeft size={24} />
+            </button>
             <h2>Mesajlar</h2>
           </div>
           <div className="messages-sidebar__list">

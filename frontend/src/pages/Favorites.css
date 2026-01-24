@@ -35,12 +35,14 @@
 }
 
 .back-btn {
-    background-color: #3498db;
-    color: white;
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
 }
 
 .back-btn:hover {
-    background-color: #2980b9;
+    background-color: var(--bg-gray);
+    color: var(--text);
 }
 
 .logout-btn {
@@ -108,7 +110,7 @@
 
 .browse-btn {
     padding: 0.75rem 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #27ae60;
     color: white;
     border: none;
     border-radius: 6px;
@@ -121,6 +123,7 @@
 }
 
 .browse-btn:hover {
+    background-color: #219150;
     transform: translateY(-2px);
 }
 
@@ -191,7 +194,7 @@
     gap: 0.5rem;
 }
 
-. info-row {
+.info-row {
     display: flex;
     justify-content: space-between;
     align-items: center;

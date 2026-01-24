@@ -28,7 +28,11 @@ const Profile = () => {
         <div className="page">
             <div className="page__container">
                 <div className="profile-header">
+                    <button onClick={() => navigate('/')} className="back-btn" style={{ background: 'transparent', color: '#64748b', border: '1px solid #e2e8f0' }}>
+                        ← İlanlara Dön
+                    </button>
                     <h1>Profilim</h1>
+                    <div style={{ width: '100px' }}></div> {/* Spacer for centering if needed, or just auto */}
                 </div>
 
                 {/* Main Profile Card */}

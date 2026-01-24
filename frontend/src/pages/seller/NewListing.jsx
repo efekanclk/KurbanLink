@@ -435,6 +435,8 @@ const NewListing = () => {
                                     onDragOver={handleDragOverDropZone}
                                     onDragEnter={handleDragEnter}
                                     onDragLeave={handleDragLeave}
+                                    onClick={() => document.getElementById('images').click()}
+                                    style={{ cursor: 'pointer' }}
                                 >
                                     <div className="image-uploader__input">
                                         <input
@@ -444,6 +446,7 @@ const NewListing = () => {
                                             multiple
                                             onChange={handleImageChange}
                                             className="file-input"
+                                            style={{ display: 'none' }}
                                         />
                                         <span className="image-uploader__hint">
                                             Ekle ya da sürükle

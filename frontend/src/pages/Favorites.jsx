@@ -67,10 +67,7 @@ const Favorites = () => {
                     <h1>Favorilerim</h1>
                     <div className="header-actions">
                         <button onClick={() => navigate('/')} className="back-btn">
-                            ← Geri
-                        </button>
-                        <button onClick={logout} className="logout-btn">
-                            Çıkış Yap
+                            ← İlanlara Dön
                         </button>
                     </div>
                 </div>
@@ -90,11 +87,9 @@ const Favorites = () => {
                     <h1>Favorilerim</h1>
                     <div className="header-actions">
                         <button onClick={() => navigate('/')} className="back-btn">
-                            ← Geri
+                            ← İlanlara Dön
                         </button>
-                        <button onClick={logout} className="logout-btn">
-                            Çıkış Yap
-                        </button>
+                        {/* Logout removed as requested */}
                     </div>
                 </div>
                 <div className="page">
@@ -118,17 +113,14 @@ const Favorites = () => {
                     <h1>Favorilerim</h1>
                     <div className="header-actions">
                         <button onClick={() => navigate('/')} className="back-btn">
-                            ← Geri
+                            ← İlanlara Dön
                         </button>
-                        <button onClick={logout} className="logout-btn">
-                            Çıkış Yap
-                        </button>
+                        {/* Logout removed as requested */}
                     </div>
                 </div>
                 <div className="page">
                     <div className="page__container">
                         <div className="form-card">
-                            <p className="empty-icon">😔</p>
                             <p>Henüz favori yok.</p>
                             <p className="empty-subtitle">İlanları beğenerek favorilere ekleyebilirsiniz.</p>
                             <button onClick={() => navigate('/')} className="browse-btn">
@@ -147,11 +139,9 @@ const Favorites = () => {
                 <h1>Favorilerim</h1>
                 <div className="header-actions">
                     <button onClick={() => navigate('/')} className="back-btn">
-                        ← Geri
+                        ← İlanlara Dön
                     </button>
-                    <button onClick={logout} className="logout-btn">
-                        Çıkış Yap
-                    </button>
+                    {/* Logout removed as requested */}
                 </div>
             </div>
 
