@@ -7,6 +7,7 @@ import { createConversation } from '../api/messages';
 import { deleteListing } from '../api/sellers';
 import './AnimalDetail.css';
 import { Edit3, Eye, MessageCircle, Heart, Trash2 } from '../ui/icons';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 
 const AnimalDetail = () => {
     const { id } = useParams();
@@ -23,6 +24,7 @@ const AnimalDetail = () => {
     const [favoriteError, setFavoriteError] = useState(null);
     const [messagingLoading, setMessagingLoading] = useState(false);
     const [messagingError, setMessagingError] = useState(null);
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', message: '', onConfirm: null, type: 'warning', showCancel: true });
 
     // Use ref to track latest request ID to prevent race conditions
     const requestIdRef = useRef(0);
@@ -77,8 +79,19 @@ const AnimalDetail = () => {
 
     const handleAuthAction = (action) => {
         if (!user) {
-            alert('Bu işlem için giriş yapmalısınız.');
-            navigate(`/login?next=${encodeURIComponent(window.location.pathname)}`);
+            setConfirmDialog({
+                isOpen: true,
+                title: 'Giriş Yapmalısınız',
+                message: 'Bu işlem için giriş yapmalısınız.',
+                type: 'info',
+                showCancel: false,
+                confirmText: 'Giriş Yap',
+                onConfirm: () => {
+                    setConfirmDialog({ ...confirmDialog, isOpen: false });
+                    navigate(`/login?next=${encodeURIComponent(window.location.pathname)}`);
+                },
+                onCancel: () => setConfirmDialog({ ...confirmDialog, isOpen: false })
+            });
             return false;
         }
         return true;
@@ -167,20 +180,37 @@ const AnimalDetail = () => {
     const favorited = isFavorited(parseInt(id));
     const isTogglingFavorite = toggleLoading[id];
 
-    const handleDelete = async () => {
-        if (!window.confirm('Bu ilanı silmek istediğinize emin misiniz?')) {
-            return;
-        }
-
-        try {
-            setLoading(true);
-            await deleteListing(id);
-            navigate('/');
-        } catch (err) {
-            console.error('Delete failed:', err);
-            alert('İlan silinemedi: ' + (err.response?.data?.detail || 'Bilinmeyen hata'));
-            setLoading(false);
-        }
+    const handleDelete = () => {
+        setConfirmDialog({
+            isOpen: true,
+            title: 'İlanı Sil',
+            message: 'Bu ilanı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.',
+            type: 'danger',
+            confirmText: 'Sil',
+            showCancel: true,
+            onConfirm: async () => {
+                setConfirmDialog({ ...confirmDialog, isOpen: false });
+                try {
+                    setLoading(true);
+                    await deleteListing(id);
+                    navigate('/');
+                } catch (err) {
+                    console.error('Delete failed:', err);
+                    setConfirmDialog({
+                        isOpen: true,
+                        title: 'Hata',
+                        message: 'İlan silinemedi: ' + (err.response?.data?.detail || 'Bilinmeyen hata'),
+                        type: 'danger',
+                        showCancel: false,
+                        confirmText: 'Tamam',
+                        onConfirm: () => setConfirmDialog({ ...confirmDialog, isOpen: false }),
+                        onCancel: () => setConfirmDialog({ ...confirmDialog, isOpen: false })
+                    });
+                    setLoading(false);
+                }
+            },
+            onCancel: () => setConfirmDialog({ ...confirmDialog, isOpen: false })
+        });
     };
 
     return (
@@ -326,7 +356,19 @@ const AnimalDetail = () => {
                     )}
                 </div>
             </div>
-        </div>
+
+            <ConfirmDialog
+                isOpen={confirmDialog.isOpen}
+                title={confirmDialog.title}
+                message={confirmDialog.message}
+                type={confirmDialog.type}
+                confirmText={confirmDialog.confirmText}
+                cancelText={confirmDialog.cancelText}
+                showCancel={confirmDialog.showCancel}
+                onConfirm={confirmDialog.onConfirm}
+                onCancel={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
+            />
+        </div >
     );
 };
 

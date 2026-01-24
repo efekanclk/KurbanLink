@@ -1,4 +1,4 @@
-/* L.login-page {
+.login-page {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -9,14 +9,17 @@
 
 .login-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 440px;
+    /* Slightly wider for better breathing room */
+    margin: 0 auto;
 }
 
 .login-card {
     background: var(--bg-surface);
-    padding: var(--space-4);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .login-header {

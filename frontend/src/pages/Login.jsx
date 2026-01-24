@@ -20,11 +20,13 @@ const Login = () => {
     };
 
     return (
-        <div className="page">
-            <div className="page__container">
-                <div className="form-card">
-                    <h1>KurbanLink</h1>
-                    <h2>Giriş Yap</h2>
+        <div className="login-page">
+            <div className="login-container">
+                <div className="login-card">
+                    <div className="login-header">
+                        <h1>KurbanLink</h1>
+                        <h2>Giriş Yap</h2>
+                    </div>
 
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">

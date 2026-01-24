@@ -8,6 +8,20 @@
     padding: var(--space-3);
 }
 
+.register-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.register-card {
+    background: var(--bg-surface);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
 .subtitle {
     text-align: center;
     color: var(--text-muted);
@@ -213,6 +227,42 @@
 .role-item:has(input:checked) {
     background: #e8f0fe;
     border-color: #667eea;
+}
+
+/* Custom styling for the single checkbox group */
+.checkbox-group {
+    background: var(--bg-gray);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-group:hover {
+    border-color: var(--primary);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    margin: 0;
+    width: 100%;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.75rem;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.checkbox-label span {
+    font-size: 1rem;
+    color: var(--text);
 }
 
 .role-item input[type="checkbox"] {

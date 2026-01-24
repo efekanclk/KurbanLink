@@ -27,7 +27,7 @@ const PartnershipDetail = () => {
     const [actionLoading, setActionLoading] = useState(false);
     const [error, setError] = useState(null);
     const [toast, setToast] = useState(null);
-    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', message: '', onConfirm: null, type: 'warning' });
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', message: '', onConfirm: null, type: 'warning', showCancel: true });
 
     useEffect(() => {
         loadPartnership();
@@ -76,8 +76,19 @@ const PartnershipDetail = () => {
 
     const handleAuthAction = () => {
         if (!user) {
-            alert('Bu işlem için giriş yapmalısınız.');
-            navigate(`/login?next=${encodeURIComponent(window.location.pathname)}`);
+            setConfirmDialog({
+                isOpen: true,
+                title: 'Giriş Yapmalısınız',
+                message: 'Bu işlem için giriş yapmalısınız.',
+                type: 'info',
+                showCancel: false,
+                confirmText: 'Giriş Yap',
+                onConfirm: () => {
+                    setConfirmDialog({ ...confirmDialog, isOpen: false });
+                    navigate(`/login?next=${encodeURIComponent(window.location.pathname)}`);
+                },
+                onCancel: () => setConfirmDialog({ ...confirmDialog, isOpen: false })
+            });
             return false;
         }
         return true;
@@ -359,6 +370,8 @@ const PartnershipDetail = () => {
                 title={confirmDialog.title}
                 message={confirmDialog.message}
                 type={confirmDialog.type}
+                confirmText={confirmDialog.confirmText}
+                showCancel={confirmDialog.showCancel}
                 onConfirm={confirmDialog.onConfirm}
                 onCancel={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
             />

@@ -170,7 +170,7 @@ const NewListing = () => {
         if (!formData.weight) newErrors.weight = 'Ağırlık gereklidir';
         if (!formData.price) newErrors.price = 'Fiyat gereklidir';
         if (!formData.city) newErrors.city = 'Şehir gereklidir';
-        if (!formData.district) newErrors.district = 'İlçe gereklidir';
+        // if (!formData.district) newErrors.district = 'İlçe gereklidir';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -397,13 +397,12 @@ const NewListing = () => {
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="district">İlçe *</label>
+                                    <label htmlFor="district">İlçe</label>
                                     <select
                                         id="district"
                                         name="district"
                                         value={formData.district}
                                         onChange={handleChange}
-                                        required
                                         disabled={!formData.city}
                                     >
                                         <option value="">Seçiniz</option>

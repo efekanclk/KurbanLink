@@ -1,7 +1,7 @@
 import React from 'react';
 import './ConfirmDialog.css';
 
-const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel, confirmText = 'Tamam', cancelText = 'İptal', type = 'warning' }) => {
+const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel, confirmText = 'Tamam', cancelText = 'İptal', type = 'warning', showCancel = true }) => {
     if (!isOpen) return null;
 
     return (
@@ -15,9 +15,11 @@ const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel, confirmTex
                     <p>{message}</p>
                 </div>
                 <div className="confirm-dialog-footer">
-                    <button className="confirm-btn-cancel" onClick={onCancel}>
-                        {cancelText}
-                    </button>
+                    {showCancel && (
+                        <button className="confirm-btn-cancel" onClick={onCancel}>
+                            {cancelText}
+                        </button>
+                    )}
                     <button className={`confirm-btn-confirm ${type}`} onClick={onConfirm}>
                         {confirmText}
                     </button>
