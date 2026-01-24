@@ -5,19 +5,24 @@ import { fetchPartnerships, createPartnership, closePartnership } from '../../ap
 import { fetchAnimals } from '../../api/animals';
 import { animalTypeLabel, partnershipStatusLabel } from '../../utils/labels';
 import { formatTRY, formatDateTR } from '../../utils/format';
+import { cities } from '../../data/locations';
 import LoadingState from '../../components/state/LoadingState';
 import EmptyState from '../../components/state/EmptyState';
 import ErrorState from '../../components/state/ErrorState';
 import './Partnerships.css';
 import { CheckCircle2, AlertTriangle, MapPin } from '../../ui/icons';
 
+import { useAuth } from '../../auth/AuthContext';
+
 const Partnerships = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [partnerships, setPartnerships] = useState([]);
     const [animals, setAnimals] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [cityFilter, setCityFilter] = useState('');
+    const [myPartnershipsOnly, setMyPartnershipsOnly] = useState(false);
 
     // Form state
     const [formData, setFormData] = useState({
@@ -101,7 +106,11 @@ const Partnerships = () => {
     const applyFilter = async () => {
         try {
             setLoading(true);
-            const data = await fetchPartnerships({ city: cityFilter });
+            const filters = { city: cityFilter };
+            if (myPartnershipsOnly) {
+                filters.my_partnerships = true;
+            }
+            const data = await fetchPartnerships(filters);
             setPartnerships(Array.isArray(data) ? data : data.results || []);
         } catch (err) {
             console.error('Filter failed:', err);
@@ -109,6 +118,11 @@ const Partnerships = () => {
             setLoading(false);
         }
     };
+
+    // Reload when toggling myPartnershipsOnly
+    useEffect(() => {
+        applyFilter();
+    }, [myPartnershipsOnly]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -196,14 +210,17 @@ const Partnerships = () => {
                         <form onSubmit={handleSubmit} className="partnership-form">
                             <div className="form-group">
                                 <label htmlFor="city">Şehir *</label>
-                                <input
-                                    type="text"
+                                <select
                                     id="city"
                                     value={formData.city}
                                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                                     required
-                                    placeholder="Örn: Ankara"
-                                />
+                                >
+                                    <option value="">Şehir seçiniz</option>
+                                    {cities.map(city => (
+                                        <option key={city} value={city}>{city}</option>
+                                    ))}
+                                </select>
                             </div>
 
                             <div className="form-group">
@@ -212,10 +229,10 @@ const Partnerships = () => {
                                     type="number"
                                     id="person_count"
                                     min="1"
+                                    max="7"
                                     value={formData.person_count}
                                     onChange={(e) => setFormData({ ...formData, person_count: e.target.value })}
                                     required
-                                    placeholder="Örn: 3"
                                 />
                             </div>
 
@@ -266,6 +283,15 @@ const Partnerships = () => {
                                 <button onClick={applyFilter} className="btn-secondary">
                                     Filtrele
                                 </button>
+                                {user && (
+                                    <button
+                                        onClick={() => setMyPartnershipsOnly(!myPartnershipsOnly)}
+                                        className={`btn-secondary ${myPartnershipsOnly ? 'active' : ''}`}
+                                        style={myPartnershipsOnly ? { backgroundColor: 'var(--primary)', color: 'white' } : {}}
+                                    >
+                                        Ortaklıklarım
+                                    </button>
+                                )}
                             </div>
                         </div>
 
@@ -281,8 +307,11 @@ const Partnerships = () => {
                                     <div
                                         key={partnership.id}
                                         className="partnership-card"
-                                        onClick={() => navigate(`/partnerships/${partnership.id}`)}
-                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => partnership.status !== 'CLOSED' && navigate(`/partnerships/${partnership.id}`)}
+                                        style={{
+                                            cursor: partnership.status === 'CLOSED' ? 'default' : 'pointer',
+                                            opacity: partnership.status === 'CLOSED' ? 0.6 : 1
+                                        }}
                                     >
                                         <div className="card-header">
                                             <h3>

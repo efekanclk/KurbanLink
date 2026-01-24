@@ -12,6 +12,7 @@ import {
     fetchMembers
 } from '../../api/partnerships';
 import { Users, UserPlus, UserMinus, X, Check, MessageCircle } from '../../ui/icons';
+import ConfirmDialog from '../../components/ui/ConfirmDialog';
 import './PartnershipDetail.css';
 
 const PartnershipDetail = () => {
@@ -26,6 +27,7 @@ const PartnershipDetail = () => {
     const [actionLoading, setActionLoading] = useState(false);
     const [error, setError] = useState(null);
     const [toast, setToast] = useState(null);
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', message: '', onConfirm: null, type: 'warning' });
 
     useEffect(() => {
         loadPartnership();
@@ -123,38 +125,52 @@ const PartnershipDetail = () => {
         }
     };
 
-    const handleLeave = async () => {
+    const handleLeave = () => {
         if (!handleAuthAction()) return;
-        if (!window.confirm('Ortaklıktan ayrılmak istediğinizden emin misiniz?')) return;
-
-        setActionLoading(true);
-        try {
-            await leavePartnership(id);
-            showToast('Ortaklıktan ayrıldınız');
-            await loadPartnership();
-            navigate('/partnerships');
-        } catch (err) {
-            const message = err.response?.data?.error || 'Ayrılamadınız';
-            showToast(message, 'error');
-        } finally {
-            setActionLoading(false);
-        }
+        setConfirmDialog({
+            isOpen: true,
+            title: 'Ortaklıktan Ayrıl',
+            message: 'Ortaklıktan ayrılmak istediğinizden emin misiniz?',
+            type: 'warning',
+            onConfirm: async () => {
+                setConfirmDialog({ ...confirmDialog, isOpen: false });
+                setActionLoading(true);
+                try {
+                    await leavePartnership(id);
+                    showToast('Ortaklıktan ayrıldınız');
+                    await loadPartnership();
+                    await loadMembers();
+                } catch (err) {
+                    showToast('Bir hata oluştu', 'error');
+                } finally {
+                    setActionLoading(false);
+                }
+            }
+        });
     };
 
-    const handleClose = async () => {
+    const handleClose = () => {
         if (!handleAuthAction()) return;
-        if (!window.confirm('Ortaklığı kapatmak istediğinizden emin misiniz?')) return;
-
-        setActionLoading(true);
-        try {
-            await closePartnership(id);
-            showToast('Ortaklık kapatıldı');
-            await loadPartnership();
-        } catch (err) {
-            showToast('Kapatılamadı', 'error');
-        } finally {
-            setActionLoading(false);
-        }
+        setConfirmDialog({
+            isOpen: true,
+            title: 'Ortaklığı Kapat',
+            message: 'Ortaklığı kapatmak istediğinizden emin misiniz? Bu işlem geri alınamaz.',
+            type: 'danger',
+            onConfirm: async () => {
+                setConfirmDialog({ ...confirmDialog, isOpen: false });
+                setActionLoading(true);
+                try {
+                    await closePartnership(id);
+                    showToast('Ortaklık başarıyla silindi');
+                    setTimeout(() => {
+                        navigate('/partnerships');
+                    }, 1000);
+                } catch (err) {
+                    showToast('Ortaklık kapatılamadı', 'error');
+                    setActionLoading(false);
+                }
+            }
+        });
     };
 
     const handleOpenGroupChat = () => {
@@ -336,6 +352,16 @@ const PartnershipDetail = () => {
                     </div>
                 )}
             </div>
+
+            {/* Confirm Dialog */}
+            <ConfirmDialog
+                isOpen={confirmDialog.isOpen}
+                title={confirmDialog.title}
+                message={confirmDialog.message}
+                type={confirmDialog.type}
+                onConfirm={confirmDialog.onConfirm}
+                onCancel={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
+            />
         </div>
     );
 };

@@ -73,6 +73,14 @@ class PartnershipSerializer(serializers.ModelSerializer):
         join_request = obj.join_requests.filter(user=request.user).first()
         return join_request.status if join_request else None
 
+    def validate_person_count(self, value):
+        """Ensure person_count is not greater than 7."""
+        if value > 7:
+            raise serializers.ValidationError("Ortak sayısı en fazla 7 olabilir.")
+        if value < 1:
+            raise serializers.ValidationError("Ortak sayısı en az 1 olmalıdır.")
+        return value
+
 
 class MemberSerializer(serializers.ModelSerializer):
     """

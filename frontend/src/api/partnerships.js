@@ -23,6 +23,7 @@ export const fetchPartnerships = async (filters = {}) => {
     const params = new URLSearchParams();
     if (filters.city) params.append('city', filters.city);
     if (filters.show_closed) params.append('show_closed', 'true');
+    if (filters.my_partnerships) params.append('my_partnerships', 'true');
 
     const response = await apiClient.get(`/api/partnerships/?${params}`);
     return response.data;

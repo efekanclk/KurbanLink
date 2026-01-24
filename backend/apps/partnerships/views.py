@@ -30,15 +30,24 @@ class PartnershipListingViewSet(viewsets.ModelViewSet):
         """Filter queryset based on query params."""
         queryset = PartnershipListing.objects.all()
         
+        # Filter by user membership
+        my_partnerships = self.request.query_params.get('my_partnerships', 'false')
+        is_my_partnerships = my_partnerships.lower() == 'true' and self.request.user.is_authenticated
+
         # Filter by status
+        # If showing my partnerships, show ALL status (including CLOSED)
+        # Otherwise, default to OPEN unless show_closed=true
         show_closed = self.request.query_params.get('show_closed', 'false')
-        if show_closed.lower() != 'true':
+        if not is_my_partnerships and show_closed.lower() != 'true':
             queryset = queryset.filter(status=PartnershipListing.OPEN)
         
         # Filter by city
         city = self.request.query_params.get('city')
         if city:
             queryset = queryset.filter(city__icontains=city)
+        
+        if is_my_partnerships:
+            queryset = queryset.filter(memberships__user=self.request.user, memberships__is_active=True).distinct()
         
         return queryset
     
@@ -96,8 +105,30 @@ class PartnershipListingViewSet(viewsets.ModelViewSet):
             )
         
         # Check if user has another active membership
-        if PartnershipMembership.objects.filter(user=user, is_active=True).exists():
-            return Response(
+        active_memberships = PartnershipMembership.objects.filter(user=user, is_active=True)
+        
+        # CLEANUP: Check for orphan memberships (linked to non-existent partnerships)
+        # Also ignore memberships for CLOSED partnerships
+        valid_memberships = []
+        for membership in active_memberships:
+            # Check if partnership actually exists in DB
+            partnership_exists = PartnershipListing.objects.filter(id=membership.partnership_id).exists()
+            if not partnership_exists:
+                # Orphan membership found! Delete it.
+                membership.delete()
+                continue
+                
+            # Check if partnership is CLOSED
+            # If closed, this membership shouldn't block new applications.
+            # Ideally user should have left, but we can treat closed partnership memberships as "archived"
+            partnership_obj = PartnershipListing.objects.get(id=membership.partnership_id)
+            if partnership_obj.status == PartnershipListing.CLOSED:
+                continue
+                
+            valid_memberships.append(membership)
+        
+        if valid_memberships:
+             return Response(
                 {'error': 'Zaten başka bir ortaklığın üyesisiniz.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
