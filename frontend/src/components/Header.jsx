@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { useAuth } from '../auth/AuthContext';
 import NotificationDropdown from './NotificationDropdown';
 import './Header.css';
 import { Search, User, LogOut, Menu } from '../ui/icons';

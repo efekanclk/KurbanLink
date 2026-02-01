@@ -1,222 +1,181 @@
-"""
-Service layer for generating recommendations.
-
-Rule-based recommendation engine using user behavior data.
-"""
-
-from typing import List, Tuple
-from django.db.models import Q, Count
+import logging
+from datetime import timedelta
+from django.db.models import Q, F, Count, Avg
+from django.utils import timezone
 from apps.animals.models import AnimalListing
-from apps.favorites.models import Favorite
 from apps.accounts.models import User
-from .models import Recommendation
+from .models import ListingInteraction
 
+logger = logging.getLogger(__name__)
 
-class RecommendationService:
+class RecommendationEngine:
     """
-    Service for generating rule-based recommendations.
+    Rule-based recommendation engine for Animal Listings.
+    Deterministic and explainable ranking for MVP.
     """
     
-    def __init__(self, user: User):
-        self.user = user
-        self.recommendations = []
-    
-    def generate_all(self) -> List[Recommendation]:
+    def __init__(self):
+        self.weights = {
+            'location_city': 0.30,
+            'location_district': 0.15,
+            'price_match': 0.20,
+            'popularity': 0.10,
+            'recency': 0.05,
+            'diversity_penalty': 0.10
+        }
+
+    def get_recommendations(self, user=None, city=None, district=None, limit=20, exclude_ids=None):
         """
-        Generate all types of recommendations for the user.
-        
-        Returns:
-            List of Recommendation instances (not saved)
+        Main entry point for retrieving recommended listings.
         """
-        self.recommendations = []
-        
-        # Generate each type
-        self._generate_animal_recommendations()
-        self._generate_seller_recommendations()
-        self._generate_butcher_recommendations()
-        
-        return self.recommendations
-    
-    def _generate_animal_recommendations(self) -> None:
-        """
-        Generate animal listing recommendations based on:
-        - Similar animal_type to favorites
-        - Similar location
-        - Price proximity (+/- 20%)
-        """
-        # Get user's favorites
-        favorites = Favorite.objects.filter(
-            user=self.user
-        ).select_related('animal')
-        
-        if not favorites.exists():
-            # No favorites, recommend popular listings
-            self._recommend_popular_animals()
-            return
-        
-        # Extract favorite animal types, locations, and price ranges
-        favorite_listings = [f.animal for f in favorites]
-        favorite_types = set(l.animal_type for l in favorite_listings)
-        favorite_locations = set(l.location for l in favorite_listings)
-        
-        # Calculate average price
-        prices = [l.price for l in favorite_listings]
-        avg_price = sum(prices) / len(prices) if prices else 0
-        price_min = avg_price * 0.8
-        price_max = avg_price * 1.2
-        
-        # Find similar listings
-        candidates = AnimalListing.objects.filter(
-            is_active=True
-        ).exclude(
-            id__in=[f.animal.id for f in favorites]  # Exclude favorited
-        ).exclude(
-            seller=self.user  # Exclude own listings
-        ).select_related('seller')
-        
-        for listing in candidates[:20]:  # Limit candidates
-            score = 0.0
-            reasons = []
+        if exclude_ids is None:
+            exclude_ids = []
             
-            # Score based on animal type match
-            if listing.animal_type in favorite_types:
-                score += 50
-                reasons.append("similar type")
-            
-            # Score based on location match
-            if listing.location in favorite_locations:
-                score += 30
-                reasons.append("same area")
-            
-            # Score based on price proximity
-            if price_min <= listing.price <= price_max:
-                score += 20
-                reasons.append("similar price")
-            
-            if score > 0:
-                reason = f"Based on your favorites: {', '.join(reasons)}"
-                self.recommendations.append(
-                    Recommendation(
-                        user=self.user,
-                        type=Recommendation.ANIMAL,
-                        object_id=listing.id,
-                        score=score,
-                        reason=reason
-                    )
-                )
-    
-    def _recommend_popular_animals(self) -> None:
-        """
-        Recommend popular listings (fallback when no favorites).
-        """
-        popular = AnimalListing.objects.filter(
-            is_active=True
-        ).exclude(
-            seller=self.user
-        ).annotate(
-            favorite_count=Count('favorites')
-        ).order_by('-favorite_count')[:10]
+        # 1. Determine Context (Location)
+        target_city = city
+        target_district = district
         
-        for listing in popular:
-            self.recommendations.append(
-                Recommendation(
-                    user=self.user,
-                    type=Recommendation.ANIMAL,
-                    object_id=listing.id,
-                    score=30.0,
-                    reason="Popular listing"
-                )
+        if user and user.is_authenticated:
+            # If logged in, prefer profile location if not overridden
+            if not target_city:
+                target_city = user.city
+            if not target_district:
+                target_district = user.district
+        
+        # 2. Candidate Generation
+        candidates = self._generate_candidates(user, target_city, exclude_ids)
+        
+        # 3. Scoring
+        scored_listings = []
+        for listing in candidates:
+            score, reasons = self._score_listing(listing, user, target_city, target_district)
+            scored_listings.append({
+                'listing': listing,
+                'score': score,
+                'reasons': reasons
+            })
+            
+        # 4. Sorting & Re-ranking (Diversity)
+        # Sort by score desc
+        scored_listings.sort(key=lambda x: x['score'], reverse=True)
+        
+        # Apply diversity penalty (simple version: reduce score if seller appeared recently)
+        final_list = self._apply_diversity(scored_listings)
+        
+        return final_list[:limit]
+
+    def _generate_candidates(self, user, target_city, exclude_ids):
+        """
+        Fetch active listings to be scored.
+        """
+        # Base filter: Active listings only
+        queryset = AnimalListing.objects.filter(is_active=True)
+        
+        # Exclude already seen/specific IDs
+        if exclude_ids:
+            queryset = queryset.exclude(id__in=exclude_ids)
+            
+        # Exclude own listings
+        if user and user.is_authenticated:
+            queryset = queryset.exclude(seller=user)
+            
+        # For MVP optimization: 
+        # If we have a target city, fetch all from that city + some popular/recent from others
+        # Use simple union or just fetch top 100 recent/popular to score
+        if target_city:
+            # Priority: Same city OR Recent
+            queryset = queryset.filter(
+                Q(city__iexact=target_city) | 
+                Q(created_at__gte=timezone.now() - timedelta(days=30))
             )
-    
-    def _generate_seller_recommendations(self) -> None:
-        """
-        Generate seller recommendations based on:
-        - Sellers with listings matching user's favorite animal types
-        - Sellers in user's preferred locations
-        """
-        # Get user's favorites
-        favorites = Favorite.objects.filter(
-            user=self.user
-        ).select_related('animal')
-        
-        if not favorites.exists():
-            return
-        
-        favorite_listings = [f.animal for f in favorites]
-        favorite_types = set(l.animal_type for l in favorite_listings)
-        favorite_locations = set(l.location for l in favorite_listings)
-        
-        # Find sellers with matching listings
-        sellers = User.objects.filter(
-            animal_listings__is_active=True,
-            animal_listings__animal_type__in=favorite_types
-        ).exclude(
-            id=self.user.id
-        ).distinct().annotate(
-            listing_count=Count('animal_listings')
-        )[:10]
-        
-        for seller in sellers:
-            score = 40.0
-            reasons = []
+        else:
+            # No location context: just recent listings
+            queryset = queryset.filter(created_at__gte=timezone.now() - timedelta(days=60))
             
-            # Check if seller has listings in favorite locations
-            has_location_match = seller.animal_listings.filter(
-                location__in=favorite_locations,
-                is_active=True
-            ).exists()
-            
-            if has_location_match:
-                score += 20
-                reasons.append("in your area")
-            
-            reasons.append("matches your interests")
-            reason = f"Seller {', '.join(reasons)}"
-            
-            self.recommendations.append(
-                Recommendation(
-                    user=self.user,
-                    type=Recommendation.SELLER,
-                    object_id=seller.id,
-                    score=score,
-                    reason=reason
-                )
-            )
-    
-    def _generate_butcher_recommendations(self) -> None:
-        """
-        Generate butcher recommendations (placeholder logic).
-        
-        This is a placeholder. In the future, this would check:
-        - Same city
-        - High ratings
-        """
-        # Placeholder: No butcher logic implemented yet
-        # This method exists for future expansion
-        pass
+        # Limit candidate pool size for performance (score max 200 items)
+        return queryset.select_related('seller').order_by('-created_at')[:200]
 
-
-def generate_recommendations_for_user(user: User) -> List[Recommendation]:
-    """
-    Generate and save recommendations for a user.
-    
-    Args:
-        user: User to generate recommendations for
+    def _score_listing(self, listing, user, target_city, target_district):
+        """
+        Calculate score for a single listing.
+        Returns (score, reasons_list)
+        """
+        score = 0.0
+        reasons = []
         
-    Returns:
-        List of created Recommendation instances
-    """
-    service = RecommendationService(user)
-    recommendations = service.generate_all()
-    
-    # Save recommendations (ignore duplicates)
-    saved = []
-    for rec in recommendations:
+        # 1. Location Match
+        if target_city and listing.city and listing.city.lower() == target_city.lower():
+            score += self.weights['location_city']
+            reasons.append('SAME_CITY')
+            
+            if target_district and listing.district and listing.district.lower() == target_district.lower():
+                score += self.weights['location_district']
+                reasons.append('SAME_DISTRICT')
+
+        # 2. Recency (New Listing)
+        # Is created in last 7 days?
+        if listing.created_at >= timezone.now() - timedelta(days=7):
+            score += self.weights['recency']
+            reasons.append('NEW_LISTING')
+            
+        # 3. Popularity (View Count)
+        # Simple normalization: cap at 100 views -> max boost
+        views = listing.view_count
+        popularity_boost = min(views / 100.0, 1.0) * self.weights['popularity']
+        if popularity_boost > 0.05: # Threshold to mention
+            score += popularity_boost
+            reasons.append('POPULAR')
+        else:
+            score += popularity_boost
+
+        # 4. Price Match (Placeholder for MVP)
+        # If we had user history, we would compare price.
+        # For now, neutral.
+        
+        return score, reasons
+
+    def _apply_diversity(self, scored_listings):
+        """
+        Penalize consecutive listings from same seller.
+        """
+        seller_counts = {}
+        adjusted_list = []
+        
+        for item in scored_listings:
+            seller_id = item['listing'].seller_id
+            count = seller_counts.get(seller_id, 0)
+            
+            if count > 0:
+                # Penalty for subsequent listings from same seller
+                penalty = self.weights['diversity_penalty'] * count
+                item['score'] -= penalty
+                # Clamp at 0
+                item['score'] = max(0.0, item['score'])
+            
+            seller_counts[seller_id] = count + 1
+            adjusted_list.append(item)
+            
+        # Re-sort after penalties
+        adjusted_list.sort(key=lambda x: x['score'], reverse=True)
+        return adjusted_list
+
+    def log_interaction(self, user, listing_id, interaction_type, ip_address=None):
+        """
+        Log user interaction.
+        """
         try:
-            rec.save()
-            saved.append(rec)
-        except Exception:
-            # Duplicate or error, skip
+            listing = AnimalListing.objects.get(id=listing_id)
+            ListingInteraction.objects.create(
+                user=user if user and user.is_authenticated else None,
+                listing=listing,
+                interaction_type=interaction_type,
+                ip_address=ip_address
+            )
+            
+            # Update view count directly on listing for simple tracking
+            if interaction_type == ListingInteraction.VIEW:
+                listing.view_count = F('view_count') + 1
+                listing.save(update_fields=['view_count'])
+                
+        except AnimalListing.DoesNotExist:
             pass
-    
-    return saved

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import FeaturedSection from '../components/home/FeaturedSection';
 import HomeSidebar from '../components/home/HomeSidebar';
+import RecommendedListings from '../components/home/RecommendedListings';
 import { fetchAnimals, fetchAnimalImages } from '../api/animals';
 import { useAuth } from '../auth/AuthContext';
 import './Home.css';
@@ -59,6 +60,9 @@ const Home = () => {
                 <HomeSidebar />
 
                 <main className="home-content">
+                    {/* Recommendations Section */}
+                    <RecommendedListings />
+
                     {/* Header for listings */}
                     <div className="listings-header">
                         <h2>Tüm İlanlar</h2>
