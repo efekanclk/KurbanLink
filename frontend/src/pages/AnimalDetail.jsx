@@ -8,6 +8,7 @@ import { deleteListing } from '../api/sellers';
 import './AnimalDetail.css';
 import { Edit3, Eye, MessageCircle, Heart, Trash2 } from '../ui/icons';
 import ConfirmDialog from '../components/ui/ConfirmDialog';
+import SimilarListings from '../components/animals/SimilarListings';
 
 const AnimalDetail = () => {
     const { id } = useParams();
@@ -356,6 +357,9 @@ const AnimalDetail = () => {
                     )}
                 </div>
             </div>
+
+            {/* Similar Listings Section */}
+            {listing && <SimilarListings currentListing={listing} />}
 
             <ConfirmDialog
                 isOpen={confirmDialog.isOpen}
