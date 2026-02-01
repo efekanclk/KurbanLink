@@ -17,11 +17,16 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "kurbanlink_db",
+        "USER": "kurbanlink",
+        "PASSWORD": "07antalya",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
+
 
 
 # CORS settings (if needed for frontend development)

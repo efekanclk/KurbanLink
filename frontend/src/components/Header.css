@@ -4,8 +4,8 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background: #fff;
-    border-bottom: 1px solid var(--border, #e0e0e0);
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
     height: 64px;
 }
 
@@ -142,7 +142,7 @@
 }
 
 .user-dropdown-item:hover {
-    background-color: #f8fafc;
+    background-color: var(--bg-secondary);
 }
 
 .user-dropdown-item.logout {
@@ -219,7 +219,7 @@
     background: transparent;
     padding: 0.5rem;
     font-size: 0.95rem;
-    color: #333;
+    color: var(--text-primary);
     outline: none;
 }
 

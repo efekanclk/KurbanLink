@@ -1,0 +1,3931 @@
+[
+  {
+    "model": "sessions.session",
+    "pk": "2go1soa2v6qc4ksu5ijpf37onqkn1wu0",
+    "fields": {
+      "session_data": ".eJxVjEEOwiAQRe_C2hCmCKUu3fcMZGBmpGpoUtqV8e7apAvd_vfef6mI21ri1niJE6mLAnX63RLmB9cd0B3rbdZ5rusyJb0r-qBNjzPx83q4fwcFW_nW3kDmwRowwXYevB8ExQUOIkmcdER9ODsG55gtBhw6MuATYBC21It6fwDTwDgS:1vfiEJ:U-QKD0Uj7pO-SrAc2VoWVG5x1f2W8DyLcJdlfI2fPdQ",
+      "expire_date": "2026-01-27T17:30:55.760Z"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$4lnl2uKpBpmQFZVzNZXaYR$KIbRvBjC29MtF230tgYhpjviTYSmBE8S4/iIj6w1v9w=",
+      "last_login": "2026-01-13T17:30:55Z",
+      "is_superuser": true,
+      "email": "efecelik4207@gmail.com",
+      "username": "efekanclk",
+      "phone_number": "05531372139",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "profiles/linkedinpp.jpeg",
+      "city": "Ankara",
+      "district": "Gölbaşı",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-01-13T17:30:38Z",
+      "groups": [],
+      "user_permissions": [
+        [
+          "add_role",
+          "accounts",
+          "role"
+        ],
+        [
+          "change_role",
+          "accounts",
+          "role"
+        ],
+        [
+          "delete_role",
+          "accounts",
+          "role"
+        ],
+        [
+          "view_role",
+          "accounts",
+          "role"
+        ],
+        [
+          "add_user",
+          "accounts",
+          "user"
+        ],
+        [
+          "change_user",
+          "accounts",
+          "user"
+        ],
+        [
+          "delete_user",
+          "accounts",
+          "user"
+        ],
+        [
+          "view_user",
+          "accounts",
+          "user"
+        ],
+        [
+          "add_userrole",
+          "accounts",
+          "userrole"
+        ],
+        [
+          "change_userrole",
+          "accounts",
+          "userrole"
+        ],
+        [
+          "delete_userrole",
+          "accounts",
+          "userrole"
+        ],
+        [
+          "view_userrole",
+          "accounts",
+          "userrole"
+        ],
+        [
+          "add_logentry",
+          "admin",
+          "logentry"
+        ],
+        [
+          "change_logentry",
+          "admin",
+          "logentry"
+        ],
+        [
+          "delete_logentry",
+          "admin",
+          "logentry"
+        ],
+        [
+          "view_logentry",
+          "admin",
+          "logentry"
+        ],
+        [
+          "add_animalimage",
+          "animals",
+          "animalimage"
+        ],
+        [
+          "change_animalimage",
+          "animals",
+          "animalimage"
+        ],
+        [
+          "delete_animalimage",
+          "animals",
+          "animalimage"
+        ],
+        [
+          "view_animalimage",
+          "animals",
+          "animalimage"
+        ],
+        [
+          "add_animallisting",
+          "animals",
+          "animallisting"
+        ],
+        [
+          "change_animallisting",
+          "animals",
+          "animallisting"
+        ],
+        [
+          "delete_animallisting",
+          "animals",
+          "animallisting"
+        ],
+        [
+          "view_animallisting",
+          "animals",
+          "animallisting"
+        ],
+        [
+          "add_group",
+          "auth",
+          "group"
+        ],
+        [
+          "change_group",
+          "auth",
+          "group"
+        ],
+        [
+          "delete_group",
+          "auth",
+          "group"
+        ],
+        [
+          "view_group",
+          "auth",
+          "group"
+        ],
+        [
+          "add_permission",
+          "auth",
+          "permission"
+        ],
+        [
+          "change_permission",
+          "auth",
+          "permission"
+        ],
+        [
+          "delete_permission",
+          "auth",
+          "permission"
+        ],
+        [
+          "view_permission",
+          "auth",
+          "permission"
+        ],
+        [
+          "add_appointment",
+          "butchers",
+          "appointment"
+        ],
+        [
+          "change_appointment",
+          "butchers",
+          "appointment"
+        ],
+        [
+          "delete_appointment",
+          "butchers",
+          "appointment"
+        ],
+        [
+          "view_appointment",
+          "butchers",
+          "appointment"
+        ],
+        [
+          "add_butcherprofile",
+          "butchers",
+          "butcherprofile"
+        ],
+        [
+          "change_butcherprofile",
+          "butchers",
+          "butcherprofile"
+        ],
+        [
+          "delete_butcherprofile",
+          "butchers",
+          "butcherprofile"
+        ],
+        [
+          "view_butcherprofile",
+          "butchers",
+          "butcherprofile"
+        ],
+        [
+          "add_conversation",
+          "chat_messages",
+          "conversation"
+        ],
+        [
+          "change_conversation",
+          "chat_messages",
+          "conversation"
+        ],
+        [
+          "delete_conversation",
+          "chat_messages",
+          "conversation"
+        ],
+        [
+          "view_conversation",
+          "chat_messages",
+          "conversation"
+        ],
+        [
+          "add_message",
+          "chat_messages",
+          "message"
+        ],
+        [
+          "change_message",
+          "chat_messages",
+          "message"
+        ],
+        [
+          "delete_message",
+          "chat_messages",
+          "message"
+        ],
+        [
+          "view_message",
+          "chat_messages",
+          "message"
+        ],
+        [
+          "add_contenttype",
+          "contenttypes",
+          "contenttype"
+        ],
+        [
+          "change_contenttype",
+          "contenttypes",
+          "contenttype"
+        ],
+        [
+          "delete_contenttype",
+          "contenttypes",
+          "contenttype"
+        ],
+        [
+          "view_contenttype",
+          "contenttypes",
+          "contenttype"
+        ],
+        [
+          "add_favorite",
+          "favorites",
+          "favorite"
+        ],
+        [
+          "change_favorite",
+          "favorites",
+          "favorite"
+        ],
+        [
+          "delete_favorite",
+          "favorites",
+          "favorite"
+        ],
+        [
+          "view_favorite",
+          "favorites",
+          "favorite"
+        ],
+        [
+          "add_notification",
+          "notifications",
+          "notification"
+        ],
+        [
+          "change_notification",
+          "notifications",
+          "notification"
+        ],
+        [
+          "delete_notification",
+          "notifications",
+          "notification"
+        ],
+        [
+          "view_notification",
+          "notifications",
+          "notification"
+        ],
+        [
+          "add_recommendation",
+          "recommendations",
+          "recommendation"
+        ],
+        [
+          "change_recommendation",
+          "recommendations",
+          "recommendation"
+        ],
+        [
+          "delete_recommendation",
+          "recommendations",
+          "recommendation"
+        ],
+        [
+          "view_recommendation",
+          "recommendations",
+          "recommendation"
+        ],
+        [
+          "add_session",
+          "sessions",
+          "session"
+        ],
+        [
+          "change_session",
+          "sessions",
+          "session"
+        ],
+        [
+          "delete_session",
+          "sessions",
+          "session"
+        ],
+        [
+          "view_session",
+          "sessions",
+          "session"
+        ]
+      ]
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$cmmHZStz2dnHYlV1ygcZ2c$1pJzDj/M0xP8GMzEAryHM5qBhbU8GbqLuNFGIWVPF64=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "kurbanlinkdeneme@gmail.com",
+      "username": "kurbanlinkdeneme",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": true,
+      "is_active": false,
+      "date_joined": "2026-01-13T18:24:45Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$5QYgpZpMsElvEHlMBRGuIl$ynb36ZisfkJ+BKlPukZp+rV9xG+zoMAOUGwqvuB/Dpg=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "deneme2@gmail.com",
+      "username": "deneme2",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": true,
+      "is_active": false,
+      "date_joined": "2026-01-14T10:26:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$5nzMnVWgsiV9mnqGm9waMv$6UDDNzEj0KcvQrFouMevSgAK1YrQfvGPbusv023v2kI=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "deneme3@gmail.com",
+      "username": "deneme3",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-14T13:18:05Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$9BNLErI5fI0k2lG9YXKibd$tFX+MduG6jyyk0qbjEiXLjuiOuKcWf/43X9GgAd26EE=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "buyerdeneme@gmail.com",
+      "username": "buyerdeneme",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-17T12:35:46Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$Un8mAIv9f8T8aPptt1iKch$F+G7bOnotu0DnjZ9x+2S5YiXPSzdaC4/2QoYW1eJw8E=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "deneme4@gmail.com",
+      "username": "deneme4",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-17T13:08:41.537Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$Bx29krGePpxh2lGHP0j6Fx$gmz97RvxLls5XgbPsZzB/bwZlMirSNdrSbD+Td1JG+A=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "mertsatici@gmail.com",
+      "username": "mertsatici",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-17T13:45:27.635Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$X1LcARiBcXt8bg5dOtPKP3$sY0cgAJdqz1TtpStZGCgkUH4lH1MP8IuTmf4HYkLPh8=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "kasap@gmail.com",
+      "username": "kasap",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-17T14:34:43.495Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$oZTkcNGbvdXg8Jyo7CZATc$AvBnO4PGYudf/GG+QO2f+575P9DiYIFRo5sowGFHVA0=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "kasap2@gmail.com",
+      "username": "kasap2",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-17T15:26:26.914Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$jRSBvLypmzV74tKMFqtzTY$Czpfpma/HstoahMmGXzl3B9qn/3xqKTEQCtp4c6sDjA=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "kasapdeneme@gmail.com",
+      "username": "kasapdeneme",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-17T15:27:19.453Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$wTqw9LraNFIihvrVFeozvf$QOsLbB66PT4W6RCnT3FS+jD0EAg9UUzughN+mU1YVm0=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "mehmetkasap@gmail.com",
+      "username": "mehmetkasap",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-17T15:28:18.512Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$TiyaHkaMpui5sGHo7TCxr8$1DH3GLBjSxGiVStJYhf4DUC2gfl5AdjaF9N7JjCgLhU=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "alikustar@gmail.com",
+      "username": "alikustar",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-17T15:28:18.709Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$gMIvR0oG5MatpWKHxVONlq$5SU+07RvQE6RdeY/q2a2jfIi+UlYXivqfd5cjlo0vrY=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "deneme5@gmail.com",
+      "username": null,
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-19T00:06:00.603Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$cBEuEzVF1fR4oPLCqpCOdv$edIDPopbv8Y3kHnjBWT94jYwpAsVxdJ4WSPoSVfCDu8=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "deneme6@gmail.com",
+      "username": "deneme6x",
+      "phone_number": "5531372139",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-19T14:26:52.498Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$vsmjOG59p3fzBzCUrolwxW$Xf1lAOA0+DiHvq+J1a0/QTgFqGCRp3iL5PGN0x89KGQ=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "deneme7@gmail.com",
+      "username": "deneme7",
+      "phone_number": "5531372139",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "Ankara",
+      "district": "Gölbaşı",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-19T14:32:26.302Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$VDj24xMLmSqa9jVQJIiest$t7pWH0QmtIUvduUkCGkYu/KoLe37pV2IhSIsF13J6Mw=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "deneme8@gmail.com",
+      "username": "deneme8",
+      "phone_number": "5531372139",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "Ankara",
+      "district": "Gölbaşı",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-19T14:35:24.188Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$xUyL42e0tEHVrP3mMRAn9C$2IPMMju4j6sf7efcVyPdukf0Sg4Dx5Lrso7rGjEV7j0=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "deneme9@gmail.com",
+      "username": "kasap5",
+      "phone_number": "111111111",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "Ankara",
+      "district": "Keçiören",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-25T12:33:33.334Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$vWp57bm6ZrjHP9hYD2XMl8$HgdfKsH+7bZZdn1tq72RZTkAoJWb1TTexCN9OdI7Xto=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "deneme11@gmail.com",
+      "username": "deneme11",
+      "phone_number": "5555555555",
+      "country_code": "TR",
+      "first_name": "",
+      "last_name": "",
+      "email_verified": false,
+      "profile_image": "",
+      "city": "Adıyaman",
+      "district": "Kahta",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-25T12:57:25.594Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$dQ08bIz5R8UPIdL6JxEqKt$hd3eFU3S29UmXltLn/ao7cLc6sUzBXijxlmgK5hYtjY=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "efeking4207@gmail.com",
+      "username": "efekan",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "efekan",
+      "last_name": "efekan",
+      "email_verified": true,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-25T14:12:35.001Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$eMSwBvGMvrXpDsvGXKXIfo$FrThv/WAFVU/RAhQXYbucioLotxMR96kHdviADps2Nk=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "deneme12@gmail.com",
+      "username": "deneme12",
+      "phone_number": "",
+      "country_code": "TR",
+      "first_name": "deneme",
+      "last_name": "deneme",
+      "email_verified": true,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-25T14:53:14.069Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$nUZssiNYM2ubpRtCSsuKUa$jYBxY8WF5oS0P1kEIQ1thNGPUtqxzPR3AftemhqmFTo=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "deneme13@gmail.com",
+      "username": "deneme13",
+      "phone_number": "554333333333333333",
+      "country_code": "TR",
+      "first_name": "efekan",
+      "last_name": "çelik",
+      "email_verified": true,
+      "profile_image": "",
+      "city": "",
+      "district": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-25T14:56:07.932Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.emailotpverification",
+    "pk": "42ed4439-c271-411c-b38f-e293717a6dd7",
+    "fields": {
+      "email": "efeking4207@gmail.com",
+      "user": null,
+      "otp_hash": "pbkdf2_sha256$600000$ZyXAjyfWUFpelGvfSFxkgN$BcatuNkAbamJeNO6DBo+++QJQolM+/kwBmvbt0ZVAUs=",
+      "created_at": "2026-01-25T13:53:47.808Z",
+      "expires_at": "2026-01-25T14:03:47.808Z",
+      "consumed_at": null,
+      "attempt_count": 0,
+      "resend_count": 0,
+      "last_sent_at": "2026-01-25T13:53:47.808Z",
+      "purpose": "REGISTER_EMAIL_VERIFY"
+    }
+  },
+  {
+    "model": "animals.animallisting",
+    "pk": 1,
+    "fields": {
+      "seller": [
+        "efecelik4207@gmail.com"
+      ],
+      "species": null,
+      "animal_type": "SMALL",
+      "title": "SATILIK KEÇİ",
+      "breed": "dede",
+      "gender": null,
+      "age_months": 1231,
+      "age": null,
+      "weight": "80.00",
+      "price": "41242141.00",
+      "location": "Ankara, Sincan",
+      "city": "Ankara",
+      "district": "Sincan",
+      "ear_tag_no": null,
+      "company": "",
+      "description": "SÜÜÜÜ",
+      "is_active": true,
+      "view_count": 36,
+      "created_at": "2026-01-19T15:02:58.747Z"
+    }
+  },
+  {
+    "model": "animals.animallisting",
+    "pk": 2,
+    "fields": {
+      "seller": [
+        "efecelik4207@gmail.com"
+      ],
+      "species": null,
+      "animal_type": "SMALL",
+      "title": "Koç",
+      "breed": "koyun",
+      "gender": "ERKEK",
+      "age_months": 14,
+      "age": null,
+      "weight": "70.00",
+      "price": "15000.00",
+      "location": "Konya, Ilgın",
+      "city": "Konya",
+      "district": "Ilgın",
+      "ear_tag_no": "1212",
+      "company": "",
+      "description": "iyi koç",
+      "is_active": true,
+      "view_count": 28,
+      "created_at": "2026-01-20T17:03:53.092Z"
+    }
+  },
+  {
+    "model": "animals.animallisting",
+    "pk": 5,
+    "fields": {
+      "seller": [
+        "efecelik4207@gmail.com"
+      ],
+      "species": null,
+      "animal_type": "SMALL",
+      "title": "güzel koyun",
+      "breed": "Koyun",
+      "gender": "ERKEK",
+      "age_months": 2,
+      "age": null,
+      "weight": "412.00",
+      "price": "431413.00",
+      "location": "Burdur, Yeşilova",
+      "city": "Burdur",
+      "district": "Yeşilova",
+      "ear_tag_no": null,
+      "company": "",
+      "description": "deneme",
+      "is_active": true,
+      "view_count": 2,
+      "created_at": "2026-01-24T21:34:00.520Z"
+    }
+  },
+  {
+    "model": "animals.animalimage",
+    "pk": 9,
+    "fields": {
+      "listing": 1,
+      "image": "animal_images/Ekran_Resmi_2026-01-19_14.21.54_1cJ7vsT.png",
+      "is_primary": false,
+      "order": 0,
+      "created_at": "2026-01-19T15:21:05.405Z"
+    }
+  },
+  {
+    "model": "animals.animalimage",
+    "pk": 13,
+    "fields": {
+      "listing": 1,
+      "image": "animal_images/Ekran_Resmi_2026-01-19_14.21.59_ZASweE0.png",
+      "is_primary": false,
+      "order": 1,
+      "created_at": "2026-01-19T15:25:00.644Z"
+    }
+  },
+  {
+    "model": "animals.animalimage",
+    "pk": 14,
+    "fields": {
+      "listing": 1,
+      "image": "animal_images/Ekran_Resmi_2026-01-19_14.22.04_WNYrI5W.png",
+      "is_primary": false,
+      "order": 2,
+      "created_at": "2026-01-19T15:25:00.655Z"
+    }
+  },
+  {
+    "model": "animals.animalimage",
+    "pk": 15,
+    "fields": {
+      "listing": 1,
+      "image": "animal_images/linkedinpp.jpeg",
+      "is_primary": false,
+      "order": 3,
+      "created_at": "2026-01-20T11:51:48.026Z"
+    }
+  },
+  {
+    "model": "animals.animalimage",
+    "pk": 17,
+    "fields": {
+      "listing": 2,
+      "image": "animal_images/Ekran_Resmi_2026-01-20_20.03.33.png",
+      "is_primary": true,
+      "order": 0,
+      "created_at": "2026-01-20T17:03:53.218Z"
+    }
+  },
+  {
+    "model": "animals.animalimage",
+    "pk": 18,
+    "fields": {
+      "listing": 2,
+      "image": "animal_images/Ekran_Resmi_2026-01-20_20.03.42.png",
+      "is_primary": false,
+      "order": 0,
+      "created_at": "2026-01-20T17:03:53.229Z"
+    }
+  },
+  {
+    "model": "animals.animalimage",
+    "pk": 21,
+    "fields": {
+      "listing": 5,
+      "image": "animal_images/download.jpg",
+      "is_primary": true,
+      "order": 0,
+      "created_at": "2026-01-24T21:34:00.730Z"
+    }
+  },
+  {
+    "model": "favorites.favorite",
+    "pk": 13,
+    "fields": {
+      "user": [
+        "buyerdeneme@gmail.com"
+      ],
+      "animal": 1,
+      "created_at": "2026-01-20T17:16:33.027Z"
+    }
+  },
+  {
+    "model": "chat_messages.groupconversation",
+    "pk": 9,
+    "fields": {
+      "partnership": 9,
+      "created_at": "2026-01-29T16:44:15.390Z"
+    }
+  },
+  {
+    "model": "chat_messages.groupconversationparticipant",
+    "pk": 16,
+    "fields": {
+      "conversation": 9,
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "joined_at": "2026-01-29T16:44:15.393Z",
+      "last_read_at": "2026-01-29T17:43:40.724Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "chat_messages.groupconversationparticipant",
+    "pk": 17,
+    "fields": {
+      "conversation": 9,
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "joined_at": "2026-01-29T16:45:15.972Z",
+      "last_read_at": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 1,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "test hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 1,
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T12:39:42.041Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 2,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "deneme4@gmail.com OMAR ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 2
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T13:08:44.774Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 3,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "deneme4@gmail.com test ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T13:08:51.923Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 4,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "deneme4@gmail.com test ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T13:14:15.956Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 5,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "deneme4@gmail.com test ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T13:14:16.989Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 6,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "deneme4@gmail.com OMAR ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 2
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T13:21:51.872Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 7,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "mertsatici@gmail.com test ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T13:45:30.962Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 8,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "mertsatici@gmail.com test ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T13:52:21.141Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 9,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "mertsatici@gmail.com OMAR ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 2
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T13:52:27.190Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 10,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "kasap@gmail.com merinos ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 4
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T14:42:27.294Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 11,
+    "fields": {
+      "user": [
+        "kasap2@gmail.com"
+      ],
+      "type": "APPOINTMENT_REQUESTED",
+      "title": "New Appointment Request",
+      "message": "You have a new appointment request for 2026-01-29 at 14:30:00",
+      "data": {
+        "appointment_id": 1,
+        "butcher_id": 4,
+        "date": "2026-01-29",
+        "time": "14:30:00"
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T15:43:23.997Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 12,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "APPOINTMENT_APPROVED",
+      "title": "Appointment Approved",
+      "message": "Your appointment with omar kesici has been approved",
+      "data": {
+        "appointment_id": 1,
+        "butcher_id": 4,
+        "date": "2026-01-29",
+        "time": "14:30:00"
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T15:43:42.577Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 13,
+    "fields": {
+      "user": [
+        "buyerdeneme@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "test hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 1,
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T15:47:24.817Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 14,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "test hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 1,
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T15:47:52.530Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 15,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "test hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 1,
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T15:47:56.460Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 16,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "test hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 1,
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T15:48:00.529Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 17,
+    "fields": {
+      "user": [
+        "buyerdeneme@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "test hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 1,
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T15:49:07.130Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 18,
+    "fields": {
+      "user": [
+        "buyerdeneme@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "test hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 1,
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-17T15:49:09.525Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 19,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "deneme3@gmail.com DANA ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 3
+      },
+      "is_read": true,
+      "created_at": "2026-01-19T07:55:51.412Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 20,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "DANA hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 2,
+        "listing_id": 3
+      },
+      "is_read": true,
+      "created_at": "2026-01-19T09:47:09.735Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 21,
+    "fields": {
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "type": "LISTING_UPDATED",
+      "title": "İlan Güncellendi",
+      "message": "Favorilediğiniz ilan (DANA) güncellendi",
+      "data": {
+        "listing_id": 3
+      },
+      "is_read": true,
+      "created_at": "2026-01-19T09:53:03.601Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 22,
+    "fields": {
+      "user": [
+        "mertsatici@gmail.com"
+      ],
+      "type": "LISTING_UPDATED",
+      "title": "İlan Güncellendi",
+      "message": "Favorilediğiniz ilan (OMAR) güncellendi",
+      "data": {
+        "listing_id": 2
+      },
+      "is_read": true,
+      "created_at": "2026-01-19T09:53:05.963Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 23,
+    "fields": {
+      "user": [
+        "deneme4@gmail.com"
+      ],
+      "type": "LISTING_UPDATED",
+      "title": "İlan Güncellendi",
+      "message": "Favorilediğiniz ilan (OMAR) güncellendi",
+      "data": {
+        "listing_id": 2
+      },
+      "is_read": false,
+      "created_at": "2026-01-19T09:53:05.963Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 24,
+    "fields": {
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "DANA hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 2,
+        "listing_id": 3
+      },
+      "is_read": true,
+      "created_at": "2026-01-19T10:56:00.721Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 25,
+    "fields": {
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "type": "LISTING_UPDATED",
+      "title": "İlan Güncellendi",
+      "message": "Favorilediğiniz ilan (DANA) güncellendi",
+      "data": {
+        "listing_id": 3
+      },
+      "is_read": true,
+      "created_at": "2026-01-19T11:15:23.663Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 26,
+    "fields": {
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "type": "LISTING_UPDATED",
+      "title": "İlan Güncellendi",
+      "message": "Favorilediğiniz ilan (DANA) güncellendi",
+      "data": {
+        "listing_id": 3
+      },
+      "is_read": true,
+      "created_at": "2026-01-19T11:15:26.813Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 27,
+    "fields": {
+      "user": [
+        "deneme8@gmail.com"
+      ],
+      "type": "APPOINTMENT_REQUESTED",
+      "title": "New Appointment Request",
+      "message": "You have a new appointment request for 3123-03-12 at 10:30:00",
+      "data": {
+        "appointment_id": 2,
+        "butcher_id": 7,
+        "date": "3123-03-12",
+        "time": "10:30:00"
+      },
+      "is_read": true,
+      "created_at": "2026-01-19T14:36:04.907Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 28,
+    "fields": {
+      "user": [
+        "deneme7@gmail.com"
+      ],
+      "type": "APPOINTMENT_REJECTED",
+      "title": "Appointment Rejected",
+      "message": "Your appointment with kasap 8 ce has been rejected",
+      "data": {
+        "appointment_id": 2,
+        "butcher_id": 7,
+        "date": "3123-03-12",
+        "time": "10:30:00"
+      },
+      "is_read": false,
+      "created_at": "2026-01-19T14:36:21.706Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 29,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": " hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 3,
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-19T16:07:14.511Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 30,
+    "fields": {
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": " hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 3,
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-19T16:07:44.958Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 31,
+    "fields": {
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": " hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 3,
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-20T13:04:40.259Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 32,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "deneme3@gmail.com  ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 2
+      },
+      "is_read": true,
+      "created_at": "2026-01-20T17:04:34.346Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 33,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": " hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 4,
+        "listing_id": 2
+      },
+      "is_read": true,
+      "created_at": "2026-01-20T17:04:44.682Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 34,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": " hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 4,
+        "listing_id": 2
+      },
+      "is_read": true,
+      "created_at": "2026-01-20T17:04:48.613Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 35,
+    "fields": {
+      "user": [
+        "buyerdeneme@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "efecelik4207@gmail.com  ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 3
+      },
+      "is_read": true,
+      "created_at": "2026-01-20T17:09:53.851Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 36,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "buyerdeneme@gmail.com  ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 1
+      },
+      "is_read": true,
+      "created_at": "2026-01-20T17:16:33.029Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 37,
+    "fields": {
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "type": "LISTING_UPDATED",
+      "title": "İlan Güncellendi",
+      "message": "Favorilediğiniz ilan (koyun) güncellendi",
+      "data": {
+        "listing_id": 2
+      },
+      "is_read": true,
+      "created_at": "2026-01-24T20:28:16.040Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 38,
+    "fields": {
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "type": "LISTING_UPDATED",
+      "title": "İlan Güncellendi",
+      "message": "Favorilediğiniz ilan (koyun) güncellendi",
+      "data": {
+        "listing_id": 2
+      },
+      "is_read": true,
+      "created_at": "2026-01-24T20:28:27.732Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 39,
+    "fields": {
+      "user": [
+        "buyerdeneme@gmail.com"
+      ],
+      "type": "PRICE_CHANGED",
+      "title": "Fiyat Değişti",
+      "message": "dede için fiyat 11.00 → 41242141.00 olarak değişti",
+      "data": {
+        "listing_id": 1,
+        "old_price": "11.00",
+        "new_price": "41242141.00"
+      },
+      "is_read": false,
+      "created_at": "2026-01-24T20:34:53.832Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 40,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "deneme3@gmail.com DANA ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 6
+      },
+      "is_read": true,
+      "created_at": "2026-01-24T21:46:58.658Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 41,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "DANA hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 7,
+        "listing_id": 6
+      },
+      "is_read": true,
+      "created_at": "2026-01-24T21:47:09.724Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 42,
+    "fields": {
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "DANA hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 7,
+        "listing_id": 6
+      },
+      "is_read": true,
+      "created_at": "2026-01-24T21:47:42.390Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 43,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "mertsatici@gmail.com DANA ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 6
+      },
+      "is_read": true,
+      "created_at": "2026-01-24T21:55:56.878Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 44,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "DANA hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 8,
+        "listing_id": 6
+      },
+      "is_read": true,
+      "created_at": "2026-01-24T21:55:58.928Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 45,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "buyerdeneme@gmail.com DANA ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 6
+      },
+      "is_read": true,
+      "created_at": "2026-01-24T21:56:12.890Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 46,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "deneme3@gmail.com Dana ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 7
+      },
+      "is_read": false,
+      "created_at": "2026-01-29T16:33:35.950Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 47,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "Dana hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 9,
+        "listing_id": 7
+      },
+      "is_read": false,
+      "created_at": "2026-01-29T16:33:41.290Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 48,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "FAVORITED_LISTING",
+      "title": "İlan Favorilendi",
+      "message": "deneme3@gmail.com Dana ilanınızı favorilere ekledi",
+      "data": {
+        "listing_id": 8
+      },
+      "is_read": false,
+      "created_at": "2026-01-29T16:44:27.732Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 49,
+    "fields": {
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "type": "NEW_MESSAGE",
+      "title": "Yeni Mesaj",
+      "message": "Dana hakkında yeni mesajınız var",
+      "data": {
+        "conversation_id": 10,
+        "listing_id": 8
+      },
+      "is_read": true,
+      "created_at": "2026-01-29T16:44:43.834Z"
+    }
+  },
+  {
+    "model": "notifications.notification",
+    "pk": 50,
+    "fields": {
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "type": "LISTING_UPDATED",
+      "title": "İlan Güncellendi",
+      "message": "Favorilediğiniz ilan (Dana) güncellendi",
+      "data": {
+        "listing_id": 8
+      },
+      "is_read": false,
+      "created_at": "2026-01-29T16:45:41.503Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershiplisting",
+    "pk": 1,
+    "fields": {
+      "creator": [
+        "efecelik4207@gmail.com"
+      ],
+      "animal": 1,
+      "city": "Ankara",
+      "person_count": 7,
+      "description": "",
+      "status": "CLOSED",
+      "created_at": "2026-01-20T13:09:53.139Z",
+      "updated_at": "2026-01-24T20:29:13.768Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershiplisting",
+    "pk": 2,
+    "fields": {
+      "creator": [
+        "buyerdeneme@gmail.com"
+      ],
+      "animal": null,
+      "city": "Ankara",
+      "person_count": 2,
+      "description": "kurban",
+      "status": "CLOSED",
+      "created_at": "2026-01-20T17:06:52.864Z",
+      "updated_at": "2026-01-21T09:59:03.626Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershiplisting",
+    "pk": 3,
+    "fields": {
+      "creator": [
+        "efecelik4207@gmail.com"
+      ],
+      "animal": null,
+      "city": "Ankara",
+      "person_count": 4,
+      "description": "deneme",
+      "status": "CLOSED",
+      "created_at": "2026-01-24T20:31:32.732Z",
+      "updated_at": "2026-01-24T20:31:36.280Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershiplisting",
+    "pk": 4,
+    "fields": {
+      "creator": [
+        "efecelik4207@gmail.com"
+      ],
+      "animal": null,
+      "city": "Adıyaman",
+      "person_count": 321,
+      "description": "deneme",
+      "status": "CLOSED",
+      "created_at": "2026-01-24T20:33:22.832Z",
+      "updated_at": "2026-01-24T20:34:19.367Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershiplisting",
+    "pk": 5,
+    "fields": {
+      "creator": [
+        "efecelik4207@gmail.com"
+      ],
+      "animal": null,
+      "city": "Ağrı",
+      "person_count": 5,
+      "description": "eawq",
+      "status": "CLOSED",
+      "created_at": "2026-01-24T20:44:20.149Z",
+      "updated_at": "2026-01-24T20:44:22.846Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershiplisting",
+    "pk": 6,
+    "fields": {
+      "creator": [
+        "efecelik4207@gmail.com"
+      ],
+      "animal": null,
+      "city": "Ankara",
+      "person_count": 4,
+      "description": "deneme",
+      "status": "CLOSED",
+      "created_at": "2026-01-24T20:45:48.831Z",
+      "updated_at": "2026-01-24T20:45:56.331Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershiplisting",
+    "pk": 7,
+    "fields": {
+      "creator": [
+        "efecelik4207@gmail.com"
+      ],
+      "animal": null,
+      "city": "Antalya",
+      "person_count": 3,
+      "description": "deneme",
+      "status": "CLOSED",
+      "created_at": "2026-01-24T20:46:07.582Z",
+      "updated_at": "2026-01-24T21:40:15.882Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershiplisting",
+    "pk": 8,
+    "fields": {
+      "creator": [
+        "efecelik4207@gmail.com"
+      ],
+      "animal": null,
+      "city": "Ankara",
+      "person_count": 4,
+      "description": "NOLUR ŞU ADAMI KESMEMİZ LAZIM",
+      "status": "CLOSED",
+      "created_at": "2026-01-24T21:46:26.067Z",
+      "updated_at": "2026-01-29T16:37:39.798Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershiplisting",
+    "pk": 9,
+    "fields": {
+      "creator": [
+        "efecelik4207@gmail.com"
+      ],
+      "animal": null,
+      "city": "Ankara",
+      "person_count": 3,
+      "description": "ortaklık arıyorum",
+      "status": "OPEN",
+      "created_at": "2026-01-29T16:44:15.385Z",
+      "updated_at": "2026-01-29T16:44:15.385Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 1,
+    "fields": {
+      "partnership": 1,
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "joined_at": "2026-01-20T15:26:20.991Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 2,
+    "fields": {
+      "partnership": 1,
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "joined_at": "2026-01-20T15:26:21.772Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 3,
+    "fields": {
+      "partnership": 2,
+      "user": [
+        "buyerdeneme@gmail.com"
+      ],
+      "joined_at": "2026-01-20T17:06:52.867Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 4,
+    "fields": {
+      "partnership": 2,
+      "user": [
+        "mertsatici@gmail.com"
+      ],
+      "joined_at": "2026-01-20T17:08:21.607Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 5,
+    "fields": {
+      "partnership": 1,
+      "user": [
+        "buyerdeneme@gmail.com"
+      ],
+      "joined_at": "2026-01-20T17:18:18.866Z",
+      "is_active": false
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 6,
+    "fields": {
+      "partnership": 3,
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "joined_at": "2026-01-24T20:31:32.733Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 7,
+    "fields": {
+      "partnership": 4,
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "joined_at": "2026-01-24T20:33:22.833Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 8,
+    "fields": {
+      "partnership": 5,
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "joined_at": "2026-01-24T20:44:20.151Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 9,
+    "fields": {
+      "partnership": 6,
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "joined_at": "2026-01-24T20:45:48.832Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 10,
+    "fields": {
+      "partnership": 7,
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "joined_at": "2026-01-24T20:46:07.583Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 11,
+    "fields": {
+      "partnership": 7,
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "joined_at": "2026-01-24T21:00:33.281Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 12,
+    "fields": {
+      "partnership": 8,
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "joined_at": "2026-01-24T21:46:26.069Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 13,
+    "fields": {
+      "partnership": 8,
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "joined_at": "2026-01-24T21:48:01.082Z",
+      "is_active": false
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 14,
+    "fields": {
+      "partnership": 8,
+      "user": [
+        "buyerdeneme@gmail.com"
+      ],
+      "joined_at": "2026-01-24T21:56:31.476Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 15,
+    "fields": {
+      "partnership": 8,
+      "user": [
+        "mertsatici@gmail.com"
+      ],
+      "joined_at": "2026-01-24T21:56:32.131Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 16,
+    "fields": {
+      "partnership": 9,
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "joined_at": "2026-01-29T16:44:15.388Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipmembership",
+    "pk": 17,
+    "fields": {
+      "partnership": 9,
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "joined_at": "2026-01-29T16:45:15.970Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "partnerships.partnershipjoinrequest",
+    "pk": 1,
+    "fields": {
+      "partnership": 1,
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "status": "APPROVED",
+      "created_at": "2026-01-20T14:37:23.645Z",
+      "decided_at": "2026-01-20T15:26:20.986Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershipjoinrequest",
+    "pk": 2,
+    "fields": {
+      "partnership": 1,
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "status": "APPROVED",
+      "created_at": "2026-01-20T14:46:59.244Z",
+      "decided_at": "2026-01-20T15:26:21.770Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershipjoinrequest",
+    "pk": 3,
+    "fields": {
+      "partnership": 1,
+      "user": [
+        "buyerdeneme@gmail.com"
+      ],
+      "status": "APPROVED",
+      "created_at": "2026-01-20T17:06:27.266Z",
+      "decided_at": "2026-01-20T17:18:18.865Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershipjoinrequest",
+    "pk": 4,
+    "fields": {
+      "partnership": 2,
+      "user": [
+        "mertsatici@gmail.com"
+      ],
+      "status": "APPROVED",
+      "created_at": "2026-01-20T17:07:44.635Z",
+      "decided_at": "2026-01-20T17:08:21.604Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershipjoinrequest",
+    "pk": 5,
+    "fields": {
+      "partnership": 7,
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "status": "APPROVED",
+      "created_at": "2026-01-24T20:59:34.894Z",
+      "decided_at": "2026-01-24T21:00:33.280Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershipjoinrequest",
+    "pk": 6,
+    "fields": {
+      "partnership": 8,
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "status": "APPROVED",
+      "created_at": "2026-01-24T21:47:20.396Z",
+      "decided_at": "2026-01-24T21:48:01.079Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershipjoinrequest",
+    "pk": 7,
+    "fields": {
+      "partnership": 8,
+      "user": [
+        "mertsatici@gmail.com"
+      ],
+      "status": "APPROVED",
+      "created_at": "2026-01-24T21:56:02.875Z",
+      "decided_at": "2026-01-24T21:56:32.130Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershipjoinrequest",
+    "pk": 8,
+    "fields": {
+      "partnership": 8,
+      "user": [
+        "buyerdeneme@gmail.com"
+      ],
+      "status": "APPROVED",
+      "created_at": "2026-01-24T21:56:17.837Z",
+      "decided_at": "2026-01-24T21:56:31.475Z"
+    }
+  },
+  {
+    "model": "partnerships.partnershipjoinrequest",
+    "pk": 9,
+    "fields": {
+      "partnership": 9,
+      "user": [
+        "deneme3@gmail.com"
+      ],
+      "status": "APPROVED",
+      "created_at": "2026-01-29T16:44:52.752Z",
+      "decided_at": "2026-01-29T16:45:15.968Z"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+      "action_time": "2026-01-13T17:32:27.714Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "role"
+      ],
+      "object_id": "1",
+      "object_repr": "BUYER - Satıcı1",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+      "action_time": "2026-01-13T17:32:34.108Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "userrole"
+      ],
+      "object_id": "1",
+      "object_repr": "efecelik4207@gmail.com - BUYER",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+      "action_time": "2026-01-13T18:03:09.267Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "animals",
+        "animallisting"
+      ],
+      "object_id": "1",
+      "object_repr": "SMALL - test by efecelik4207@gmail.com",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+      "action_time": "2026-01-13T18:23:32.024Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "role"
+      ],
+      "object_id": "1",
+      "object_repr": "BUYER - ALICI1",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Name\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+      "action_time": "2026-01-13T18:23:48.275Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "role"
+      ],
+      "object_id": "2",
+      "object_repr": "SELLER - Satıcı1",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+      "action_time": "2026-01-13T18:24:00.604Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "userrole"
+      ],
+      "object_id": "1",
+      "object_repr": "efecelik4207@gmail.com - SELLER",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Role\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+      "action_time": "2026-01-13T18:24:09.531Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "userrole"
+      ],
+      "object_id": "2",
+      "object_repr": "efecelik4207@gmail.com - BUYER",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+      "action_time": "2026-01-13T18:24:45.830Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "2",
+      "object_repr": "kurbanlinkdeneme@gmail.com",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+      "action_time": "2026-01-13T18:24:53.188Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "2",
+      "object_repr": "kurbanlinkdeneme@gmail.com",
+      "action_flag": 2,
+      "change_message": "[]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+      "action_time": "2026-01-13T18:25:10.474Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "userrole"
+      ],
+      "object_id": "3",
+      "object_repr": "kurbanlinkdeneme@gmail.com - BUYER",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+      "action_time": "2026-01-14T10:26:08.929Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "role"
+      ],
+      "object_id": "1",
+      "object_repr": "BUYER - ALICI1",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+      "action_time": "2026-01-14T10:26:20.737Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "role"
+      ],
+      "object_id": "3",
+      "object_repr": "BUTCHER - Kasap1",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+      "action_time": "2026-01-14T10:26:27.749Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "role"
+      ],
+      "object_id": "4",
+      "object_repr": "BUYER - Alıcı1",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+      "action_time": "2026-01-14T10:26:54.520Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "3",
+      "object_repr": "deneme2@gmail.com",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+      "action_time": "2026-01-14T10:27:09.488Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "3",
+      "object_repr": "deneme2@gmail.com",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Is staff\", \"Is active\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 16,
+    "fields": {
+      "action_time": "2026-01-14T10:27:21.975Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "userrole"
+      ],
+      "object_id": "4",
+      "object_repr": "deneme2@gmail.com - BUTCHER",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 17,
+    "fields": {
+      "action_time": "2026-01-14T13:15:14.012Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "1",
+      "object_repr": "efecelik4207@gmail.com",
+      "action_flag": 2,
+      "change_message": "[]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 18,
+    "fields": {
+      "action_time": "2026-01-14T13:18:05.990Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "4",
+      "object_repr": "deneme3@gmail.com",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 19,
+    "fields": {
+      "action_time": "2026-01-14T13:18:21.552Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "4",
+      "object_repr": "deneme3@gmail.com",
+      "action_flag": 2,
+      "change_message": "[]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 20,
+    "fields": {
+      "action_time": "2026-01-14T13:18:30.514Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "1",
+      "object_repr": "efecelik4207@gmail.com",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"User permissions\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 21,
+    "fields": {
+      "action_time": "2026-01-14T13:19:28.302Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "1",
+      "object_repr": "efecelik4207@gmail.com",
+      "action_flag": 2,
+      "change_message": "[]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 22,
+    "fields": {
+      "action_time": "2026-01-17T12:10:46.842Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "animals",
+        "animalimage"
+      ],
+      "object_id": "1",
+      "object_repr": "Secondary image for test",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 23,
+    "fields": {
+      "action_time": "2026-01-17T12:12:34.910Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "animals",
+        "animallisting"
+      ],
+      "object_id": "2",
+      "object_repr": "BUYUKBAS - OMAR by efecelik4207@gmail.com",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 24,
+    "fields": {
+      "action_time": "2026-01-17T12:12:47.402Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "animals",
+        "animalimage"
+      ],
+      "object_id": "2",
+      "object_repr": "Secondary image for OMAR",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 25,
+    "fields": {
+      "action_time": "2026-01-17T12:35:46.367Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "5",
+      "object_repr": "buyerdeneme@gmail.com",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 26,
+    "fields": {
+      "action_time": "2026-01-17T12:36:25.918Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "5",
+      "object_repr": "buyerdeneme@gmail.com",
+      "action_flag": 2,
+      "change_message": "[]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 27,
+    "fields": {
+      "action_time": "2026-01-17T12:36:34.076Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "userrole"
+      ],
+      "object_id": "5",
+      "object_repr": "buyerdeneme@gmail.com - BUYER",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 28,
+    "fields": {
+      "action_time": "2026-01-17T12:53:03.494Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "message"
+      ],
+      "object_id": "1",
+      "object_repr": "Message from buyerdeneme@gmail.com at 2026-01-17 12:39:42.039705+00:00",
+      "action_flag": 2,
+      "change_message": "[]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 29,
+    "fields": {
+      "action_time": "2026-01-17T15:26:01.945Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "userrole"
+      ],
+      "object_id": "9",
+      "object_repr": "kasap@gmail.com - BUTCHER",
+      "action_flag": 2,
+      "change_message": "[]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 30,
+    "fields": {
+      "action_time": "2026-01-17T15:26:27.106Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "9",
+      "object_repr": "kasap2@gmail.com",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 31,
+    "fields": {
+      "action_time": "2026-01-17T15:26:35.963Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "userrole"
+      ],
+      "object_id": "11",
+      "object_repr": "kasap2@gmail.com - BUTCHER",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 32,
+    "fields": {
+      "action_time": "2026-01-18T20:59:40.839Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "animals",
+        "animallisting"
+      ],
+      "object_id": "5",
+      "object_repr": "KUCUKBAS - kıvırcık by mertsatici@gmail.com",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 33,
+    "fields": {
+      "action_time": "2026-01-19T00:53:34.275Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "role"
+      ],
+      "object_id": "3",
+      "object_repr": "BUTCHER - Kasap1",
+      "action_flag": 2,
+      "change_message": "[]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 34,
+    "fields": {
+      "action_time": "2026-01-19T07:54:10.018Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "1",
+      "object_repr": "efecelik4207@gmail.com",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Kasapl\\u0131k yap\\u0131yor\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 35,
+    "fields": {
+      "action_time": "2026-01-19T07:54:39.996Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "1",
+      "object_repr": "efecelik4207@gmail.com",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Kasapl\\u0131k yap\\u0131yor\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 36,
+    "fields": {
+      "action_time": "2026-01-19T07:58:16.482Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "1",
+      "object_repr": "efecelik4207@gmail.com",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Kasapl\\u0131k yap\\u0131yor\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 37,
+    "fields": {
+      "action_time": "2026-01-19T10:28:55.970Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "accounts",
+        "user"
+      ],
+      "object_id": "1",
+      "object_repr": "efecelik4207@gmail.com",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Phone number\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 38,
+    "fields": {
+      "action_time": "2026-01-21T09:50:06.580Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "butchers",
+        "butcherprofile"
+      ],
+      "object_id": "2",
+      "object_repr": "Mehmet Kasap (İstanbul)",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 39,
+    "fields": {
+      "action_time": "2026-01-21T09:50:06.582Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "butchers",
+        "butcherprofile"
+      ],
+      "object_id": "1",
+      "object_repr": "Kasap Deneme (Ankara)",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 40,
+    "fields": {
+      "action_time": "2026-01-21T09:50:06.583Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "butchers",
+        "butcherprofile"
+      ],
+      "object_id": "3",
+      "object_repr": "Ali Kuştar (İzmir)",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 41,
+    "fields": {
+      "action_time": "2026-01-21T09:50:06.583Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "butchers",
+        "butcherprofile"
+      ],
+      "object_id": "7",
+      "object_repr": "kasap 8 ce (Ankara)",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 42,
+    "fields": {
+      "action_time": "2026-01-21T09:50:06.584Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "butchers",
+        "butcherprofile"
+      ],
+      "object_id": "6",
+      "object_repr": "kasap 7  ce (Ankara)",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 43,
+    "fields": {
+      "action_time": "2026-01-21T09:50:06.585Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "butchers",
+        "butcherprofile"
+      ],
+      "object_id": "5",
+      "object_repr": "Deneme  Kasap (Ankara)",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 44,
+    "fields": {
+      "action_time": "2026-01-21T09:50:06.585Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "butchers",
+        "butcherprofile"
+      ],
+      "object_id": "4",
+      "object_repr": "Kasap İki (kerküq)",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 45,
+    "fields": {
+      "action_time": "2026-01-24T20:28:16.041Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "animals",
+        "animallisting"
+      ],
+      "object_id": "2",
+      "object_repr": "SMALL - koyun by efecelik4207@gmail.com",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Hayvan T\\u00fcr\\u00fc\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 46,
+    "fields": {
+      "action_time": "2026-01-24T20:28:27.732Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "animals",
+        "animallisting"
+      ],
+      "object_id": "2",
+      "object_repr": "SMALL - koyun by efecelik4207@gmail.com",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Cinsiyet\", \"Kulak No\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 47,
+    "fields": {
+      "action_time": "2026-01-25T16:03:43.260Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "butchers",
+        "butcherprofile"
+      ],
+      "object_id": "10",
+      "object_repr": "deneme deneme (Ağrı)",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 48,
+    "fields": {
+      "action_time": "2026-01-25T16:03:43.262Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "butchers",
+        "butcherprofile"
+      ],
+      "object_id": "9",
+      "object_repr": "Kasap İsmet (Ağrı)",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 49,
+    "fields": {
+      "action_time": "2026-01-25T16:03:43.263Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "butchers",
+        "butcherprofile"
+      ],
+      "object_id": "8",
+      "object_repr": "Kasap Ahmet (Ankara)",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 50,
+    "fields": {
+      "action_time": "2026-01-25T16:04:05.034Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "message"
+      ],
+      "object_id": "17",
+      "object_repr": "Message from mertsatici@gmail.com at 2026-01-24 21:55:58.925193+00:00",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 51,
+    "fields": {
+      "action_time": "2026-01-25T16:04:05.036Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "message"
+      ],
+      "object_id": "16",
+      "object_repr": "Message from efecelik4207@gmail.com at 2026-01-24 21:47:42.386924+00:00",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 52,
+    "fields": {
+      "action_time": "2026-01-25T16:04:05.037Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "message"
+      ],
+      "object_id": "15",
+      "object_repr": "Message from deneme3@gmail.com at 2026-01-24 21:47:09.720151+00:00",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 53,
+    "fields": {
+      "action_time": "2026-01-25T16:04:05.037Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "message"
+      ],
+      "object_id": "14",
+      "object_repr": "Message from deneme3@gmail.com at 2026-01-20 17:04:48.610106+00:00",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 54,
+    "fields": {
+      "action_time": "2026-01-25T16:04:05.038Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "message"
+      ],
+      "object_id": "13",
+      "object_repr": "Message from deneme3@gmail.com at 2026-01-20 17:04:44.679178+00:00",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 55,
+    "fields": {
+      "action_time": "2026-01-25T16:04:05.039Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "message"
+      ],
+      "object_id": "12",
+      "object_repr": "Message from efecelik4207@gmail.com at 2026-01-20 13:04:40.256914+00:00",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 56,
+    "fields": {
+      "action_time": "2026-01-25T16:04:05.040Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "message"
+      ],
+      "object_id": "11",
+      "object_repr": "Message from efecelik4207@gmail.com at 2026-01-19 16:07:44.955415+00:00",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 57,
+    "fields": {
+      "action_time": "2026-01-25T16:04:05.040Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "message"
+      ],
+      "object_id": "10",
+      "object_repr": "Message from deneme3@gmail.com at 2026-01-19 16:07:14.507998+00:00",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 58,
+    "fields": {
+      "action_time": "2026-01-25T16:04:26.148Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "conversation"
+      ],
+      "object_id": "8",
+      "object_repr": "Conversation about DANA between mertsatici@gmail.com and efecelik4207@gmail.com",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 59,
+    "fields": {
+      "action_time": "2026-01-25T16:04:26.149Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "conversation"
+      ],
+      "object_id": "7",
+      "object_repr": "Conversation about DANA between deneme3@gmail.com and efecelik4207@gmail.com",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 60,
+    "fields": {
+      "action_time": "2026-01-25T16:04:26.150Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "conversation"
+      ],
+      "object_id": "5",
+      "object_repr": "Conversation about koyun between buyerdeneme@gmail.com and efecelik4207@gmail.com",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 61,
+    "fields": {
+      "action_time": "2026-01-25T16:04:26.151Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "conversation"
+      ],
+      "object_id": "4",
+      "object_repr": "Conversation about koyun between deneme3@gmail.com and efecelik4207@gmail.com",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 62,
+    "fields": {
+      "action_time": "2026-01-25T16:04:26.152Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "conversation"
+      ],
+      "object_id": "3",
+      "object_repr": "Conversation about dede between deneme3@gmail.com and efecelik4207@gmail.com",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 63,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.558Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "1",
+      "object_repr": "efecelik4207@gmail.com in Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 64,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.560Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "2",
+      "object_repr": "deneme3@gmail.com in Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 65,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.562Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "3",
+      "object_repr": "buyerdeneme@gmail.com in Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 66,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.563Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "4",
+      "object_repr": "mertsatici@gmail.com in Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 67,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.564Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "5",
+      "object_repr": "buyerdeneme@gmail.com in Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 68,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.565Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "6",
+      "object_repr": "efecelik4207@gmail.com in Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 69,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.566Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "7",
+      "object_repr": "efecelik4207@gmail.com in Group chat for partnership in Adıyaman",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 70,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.566Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "8",
+      "object_repr": "efecelik4207@gmail.com in Group chat for partnership in Ağrı",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 71,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.567Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "9",
+      "object_repr": "efecelik4207@gmail.com in Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 72,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.568Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "10",
+      "object_repr": "efecelik4207@gmail.com in Group chat for partnership in Antalya",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 73,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.568Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "11",
+      "object_repr": "deneme3@gmail.com in Group chat for partnership in Antalya",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 74,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.569Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "12",
+      "object_repr": "efecelik4207@gmail.com in Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 75,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.569Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "13",
+      "object_repr": "deneme3@gmail.com in Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 76,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.570Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "14",
+      "object_repr": "buyerdeneme@gmail.com in Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 77,
+    "fields": {
+      "action_time": "2026-01-25T16:15:12.571Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversationparticipant"
+      ],
+      "object_id": "15",
+      "object_repr": "mertsatici@gmail.com in Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 78,
+    "fields": {
+      "action_time": "2026-01-25T16:15:34.926Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversation"
+      ],
+      "object_id": "8",
+      "object_repr": "Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 79,
+    "fields": {
+      "action_time": "2026-01-25T16:15:34.928Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversation"
+      ],
+      "object_id": "7",
+      "object_repr": "Group chat for partnership in Antalya",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 80,
+    "fields": {
+      "action_time": "2026-01-25T16:15:34.929Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversation"
+      ],
+      "object_id": "6",
+      "object_repr": "Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 81,
+    "fields": {
+      "action_time": "2026-01-25T16:15:34.930Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversation"
+      ],
+      "object_id": "5",
+      "object_repr": "Group chat for partnership in Ağrı",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 82,
+    "fields": {
+      "action_time": "2026-01-25T16:15:34.931Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversation"
+      ],
+      "object_id": "4",
+      "object_repr": "Group chat for partnership in Adıyaman",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 83,
+    "fields": {
+      "action_time": "2026-01-25T16:15:34.931Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversation"
+      ],
+      "object_id": "3",
+      "object_repr": "Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 84,
+    "fields": {
+      "action_time": "2026-01-25T16:15:34.932Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversation"
+      ],
+      "object_id": "2",
+      "object_repr": "Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 85,
+    "fields": {
+      "action_time": "2026-01-25T16:15:34.933Z",
+      "user": [
+        "efecelik4207@gmail.com"
+      ],
+      "content_type": [
+        "chat_messages",
+        "groupconversation"
+      ],
+      "object_id": "1",
+      "object_repr": "Group chat for partnership in Ankara",
+      "action_flag": 3,
+      "change_message": ""
+    }
+  }
+]

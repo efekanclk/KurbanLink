@@ -6,10 +6,12 @@ import {
     approveAppointment,
     rejectAppointment,
     fetchMyButcherProfile,
-    createButcherProfile
+    createButcherProfile,
+    updateButcherProfile
 } from '../../api/butchers';
 import './ButcherAppointments.css';
 import { Calendar, Clock } from '../../ui/icons';
+import { cities, getDistrictsForCity } from '../../data/locations';
 
 const ButcherPanel = () => {
     const navigate = useNavigate();
@@ -17,6 +19,8 @@ const ButcherPanel = () => {
     // Panel State
     const [profileLoading, setProfileLoading] = useState(true);
     const [hasProfile, setHasProfile] = useState(false);
+    const [currentProfile, setCurrentProfile] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     // Appointments State
     const [appointments, setAppointments] = useState([]);
@@ -46,6 +50,7 @@ const ButcherPanel = () => {
             const profile = await fetchMyButcherProfile();
             if (profile && profile.id) {
                 setHasProfile(true);
+                setCurrentProfile(profile);
                 loadAppointments();
             } else {
                 setHasProfile(false);
@@ -101,10 +106,47 @@ const ButcherPanel = () => {
         }
     };
 
+    const handleUpdateProfile = async (e) => {
+        e.preventDefault();
+        setCreateLoading(true);
+        setCreateError(null);
+
+        try {
+            const payload = {
+                ...profileData,
+                services: typeof profileData.services === 'string'
+                    ? profileData.services.split(',').map(s => s.trim()).filter(Boolean)
+                    : profileData.services
+            };
+
+            await updateButcherProfile(currentProfile.id, payload);
+            setIsEditing(false);
+            await checkProfile(); // Reload data
+        } catch (err) {
+            console.error('Update profile failed:', err);
+            const msg = err.response?.data?.detail || 'Profil güncellenemedi.';
+            setCreateError(msg);
+        } finally {
+            setCreateLoading(false);
+        }
+    };
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setProfileData(prev => ({ ...prev, [name]: value }));
+
+        if (name === 'city') {
+            setProfileData(prev => ({
+                ...prev,
+                [name]: value,
+                district: ''
+            }));
+        } else {
+            setProfileData(prev => ({ ...prev, [name]: value }));
+        }
     };
+
+    // Helper to get districts based on selected city
+    const districts = profileData.city ? getDistrictsForCity('TR', profileData.city) : [];
 
     const handleApprove = async (id) => {
         setActionLoading(prev => ({ ...prev, [id]: 'approve' }));
@@ -134,6 +176,20 @@ const ButcherPanel = () => {
         } finally {
             setActionLoading(prev => ({ ...prev, [id]: null }));
         }
+    };
+
+    const startEditing = () => {
+        if (!currentProfile) return;
+        setProfileData({
+            city: currentProfile.city || '',
+            district: currentProfile.district || '',
+            price_range: currentProfile.price_range || '',
+            services: Array.isArray(currentProfile.services) ? currentProfile.services.join(', ') : '',
+            first_name: currentProfile.first_name || '',
+            last_name: currentProfile.last_name || ''
+        });
+        setIsEditing(true);
+        setCreateError(null);
     };
 
     const formatDate = (dateStr) => {
@@ -227,15 +283,30 @@ const ButcherPanel = () => {
         );
     }
 
-    // --- CREATE PROFILE VIEW ---
-    if (!hasProfile) {
+    // --- CREATE / EDIT PROFILE VIEW ---
+    if (!hasProfile || isEditing) {
+        const isEditMode = hasProfile && isEditing;
         return (
             <div className="butcher-appointments-page">
                 <div className="container">
                     <div className="create-profile-card" style={{ maxWidth: '600px', margin: '40px auto', background: 'white', padding: '30px', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
-                        <h1 style={{ fontSize: '24px', marginBottom: '10px', color: '#1a1a1a' }}>Kasap İlanı Oluştur</h1>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                            <h1 style={{ fontSize: '24px', color: '#1a1a1a', margin: 0 }}>
+                                {isEditMode ? 'Profili Düzenle' : 'Kasap İlanı Oluştur'}
+                            </h1>
+                            {isEditMode && (
+                                <button
+                                    onClick={() => setIsEditing(false)}
+                                    style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '14px' }}
+                                >
+                                    İptal
+                                </button>
+                            )}
+                        </div>
                         <p style={{ color: '#666', marginBottom: '24px' }}>
-                            Kasaplık hizmetlerinizi sunmak ve randevu alabilmek için profilinizi oluşturun.
+                            {isEditMode
+                                ? 'Profil bilgilerinizi aşağıdan güncelleyebilirsiniz.'
+                                : 'Kasaplık hizmetlerinizi sunmak ve randevu alabilmek için profilinizi oluşturun.'}
                         </p>
 
                         {createError && (
@@ -244,7 +315,7 @@ const ButcherPanel = () => {
                             </div>
                         )}
 
-                        <form onSubmit={handleCreateProfile}>
+                        <form onSubmit={isEditMode ? handleUpdateProfile : handleCreateProfile}>
                             <div className="form-group">
                                 <label>İsim *</label>
                                 <input
@@ -269,24 +340,33 @@ const ButcherPanel = () => {
                             </div>
                             <div className="form-group">
                                 <label>Şehir *</label>
-                                <input
-                                    type="text"
+                                <select
                                     name="city"
                                     value={profileData.city}
                                     onChange={handleInputChange}
                                     required
-                                    placeholder="Örn: İstanbul"
-                                />
+                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '2px solid #e0e0e0', background: 'white' }}
+                                >
+                                    <option value="">Şehir Seçin</option>
+                                    {cities.map(city => (
+                                        <option key={city} value={city}>{city}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="form-group">
                                 <label>İlçe</label>
-                                <input
-                                    type="text"
+                                <select
                                     name="district"
                                     value={profileData.district}
                                     onChange={handleInputChange}
-                                    placeholder="Örn: Kadıköy"
-                                />
+                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '2px solid #e0e0e0', background: 'white' }}
+                                    disabled={!profileData.city}
+                                >
+                                    <option value="">{profileData.city ? 'İlçe Seçin' : 'Önce Şehir Seçin'}</option>
+                                    {districts.map(district => (
+                                        <option key={district} value={district}>{district}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="form-group">
                                 <label>Hizmetler (Virgülle ayırın)</label>
@@ -315,7 +395,9 @@ const ButcherPanel = () => {
                                 disabled={createLoading}
                                 style={{ marginTop: '10px' }}
                             >
-                                {createLoading ? 'Oluşturuluyor...' : 'Profil Oluştur ve Devam Et'}
+                                {createLoading
+                                    ? (isEditMode ? 'Güncelleniyor...' : 'Oluşturuluyor...')
+                                    : (isEditMode ? 'Değişiklikleri Kaydet' : 'Profil Oluştur ve Devam Et')}
                             </button>
                         </form>
                     </div>
@@ -328,9 +410,18 @@ const ButcherPanel = () => {
     return (
         <div className="butcher-appointments-page">
             <div className="container appointments-content">
-                <div className="page-header">
-                    <h1>Kasap Paneli</h1>
-                    <p className="subtitle">Gelen randevu isteklerinizi ve ilanınızı yönetin</p>
+                <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div>
+                        <h1>Kasap Paneli</h1>
+                        <p className="subtitle">Gelen randevu isteklerinizi ve ilanınızı yönetin</p>
+                    </div>
+                    <button
+                        onClick={startEditing}
+                        className="btn-primary"
+                        style={{ padding: '8px 16px', fontSize: '14px', background: '#2d6a4f', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                    >
+                        Profili Düzenle
+                    </button>
                 </div>
 
                 {loading ? (

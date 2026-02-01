@@ -6,62 +6,15 @@
  * Palette: Earth greens, browns, warm neutrals
  */
 
+/* Base Variables (Spacing, Radius, Typography - things that don't change by theme) */
 :root {
-    /* Primary Colors - Dark Green */
-    --primary: #1F7A4D;
-    --primary-hover: #16603C;
-    --primary-light: rgba(31, 122, 77, 0.1);
-
-    /* Secondary Colors - Earth Brown */
-    --secondary: #8D6E63;
-    --secondary-hover: #6D4C41;
-
-    /* Accent - Olive */
-    --accent: #556B2F;
-    --accent-hover: #3D4E1F;
-
-    /* Background & Surface */
-    --bg: #FFFFFF;
-    --bg-gray: #F7F7F4;
-    --bg-surface: #FFFFFF;
-
-    /* Text Colors */
-    --text: #111827;
-    --text-muted: #6B7280;
-    --text-light: #9CA3AF;
-
-    /* Borders */
-    --border: #E5E7EB;
-    --border-light: #F3F4F6;
-
-    /* Status Colors */
-    --success: #1F7A4D;
-    --warning: #B45309;
-    --danger: #DC2626;
-    --info: #0284C7;
-
-    /* Focus & Interaction */
-    --focus-ring: rgba(31, 122, 77, 0.35);
-
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-
     /* Spacing Scale (8px grid) */
     --space-1: 0.5rem;
-    /* 8px */
     --space-2: 1rem;
-    /* 16px */
     --space-3: 1.5rem;
-    /* 24px */
     --space-4: 2rem;
-    /* 32px */
     --space-6: 3rem;
-    /* 48px */
     --space-8: 4rem;
-    /* 64px */
 
     /* Border Radius */
     --radius-sm: 6px;
@@ -72,21 +25,54 @@
 
     /* Typography */
     --font-size-xs: 0.75rem;
-    /* 12px */
     --font-size-sm: 0.875rem;
-    /* 14px */
     --font-size-base: 1rem;
-    /* 16px */
     --font-size-lg: 1.125rem;
-    /* 18px */
     --font-size-xl: 1.25rem;
-    /* 20px */
     --font-size-2xl: 1.5rem;
-    /* 24px */
     --font-size-3xl: 1.875rem;
-    /* 30px */
     --font-size-4xl: 2.25rem;
-    /* 36px */
+
+    /* Focus */
+    --focus-ring: rgba(31, 122, 77, 0.35);
+
+    /* --- THEME COLORS (Light Mode Default) --- */
+
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-card: #ffffff;
+
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+
+    --border-color: #e5e7eb;
+
+    --primary: #1f7a4d;
+    --primary-hover: #16603c;
+    --primary-light: rgba(31, 122, 77, 0.1);
+
+    --secondary: #8D6E63;
+    --secondary-hover: #6D4C41;
+
+    --success: #16a34a;
+    --warning: #f59e0b;
+    --error: #dc2626;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+    /* LEGACY MAPPINGS */
+    --bg: var(--bg-primary);
+    --bg-gray: var(--bg-secondary);
+    --bg-surface: var(--bg-card);
+    --text: var(--text-primary);
+    --text-light: var(--text-secondary);
+    --border: var(--border-color);
+    --border-light: var(--bg-secondary);
+    --shadow: var(--shadow-md);
+    --danger: var(--error);
 }
 
 /* Global Resets */
@@ -104,6 +90,7 @@ body {
     color: var(--text);
     font-size: var(--font-size-base);
     line-height: 1.5;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Container Utility */
@@ -193,7 +180,7 @@ body {
     background-color: var(--bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
 }
 
 .form-control:focus {
@@ -224,15 +211,16 @@ body {
     border: 1px solid var(--border-light);
     border-radius: var(--radius-md);
     padding: var(--space-3);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow);
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-hover {
-    transition: box-shadow 0.2s, transform 0.2s;
+    transition: box-shadow 0.2s, transform 0.2s, background-color 0.2s;
 }
 
 .card-hover:hover {
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
 }
 
@@ -321,72 +309,73 @@ a:hover {
 
 /* Base icon styling */
 .icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  vertical-align: middle;
-  color: currentColor;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    color: currentColor;
 }
 
 .icon-muted {
-  color: var(--muted);
+    color: var(--text-muted);
 }
 
 .icon-primary {
-  color: var(--primary);
+    color: var(--primary);
 }
 
 .icon-danger {
-  color: var(--danger);
+    color: var(--danger);
 }
 
 /* Icon button base */
 .icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  border: none;
-  background: transparent;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text);
 }
 
 .icon-btn:hover:not(:disabled) {
-  background-color: var(--bg-gray);
+    background-color: var(--bg-gray);
 }
 
 .icon-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* Icon button variants */
 .icon-btn--ghost {
-  background: transparent;
-  border: 1px solid var(--border);
+    background: transparent;
+    border: 1px solid var(--border);
 }
 
 .icon-btn--ghost:hover:not(:disabled) {
-  border-color: var(--primary);
-  background-color: rgba(45, 106, 79, 0.05);
+    border-color: var(--primary);
+    background-color: rgba(45, 106, 79, 0.05);
+    /* keep this subtle green tint? or use primary-light */
 }
 
 .icon-btn--danger {
-  color: var(--danger);
+    color: var(--danger);
 }
 
 .icon-btn--danger:hover:not(:disabled) {
-  background-color: rgba(220, 53, 69, 0.1);
+    background-color: rgba(220, 53, 69, 0.1);
 }
 
 .icon-btn--primary {
-  background-color: var(--primary);
-  color: white;
+    background-color: var(--primary);
+    color: white;
 }
 
 .icon-btn--primary:hover:not(:disabled) {
-  background-color: var(--primary-hover);
+    background-color: var(--primary-hover);
 }

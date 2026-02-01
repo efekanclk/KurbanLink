@@ -35,3 +35,18 @@ class MessageAdmin(admin.ModelAdmin):
         """Show first 50 characters of message content."""
         return obj.content[:50] + '...' if len(obj.content) > 50 else obj.content
     content_preview.short_description = 'Content Preview'
+
+
+from .models import GroupConversation, GroupMessage, GroupConversationParticipant
+
+@admin.register(GroupConversation)
+class GroupConversationAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'partnership', 'created_at')
+
+@admin.register(GroupMessage)
+class GroupMessageAdmin(admin.ModelAdmin):
+    list_display = ('conversation', 'sender', 'content', 'created_at')
+
+@admin.register(GroupConversationParticipant)
+class GroupConversationParticipantAdmin(admin.ModelAdmin):
+    list_display = ('conversation', 'user', 'is_active', 'joined_at')

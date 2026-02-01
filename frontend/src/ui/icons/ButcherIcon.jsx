@@ -16,7 +16,7 @@ const ButcherIcon = ({ size = 20, className = '', ...props }) => {
             style={{ display: 'inline-block', verticalAlign: 'middle' }}
             {...props}
         >
-            <g transform="translate(0,487) scale(0.1,-0.1)" fill="currentColor">
+            <g transform="translate(0,487) scale(0.1,-0.1)" fill="currentColor" stroke="currentColor" strokeWidth="200">
                 <path d="M2470 4856 c-119 -26 -242 -119 -293 -220 -39 -77 -49 -80 -138 -49
 -231 81 -487 -32 -527 -233 -24 -119 57 -259 183 -315 23 -10 47 -25 53 -32 8
 -9 12 -251 14 -792 4 -774 4 -781 26 -853 30 -99 92 -219 148 -288 l47 -58

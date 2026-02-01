@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import ButcherCard from '../../components/butchers/ButcherCard';
 import { fetchButcherProfiles } from '../../api/butchers';
+import { ButcherIcon } from '../../ui/icons';
 import './ButcherList.css';
 
 const ButcherList = () => {
@@ -53,9 +54,7 @@ const ButcherList = () => {
                     </div>
                 ) : butchers.length === 0 ? (
                     <div className="empty-state">
-                        <svg className="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                        </svg>
+                        <ButcherIcon size={48} className="empty-icon-custom" style={{ color: '#9CA3AF', marginBottom: '1rem' }} />
                         <p>Henüz kayıtlı kasap bulunmamaktadır.</p>
                     </div>
                 ) : (

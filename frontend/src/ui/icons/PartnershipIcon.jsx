@@ -16,7 +16,7 @@ const PartnershipIcon = ({ size = 20, className = '', ...props }) => {
             style={{ display: 'inline-block', verticalAlign: 'middle' }}
             {...props}
         >
-            <g transform="translate(0,500) scale(0.1,-0.1)" fill="currentColor">
+            <g transform="translate(0,500) scale(0.1,-0.1)" fill="currentColor" stroke="currentColor" strokeWidth="200">
                 <path d="M2218 3681 c-202 -65 -328 -233 -328 -438 0 -105 28 -192 89 -274
 241 -325 750 -201 822 201 30 170 -54 356 -206 455 -109 71 -260 93 -377 56z
 m279 -111 c210 -96 277 -351 143 -545 -137 -199 -456 -195 -593 7 -99 147 -84

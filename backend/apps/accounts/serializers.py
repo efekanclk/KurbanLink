@@ -97,11 +97,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'first_name', 'last_name', 'email', 'password', 'username', 'phone_number', 'country_code',
-            'city', 'district',
+            'city', 'district', 'profile_image',
             'is_butcher', 'butcher_profile'
         ]
         extra_kwargs = {
             'password': {'write_only': True},
+            'profile_image': {'write_only': True, 'required': False},
             'first_name': {'required': True},
             'last_name': {'required': True},
             'username': {'required': True},

@@ -1,5 +1,5 @@
 .listing-card {
-    background: var(--bg);
+    background: var(--bg-card);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow: hidden;
@@ -19,7 +19,7 @@
     position: relative;
     padding-top: 66.66%;
     /* 3:2 Aspect Ratio */
-    background-color: var(--bg-gray);
+    background-color: var(--bg-secondary);
     overflow: hidden;
 }
 
@@ -76,7 +76,7 @@
 .card-title {
     font-size: 1.125rem;
     font-weight: 700;
-    color: var(--text);
+    color: var(--text-primary);
     margin: 0;
     line-height: 1.4;
 }
@@ -84,7 +84,7 @@
 .card-meta {
     display: flex;
     gap: 16px;
-    color: var(--muted);
+    color: var(--text-muted);
     font-size: 0.875rem;
     flex-wrap: wrap;
 }
@@ -106,7 +106,7 @@
 .card-footer {
     margin-top: auto;
     padding-top: 12px;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -114,7 +114,7 @@
 
 .card-location {
     font-size: 0.875rem;
-    color: var(--muted);
+    color: var(--text-muted);
     display: flex;
     align-items: center;
     gap: 4px;

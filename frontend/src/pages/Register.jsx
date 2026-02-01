@@ -22,7 +22,10 @@ const RegisterWizard = () => {
         lastName: '',
         countryCode: '+90',
         phone: '',
-        is_butcher: false
+        phone: '',
+        is_butcher: false,
+        profileImage: null,
+        profileImagePreview: null
     });
 
     // Scroll to top on step change
@@ -31,10 +34,22 @@ const RegisterWizard = () => {
     }, [currentStep]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        const { name, value, type, checked } = e.target;
+        const val = type === 'checkbox' ? checked : value;
+        setFormData(prev => ({ ...prev, [name]: val }));
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: null }));
+        }
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData(prev => ({
+                ...prev,
+                profileImage: file,
+                profileImagePreview: URL.createObjectURL(file)
+            }));
         }
     };
 
@@ -102,18 +117,24 @@ const RegisterWizard = () => {
         setErrors({});
 
         try {
-            const payload = {
-                first_name: formData.firstName.trim(),
-                last_name: formData.lastName.trim(),
-                email: formData.email.trim().toLowerCase(),
-                username: formData.username.trim(),
-                password: formData.password,
-                phone_number: formData.phone.trim() || '',
-                is_butcher: formData.is_butcher
-                // verification_token removed as per user request
-            };
+            // Use FormData for multipart/form-data upload
+            const data = new FormData();
+            data.append('first_name', formData.firstName.trim());
+            data.append('last_name', formData.lastName.trim());
+            data.append('email', formData.email.trim().toLowerCase());
+            data.append('username', formData.username.trim());
+            data.append('password', formData.password);
+            data.append('phone_number', formData.phone.trim() || '');
 
-            const result = await register(payload);
+            if (formData.is_butcher) {
+                data.append('is_butcher', 'true');
+            }
+
+            if (formData.profileImage) {
+                data.append('profile_image', formData.profileImage);
+            }
+
+            const result = await register(data);
 
             if (result.success) {
                 // Show success feedback
@@ -276,6 +297,37 @@ const RegisterWizard = () => {
                                 {errors.lastName && <span className="error-text">{errors.lastName}</span>}
                             </div>
 
+                            <div className="form-group">
+                                <label>Profil Fotoğrafı (Opsiyonel)</label>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                                    <div
+                                        style={{
+                                            width: '60px',
+                                            height: '60px',
+                                            borderRadius: '50%',
+                                            backgroundColor: '#f0f0f0',
+                                            backgroundImage: formData.profileImagePreview ? `url(${formData.profileImagePreview})` : 'none',
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            border: '1px solid #ddd'
+                                        }}
+                                    >
+                                        {!formData.profileImagePreview && (
+                                            <span style={{ fontSize: '24px', color: '#ccc' }}>📷</span>
+                                        )}
+                                    </div>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        style={{ flex: 1 }}
+                                    />
+                                </div>
+                            </div>
+
                             <div className="form-group phone-group">
                                 <label htmlFor="phone">Telefon (Opsiyonel)</label>
                                 <div className="phone-input-container" style={{ display: 'flex', gap: '10px' }}>
@@ -393,6 +445,12 @@ const RegisterWizard = () => {
                                     <div className="summary-row">
                                         <span className="summary-label">Telefon:</span>
                                         <span className="summary-value">{formData.countryCode || '+90'} {formData.phone}</span>
+                                    </div>
+                                )}
+                                {formData.profileImage && (
+                                    <div className="summary-row">
+                                        <span className="summary-label">Profil Fotoğrafı:</span>
+                                        <span className="summary-value">Seçildi ✅</span>
                                     </div>
                                 )}
                                 <div className="summary-row">

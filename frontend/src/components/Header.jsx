@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/AuthContext';
 import NotificationDropdown from './NotificationDropdown';
 import './Header.css';
 import { Search, User, LogOut, Menu } from '../ui/icons';
@@ -67,70 +68,81 @@ const Header = ({ onMenuClick }) => {
                     </form>
                 </div>
 
-                {/* Right Actions */}
-                {user ? (
-                    <div className="header-actions">
-                        <Link to="/seller/listings/new" className="create-listing-header-btn">
-                            + İlan Ver
-                        </Link>
+                <div className="header-actions">
 
-                        {/* User Profile Dropdown */}
-                        <div className="user-menu-container" ref={profileRef}>
-                            <button
-                                className="header-user-btn"
-                                onClick={() => setIsProfileOpen(!isProfileOpen)}
-                            >
-                                {user.profile_image_url ? (
-                                    <img
-                                        src={user.profile_image_url}
-                                        alt={user.username}
-                                        className="header-avatar"
-                                    />
-                                ) : (
-                                    <div className="header-avatar">
-                                        {getInitials(user.username)}
+
+                    {user ? (
+                        <>
+                            {user.roles?.includes('BUTCHER') && (
+                                <Link to="/butcher/appointments" className="nav-link" style={{ marginRight: '15px' }}>
+                                    Kasap Paneli
+                                </Link>
+                            )}
+
+                            <Link to="/seller/listings/new" className="create-listing-header-btn">
+                                + İlan Ver
+                            </Link>
+
+                            {/* User Profile Dropdown */}
+                            <div className="user-menu-container" ref={profileRef}>
+                                <button
+                                    className="header-user-btn"
+                                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                                >
+                                    {user.profile_image_url ? (
+                                        <img
+                                            src={user.profile_image_url}
+                                            alt={user.username}
+                                            className="header-avatar"
+                                        />
+                                    ) : (
+                                        <div className="header-avatar">
+                                            {getInitials(user.username)}
+                                        </div>
+                                    )}
+                                    <span className="header-username">{user.username}</span>
+                                </button>
+
+                                {isProfileOpen && (
+                                    <div className="user-dropdown-menu">
+                                        <Link
+                                            to="/profile"
+                                            className="user-dropdown-item"
+                                            onClick={() => setIsProfileOpen(false)}
+                                        >
+                                            <User size={16} style={{ marginRight: '0.5rem' }} />
+                                            Profilim
+                                        </Link>
+                                        <button
+                                            className="user-dropdown-item logout"
+                                            onClick={handleLogout}
+                                        >
+                                            <LogOut size={16} style={{ marginRight: '0.5rem' }} />
+                                            Çıkış Yap
+                                        </button>
                                     </div>
                                 )}
-                                <span className="header-username">{user.username}</span>
+                            </div>
+
+                            <NotificationDropdown />
+
+                            <button
+                                className="header-icon-btn hamburger-btn"
+                                title="Menü"
+                                onClick={onMenuClick}
+                            >
+                                <Menu size={24} />
                             </button>
 
-                            {isProfileOpen && (
-                                <div className="user-dropdown-menu">
-                                    <Link
-                                        to="/profile"
-                                        className="user-dropdown-item"
-                                        onClick={() => setIsProfileOpen(false)}
-                                    >
-                                        <User size={16} style={{ marginRight: '0.5rem' }} />
-                                        Profilim
-                                    </Link>
-                                    <button
-                                        className="user-dropdown-item logout"
-                                        onClick={handleLogout}
-                                    >
-                                        <LogOut size={16} style={{ marginRight: '0.5rem' }} />
-                                        Çıkış Yap
-                                    </button>
-                                </div>
-                            )}
+                        </>
+                    ) : (
+                        <div className="header-actions public-actions">
+
+                            <Link to="/login" className="login-btn">Giriş Yap</Link>
+                            <Link to="/register" className="register-btn">Kayıt Ol</Link>
                         </div>
-
-                        <NotificationDropdown />
-
-                        <button
-                            className="header-icon-btn hamburger-btn"
-                            title="Menü"
-                            onClick={onMenuClick}
-                        >
-                            <Menu size={24} />
-                        </button>
-                    </div>
-                ) : (
-                    <div className="header-actions public-actions">
-                        <Link to="/login" className="login-btn">Giriş Yap</Link>
-                        <Link to="/register" className="register-btn">Kayıt Ol</Link>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </header>
     );

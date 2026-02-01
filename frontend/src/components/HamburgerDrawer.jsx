@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/AuthContext';
 import './HamburgerDrawer.css';
 import { User, Calendar, LogOut, ClipboardList, ButcherIcon, PartnershipIcon, MessageCircle } from '../ui/icons';
 
@@ -38,6 +39,8 @@ const HamburgerDrawer = ({ isOpen, onClose }) => {
                 </div>
 
                 <nav className="drawer-nav">
+
+
                     <Link
                         to="/partnerships"
                         className="drawer-nav-item"

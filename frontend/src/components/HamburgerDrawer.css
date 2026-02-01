@@ -28,7 +28,7 @@
     bottom: 0;
     width: 300px;
     max-width: 85vw;
-    background: #fff;
+    background: var(--bg-card);
     box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     animation: slideIn 0.3s ease;
@@ -52,7 +52,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 1.5rem;
-    border-bottom: 1px solid var(--border, #e0e0e0);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .drawer-header h2 {
@@ -88,7 +88,7 @@
     gap: 0.75rem;
     padding: 1rem 1.5rem;
     text-decoration: none;
-    color: var(--text, #333);
+    color: var(--text-primary);
     font-size: 1rem;
     font-weight: 500;
     border: none;
@@ -100,8 +100,8 @@
 }
 
 .drawer-nav-item:hover {
-    background: var(--bg-gray, #f5f5f5);
-    color: var(--primary, #2d6a4f);
+    background: var(--bg-secondary);
+    color: var(--primary);
 }
 
 .drawer-nav-item:active {
@@ -111,7 +111,7 @@
 /* Divider */
 .drawer-divider {
     height: 1px;
-    background: var(--border, #e0e0e0);
+    background: var(--border-color);
     margin: 0.5rem 1.5rem;
 }
 

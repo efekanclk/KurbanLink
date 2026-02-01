@@ -1,9 +1,9 @@
 .home-sidebar {
     width: 260px;
     flex-shrink: 0;
-    background: white;
+    background: var(--bg-card);
     border-radius: 8px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
     padding: 1rem;
     height: fit-content;
     position: sticky;
@@ -21,10 +21,10 @@
 .sidebar-title {
     font-size: 0.95rem;
     font-weight: 600;
-    color: #1a202c;
+    color: var(--text-primary);
     margin-bottom: 0.75rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #edf2f7;
+    border-bottom: 1px solid var(--border-color);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -47,7 +47,7 @@
     border: none;
     padding: 0.5rem 0.75rem;
     font-size: 0.95rem;
-    color: #4a5568;
+    color: var(--text-secondary);
     text-decoration: none;
     border-radius: 6px;
     cursor: pointer;
@@ -55,13 +55,13 @@
 }
 
 .sidebar-link:hover {
-    background-color: #f7fafc;
-    color: #2d6a4f;
+    background-color: var(--bg-secondary);
+    color: var(--primary);
 }
 
 .sidebar-link.active {
-    background-color: #f0fdf4;
-    color: #2d6a4f;
+    background-color: var(--bg-secondary);
+    color: var(--primary);
     font-weight: 600;
     border-right: 3px solid #2d6a4f;
 }
@@ -82,7 +82,7 @@
     font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #4a5568;
+    color: var(--text-secondary);
 }
 
 .radio-group {
@@ -96,7 +96,7 @@
     align-items: center;
     gap: 0.5rem;
     font-size: 0.9rem;
-    color: #2d3748;
+    color: var(--text-primary);
     cursor: pointer;
 }
 
@@ -107,11 +107,11 @@
 .filter-select {
     width: 100%;
     padding: 0.5rem;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
-    background-color: white;
+    background-color: var(--bg-card);
     font-size: 0.9rem;
-    color: #2d3748;
+    color: var(--text-primary);
 }
 
 .filter-select:focus {
@@ -182,7 +182,7 @@
     font-size: 1.25rem;
     font-weight: 700;
     margin: 0;
-    color: #1a202c;
+    color: var(--text-primary);
 }
 
 .filter-close-btn {
@@ -190,7 +190,7 @@
     border: none;
     cursor: pointer;
     padding: 0.5rem;
-    color: #4a5568;
+    color: var(--text-secondary);
     display: flex;
     align-items: center;
     justify-content: center;

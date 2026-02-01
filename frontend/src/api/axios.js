@@ -4,9 +4,7 @@ import { getAccessToken, getRefreshToken, setTokens, clearTokens } from '../util
 // Create axios instance with base configuration
 const apiClient = axios.create({
     baseURL: 'http://localhost:8000',
-    headers: {
-        'Content-Type': 'application/json',
-    },
+    // Content-Type will be automatically set (JSON for objects, multipart for FormData)
 });
 
 // Request interceptor to attach access token
