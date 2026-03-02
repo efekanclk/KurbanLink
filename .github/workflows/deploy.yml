@@ -16,7 +16,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/KurbanLink
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
             
             # Backend Güncelleme
             cd backend

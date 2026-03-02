@@ -33,7 +33,6 @@ const RegisterWizard = () => {
         lastName: '',
         countryCode: '+90',
         phone: '',
-        phone: '',
         is_butcher: false,
         profileImage: null,
         profileImagePreview: null
