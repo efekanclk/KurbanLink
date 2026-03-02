@@ -30,7 +30,7 @@ jobs:
             npm install
             
             # Localhost temizliği
-            find src -type f -exec sed -i 's|http://localhost:8000|https://kurbanlink.com/api|g' {} +
+            find src -type f -exec sed -i 's|http://localhost:8000|https://kurbanlink.com|g' {} +
             
             # Build ve Restart
             npm run build

@@ -40,7 +40,7 @@ apiClient.interceptors.response.use(
                 }
 
                 // Attempt to refresh token
-                const response = await axios.post('http://localhost:8000/api/auth/refresh/', {
+                const response = await axios.post('https://kurbanlink.com/api/auth/refresh/', {
                     refresh: refreshToken,
                 });
 
