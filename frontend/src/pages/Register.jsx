@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import { Eye, EyeOff } from 'lucide-react';
 import './RegisterWizard.css';
 
 const RegisterWizard = () => {
@@ -12,6 +13,8 @@ const RegisterWizard = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [showPasswordTooltip, setShowPasswordTooltip] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState({
         hasMinLength: false,
         hasUppercase: false,
@@ -268,7 +271,7 @@ const RegisterWizard = () => {
                                 <label htmlFor="password">Şifre *</label>
                                 <div style={{ position: 'relative' }}>
                                     <input
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
                                         id="password"
                                         name="password"
                                         value={formData.password}
@@ -277,7 +280,28 @@ const RegisterWizard = () => {
                                         onBlur={() => setTimeout(() => setShowPasswordTooltip(false), 200)}
                                         className={errors.password ? 'error' : ''}
                                         placeholder="En az 8 karakter"
+                                        style={{ paddingRight: '40px' }}
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword((prev) => !prev)}
+                                        style={{
+                                            position: 'absolute',
+                                            right: '12px',
+                                            top: '50%',
+                                            transform: 'translateY(-50%)',
+                                            background: 'transparent',
+                                            border: 'none',
+                                            cursor: 'pointer',
+                                            color: '#6b7280',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            padding: 0
+                                        }}
+                                    >
+                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                    </button>
 
                                     {/* Password Strength Tooltip */}
                                     {showPasswordTooltip && (
@@ -311,15 +335,38 @@ const RegisterWizard = () => {
 
                             <div className="form-group">
                                 <label htmlFor="passwordConfirm">Şifre Tekrar *</label>
-                                <input
-                                    type="password"
-                                    id="passwordConfirm"
-                                    name="passwordConfirm"
-                                    value={formData.passwordConfirm}
-                                    onChange={handleChange}
-                                    className={errors.passwordConfirm ? 'error' : ''}
-                                    placeholder="Şifrenizi tekrar girin"
-                                />
+                                <div style={{ position: 'relative' }}>
+                                    <input
+                                        type={showPasswordConfirm ? "text" : "password"}
+                                        id="passwordConfirm"
+                                        name="passwordConfirm"
+                                        value={formData.passwordConfirm}
+                                        onChange={handleChange}
+                                        className={errors.passwordConfirm ? 'error' : ''}
+                                        placeholder="Şifrenizi tekrar girin"
+                                        style={{ paddingRight: '40px' }}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPasswordConfirm((prev) => !prev)}
+                                        style={{
+                                            position: 'absolute',
+                                            right: '12px',
+                                            top: '50%',
+                                            transform: 'translateY(-50%)',
+                                            background: 'transparent',
+                                            border: 'none',
+                                            cursor: 'pointer',
+                                            color: '#6b7280',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            padding: 0
+                                        }}
+                                    >
+                                        {showPasswordConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
+                                    </button>
+                                </div>
                                 {errors.passwordConfirm && <span className="error-text">{errors.passwordConfirm}</span>}
                             </div>
                         </div>
