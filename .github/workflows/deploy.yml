@@ -2,7 +2,7 @@ name: KurbanLink Deploy
 
 on:
   push:
-    branches: [ main ] # Senin kullandığın branch adı neyse (main veya master) onu yaz.
+    branches: [ main ]
 
 jobs:
   deploy:
@@ -14,7 +14,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-script: |
+          script: |
             cd ~/KurbanLink
             git pull origin main
             
@@ -28,11 +28,10 @@ script: |
             # Frontend Güncelleme
             cd ../frontend
             npm install
-            # Localhost hatalarını otomatik temizleyen o komut
+            
+            # Localhost temizliği
             find src -type f -exec sed -i 's|http://localhost:8000|https://kurbanlink.com/api|g' {} +
             
-            # KRİTİK ADIM: Projeyi derle (Build al)
+            # Build ve Restart
             npm run build
-            
-            # PM2 ile frontend'i güncelle
             pm2 restart kurban-frontend
