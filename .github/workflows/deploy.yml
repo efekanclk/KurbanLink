@@ -14,7 +14,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          script: |
+script: |
             cd ~/KurbanLink
             git pull origin main
             
@@ -22,12 +22,17 @@ jobs:
             cd backend
             source venv/bin/activate
             pip install -r requirements.txt
-            python manage.py migrate
+            python manage.py migrate --noinput
             pm2 restart kurban-backend
             
             # Frontend Güncelleme
             cd ../frontend
             npm install
-            # Localhost hatalarını otomatik temizleyen o komut (Garantiye alalım)
+            # Localhost hatalarını otomatik temizleyen o komut
             find src -type f -exec sed -i 's|http://localhost:8000|https://kurbanlink.com/api|g' {} +
+            
+            # KRİTİK ADIM: Projeyi derle (Build al)
+            npm run build
+            
+            # PM2 ile frontend'i güncelle
             pm2 restart kurban-frontend
