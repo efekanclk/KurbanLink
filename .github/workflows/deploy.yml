@@ -33,6 +33,8 @@ jobs:
             # Localhost temizliği
             find src -type f -exec sed -i 's|http://localhost:8000|https://kurbanlink.com|g' {} +
             
-            # Build ve Restart
+            # Build ve Restart (dist/ klasörünü serve ile sun)
             npm run build
-            pm2 restart kurban-frontend
+            pm2 delete kurban-frontend || true
+            pm2 start "serve -s dist -l 3000" --name kurban-frontend
+            pm2 save
