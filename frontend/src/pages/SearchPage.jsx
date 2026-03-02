@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 // Navbar removed - using global Header
 import SearchFilters from '../components/search/SearchFilters';
 import ListingCard from '../components/ListingCard';
+import SEO from '../components/SEO';
 import { fetchAnimals, fetchAnimalImages } from '../api/animals';
 import './SearchPage.css';
 
@@ -104,9 +105,18 @@ const SearchPage = () => {
         if (key !== 'page') currentFilters[key] = value;
     });
 
+    const query = searchParams.get('search') || searchParams.get('q') || '';
+    const speciesParam = searchParams.get('species') || '';
+    const seoTitle = query ? `"${query}" Arama Sonuçları` : speciesParam ? `${speciesParam} İlanları` : 'Arama Sonuçları';
+
     return (
         <div className="search-page">
-            
+            <SEO
+                title={seoTitle}
+                description={`KurbanLink'te ${totalCount} kurban hayvanı ilanı bulundu. Filtreler ile aradığınız hayvanı kolayca bulun.`}
+                url={`https://kurbanlink.com/search?${searchParams.toString()}`}
+            />
+
 
             <div className="container search-layout">
                 <aside className="search-sidebar">

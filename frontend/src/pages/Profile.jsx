@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import SEO from '../components/SEO';
 import './Profile.css';
 import { MapPin, Edit3, Heart, MessageCircle, Calendar, Mail, Phone, ClipboardList } from '../ui/icons';
 
@@ -26,6 +27,11 @@ const Profile = () => {
 
     return (
         <div className="page">
+            <SEO
+                title="Profilim"
+                description="KurbanLink profil sayfanız. İlanlarınızı, favorilerinizi ve mesajlarınızı yönetin."
+                url="https://kurbanlink.com/profile"
+            />
             <div className="page__container">
                 <div className="profile-header">
                     <button onClick={() => navigate('/')} className="back-btn" style={{ background: 'transparent', color: '#64748b', border: '1px solid #e2e8f0' }}>

@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /profile/
+Disallow: /messages/
+Disallow: /favorites/
+Disallow: /notifications/
+
+Sitemap: https://kurbanlink.com/sitemap.xml

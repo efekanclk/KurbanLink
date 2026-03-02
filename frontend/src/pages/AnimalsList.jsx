@@ -4,6 +4,7 @@ import { useAuth } from '../auth/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { fetchAnimals, fetchAnimalImages } from '../api/animals';
 import NotificationDropdown from '../components/NotificationDropdown';
+import SEO from '../components/SEO';
 import './AnimalsList.css';
 import { MessageCircle, Bell, User, Calendar } from '../ui/icons';
 
@@ -125,6 +126,12 @@ const AnimalsList = () => {
 
     return (
         <div className="animals-container">
+            <SEO
+                title="Tüm İlanlar"
+                description="Türkiye'nin en büyük kurban hayvanı platformunda binlerce ilan arasından kurban seçin. Koyun, kuzu, dana, tosun ve deve ilanları sizi bekliyor."
+                keywords="kurban hayvanı ilanları, koyun satışı, kuzu satışı, dana satışı, tosun, kurban bayramı"
+                url="https://kurbanlink.com/animals"
+            />
             <div className="animals-header">
                 <h1>Hayvan İlanları</h1>
                 <div className="header-actions">

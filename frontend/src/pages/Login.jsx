@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useNavigate, Link, useSearchParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { Eye, EyeOff } from 'lucide-react';
+import SEO from '../components/SEO';
 import './Login.css';
 
 const Login = () => {
+    // SEO injected at render time
     const navigate = useNavigate();
     const location = useLocation();
     const [searchParams] = useSearchParams();
@@ -26,6 +28,11 @@ const Login = () => {
 
     return (
         <div className="login-page">
+            <SEO
+                title="Giriş Yap"
+                description="KurbanLink hesabınıza giriş yapın. Kurban hayvanı ilanlarını görüntüleyin, favori ilanlarınızı kaydedin ve satıcılarla iletişim kurun."
+                url="https://kurbanlink.com/login"
+            />
             <div className="login-container">
                 <div className="login-card">
                     <div className="login-header">

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { Eye, EyeOff } from 'lucide-react';
+import SEO from '../components/SEO';
 import './RegisterWizard.css';
 
 const RegisterWizard = () => {
@@ -200,6 +201,11 @@ const RegisterWizard = () => {
 
     return (
         <div className="register-wizard-page">
+            <SEO
+                title="Kayıt Ol"
+                description="KurbanLink'e ücretsiz kayıt olun. Kurban hayvanı ilanı verin, güvenli alışveriş yapın ve kasap randevusu alın."
+                url="https://kurbanlink.com/register"
+            />
             <div className="register-wizard-container">
                 <div className="register-wizard-card">
                     {/* Progress Indicator */}
