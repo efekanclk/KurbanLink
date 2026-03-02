@@ -23,8 +23,12 @@ jobs:
             cd backend
             source venv/bin/activate
             pip install -r requirements.txt
-            python manage.py migrate --noinput
-            pm2 restart kurban-backend
+            set -a && source .env && set +a
+            DJANGO_SETTINGS_MODULE=config.settings.prod python manage.py migrate --noinput
+            DJANGO_SETTINGS_MODULE=config.settings.prod python manage.py collectstatic --noinput
+            pm2 delete kurban-backend || true
+            pm2 start "bash -c 'cd ~/KurbanLink/backend && set -a && source .env && set +a && DJANGO_SETTINGS_MODULE=config.settings.prod venv/bin/gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3'" --name kurban-backend
+            pm2 save
             
             # Frontend Güncelleme
             cd ../frontend
