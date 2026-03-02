@@ -1,0 +1,33 @@
+name: KurbanLink Deploy
+
+on:
+  push:
+    branches: [ main ] # Senin kullandığın branch adı neyse (main veya master) onu yaz.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploying to AWS Lightsail
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/KurbanLink
+            git pull origin main
+            
+            # Backend Güncelleme
+            cd backend
+            source venv/bin/activate
+            pip install -r requirements.txt
+            python manage.py migrate
+            pm2 restart kurban-backend
+            
+            # Frontend Güncelleme
+            cd ../frontend
+            npm install
+            # Localhost hatalarını otomatik temizleyen o komut (Garantiye alalım)
+            find src -type f -exec sed -i 's|http://localhost:8000|https://kurbanlink.com/api|g' {} +
+            pm2 restart kurban-frontend

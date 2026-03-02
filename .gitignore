@@ -27,3 +27,18 @@ env/
 yedek_m_
 
 data.json
+
+# --- KRİTİK GÜVENLİK ---
+*.pem
+*.key
+auth_key*
+
+# --- FRONTEND ---
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+.env.local
+.env.production
+
+# --- DİĞER ---
+*.backup
