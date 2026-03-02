@@ -71,6 +71,28 @@ const Home = () => {
                     {/* Recommendations Section */}
                     <RecommendedListings />
 
+                    {/* Hero / Welcome Section */}
+                    <section className="hero-welcome">
+                        <div className="hero-welcome-inner">
+                            <h1 className="hero-welcome-title">
+                                Kurban İbadetinizde Güvenilir Köprü:{' '}
+                                <span>KurbanLink</span>
+                            </h1>
+                            <p className="hero-welcome-subtitle">
+                                Hisseli veya tekil kurbanlık ilanlarını inceleyin,
+                                kasap ve nakliye hizmetlerine tek tıkla ulaşın.
+                            </p>
+                            <div className="hero-welcome-actions">
+                                <Link to="/" className="hero-btn hero-btn-primary">
+                                    İlanları İncele
+                                </Link>
+                                <Link to="/create-listing" className="hero-btn hero-btn-outline">
+                                    İlan Ver
+                                </Link>
+                            </div>
+                        </div>
+                    </section>
+
                     {/* Header for listings */}
                     <div className="listings-header">
                         <h2>Tüm İlanlar</h2>
