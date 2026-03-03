@@ -58,11 +58,46 @@ const Home = () => {
     return (
         <div className="home-page">
             <SEO
-                title="Ana Sayfa"
-                description="Kurban hayvanı alım satım platformu. Koyun, kuzu, dana, tosun ve deve ilanları. Güvenilir satıcılardan kurban hayvanı satın alın."
-                keywords="kurban, kurban hayvanı, koyun, kuzu, dana, tosun, deve, kurban satışı"
+                title="Kurban Al | Kurbanlık Hayvan İlanları"
+                description="Kurban al, kurban sat — Türkiye'nin güvenilir kurbanlık hayvan platformu. Büyükbaş (dana, tosun) ve küçükbaş (koyun, kuzu) kurban ilanları. Hisseli kurban ve kasap randevusu imkânı."
+                keywords="kurban al, büyükbaş kurban, küçükbaş kurban, hisseli kurban, kurbanlık hayvan ilanı, kurban link, online kurban alım"
                 url="https://kurbanlink.com/"
             />
+            {/* FAQ JSON-LD Schema */}
+            <script type="application/ld+json" dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "FAQPage",
+                    "mainEntity": [
+                        {
+                            "@type": "Question",
+                            "name": "KurbanLink'ten nasıl kurban hayvanı alabilirim?",
+                            "acceptedAnswer": { "@type": "Answer", "text": "KurbanLink üzerinden kurban hayvanı almak çok kolay: İlanları inceleyin, beğendiğinizi favorilere ekleyin ve satıcıyla mesajlaşın. Tüm işlem güvenli ve hızlıca tamamlanır." }
+                        },
+                        {
+                            "@type": "Question",
+                            "name": "KurbanLink'te büyükbaş hayvan ilanları var mı?",
+                            "acceptedAnswer": { "@type": "Answer", "text": "Evet! Dana, tosun, düve ve manda gibi tüm büyükbaş kurbanlık hayvan ilanları KurbanLink'te yer almaktadır. İlanlar günlük olarak güncellenir." }
+                        },
+                        {
+                            "@type": "Question",
+                            "name": "Hisseli kurban ilanları bulabilir miyim?",
+                            "acceptedAnswer": { "@type": "Answer", "text": "KurbanLink'te hisseli kurban ortaklıkları da yer almaktadır. Büyükbaş hayvanlar için hissedar arayabilir ya da hisseli kurban ilanı verebilirsiniz." }
+                        },
+                        {
+                            "@type": "Question",
+                            "name": "Kurban hayvanını kestirmek için kasap bulmak mı istiyorsunuz?",
+                            "acceptedAnswer": { "@type": "Answer", "text": "KurbanLink üzerinden kasap profillerini inceleyebilir, randevu alabilir ve kurban şikriniz için en uygun kasabı bulabilirsiniz." }
+                        },
+                        {
+                            "@type": "Question",
+                            "name": "KurbanLink ücretli mi?",
+                            "acceptedAnswer": { "@type": "Answer", "text": "KurbanLink'e kayıt olmak ve ilan vermek tamamen ücretsidir. Platform Türkiye genelinde kurban alım satımını kolaylaştırmak için hizmet vermektedir." }
+                        }
+                    ]
+                })
+            }} />
+
 
             <div className="home-container">
                 <HomeSidebar />
@@ -118,6 +153,39 @@ const Home = () => {
                     )}
                 </main>
             </div>
+
+            {/* SEO Content Section — keyword-rich visible text for Google */}
+            <section className="seo-content-section" style={{
+                background: '#f8f9fa',
+                padding: '3rem 1.5rem',
+                borderTop: '1px solid #e9ecef'
+            }}>
+                <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+                    <h2 style={{ color: '#1a5c30', fontSize: '1.5rem', marginBottom: '1rem' }}>
+                        Türkiye'nin Kurbanlık Hayvan Platformu: KurbanLink
+                    </h2>
+                    <p style={{ color: '#444', lineHeight: '1.8', marginBottom: '1rem' }}>
+                        <strong>Kurban al</strong>, kurban sat, kasap bul — KurbanLink'te her şeyi tek yerde bulursunuz.
+                        <strong> Büyükbaş kurban</strong> arayanlar için dana, tosun, düve ve manda ilanları;
+                        <strong> küçükbaş kurban</strong> arayanlar için koyun, kuzu ve keçi ilanları.
+                    </p>
+                    <p style={{ color: '#444', lineHeight: '1.8', marginBottom: '1rem' }}>
+                        <strong>Hisseli kurban</strong> ortaklığı arıyor musunuz? KurbanLink'te büyükbaş hayvanlar için
+                        hissedar bulabilir ya da kendiçi ilanınızı verebilirsiniz. <strong>Online kurban alımı</strong>
+                        artık çok daha güvenli ve kolay.
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1.5rem' }}>
+                        {['Kurban Al', 'Büyükbaş Kurban', 'Küçükbaş Kurban', 'Dana Kurban', 'Koyun Kurban',
+                            'Tosun Kurban', 'Hisseli Kurban', 'Kasap Randevu', 'Kurban İlanı', 'Online Kurban'].map(tag => (
+                                <span key={tag} style={{
+                                    background: '#e8f5ee', color: '#1a5c30',
+                                    padding: '0.3rem 0.8rem', borderRadius: '999px',
+                                    fontSize: '0.85rem', fontWeight: '500'
+                                }}>{tag}</span>
+                            ))}
+                    </div>
+                </div>
+            </section>
         </div>
     );
 };
