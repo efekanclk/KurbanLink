@@ -24,9 +24,7 @@ body {
 
 @media (max-width: 768px) {
 
-  /* ── 2. Global containers ─────────────────────────── */
-  .container,
-  .main-content,
+  /* ── 2. Global containers (NOT navbar) ──────────── */
   .page__container,
   .animals-container,
   .search-container,
@@ -132,10 +130,11 @@ body {
     /* prevent iOS zoom */
   }
 
-  .btn,
-  .btn-primary,
-  .btn-secondary,
-  button[type="submit"] {
+  /* Submit buttons — only in login/register forms */
+  .login-card button[type="submit"],
+  .register-wizard-card button[type="submit"],
+  .login-card .btn,
+  .register-wizard-card .btn {
     width: 100% !important;
     box-sizing: border-box;
   }
