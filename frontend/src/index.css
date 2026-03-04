@@ -1,17 +1,13 @@
 /* KurbanLink - Minimal index.css */
 /* Main theme in /styles/theme.css */
 
-/* Any legacy overrides can go here, but prefer theme.css */
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 /* ═══════════════════════════════════════════════════════
-   GLOBAL RESPONSIVE — max-width: 768px
+   GLOBAL: Prevent horizontal scroll
    ═══════════════════════════════════════════════════════ */
-
-/* 1. Prevent horizontal scroll globally */
 html,
 body {
   overflow-x: hidden;
@@ -22,37 +18,63 @@ body {
   overflow-x: hidden;
 }
 
-@media (max-width: 768px) {
+/* ═══════════════════════════════════════════════════════
+   TOUCH TARGETS — minimum 44px (mobile accessibility)
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
 
-  /* ── 2. Global containers (NOT navbar) ──────────── */
-  .page__container,
-  .animals-container,
-  .search-container,
-  .profile-container {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    box-sizing: border-box;
+  button,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"],
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .hero-btn,
+  .drawer-btn,
+  .filter-apply-btn {
+    min-height: 44px;
   }
 
-  /* ── 3. Home layout: hide sidebar, full-width content ── */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="search"],
+  select,
+  textarea {
+    min-height: 44px;
+    font-size: 16px !important;
+    /* prevent iOS auto-zoom */
+  }
+
+  .search-input {
+    min-height: 44px;
+    font-size: 16px !important;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   BREAKPOINT 1 — max-width: 900px
+   (matches Navbar & HomeSidebar mobile breakpoint)
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+
+  /* Home layout: sidebar → modal, content full width */
   .home-container {
     flex-direction: column;
     padding: 1rem !important;
-    gap: 1rem;
-  }
-
-  .home-sidebar,
-  .desktop-only {
-    display: none !important;
+    gap: 0.75rem;
   }
 
   .home-content {
     width: 100%;
+    min-width: 0;
   }
 
-  /* ── 4. Hero welcome buttons ──────────────────────── */
+  /* Hero section */
   .hero-welcome {
     padding: 1.25rem 1rem !important;
     text-align: center;
@@ -63,7 +85,7 @@ body {
   }
 
   .hero-welcome-title {
-    font-size: 1.3rem !important;
+    font-size: 1.35rem !important;
   }
 
   .hero-welcome-subtitle {
@@ -82,25 +104,49 @@ body {
     justify-content: center;
   }
 
-  /* ── 5. Recommended & featured listing grids ──────── */
+  /* Listing grids → single column */
   .listings-grid,
-  .skeleton-grid {
-    grid-template-columns: 1fr !important;
-    gap: 1rem !important;
-  }
-
+  .skeleton-grid,
   .featured-grid {
     grid-template-columns: 1fr !important;
     gap: 1rem !important;
   }
 
-  /* ── 6. Listing card image aspect ratio ───────────── */
-  .card-image-wrapper {
-    padding-top: 56.25% !important;
-    /* 16:9 */
+  /* Section padding */
+  .recommended-section {
+    padding: 1rem !important;
   }
 
-  /* ── 7. Forms — login & register ─────────────────── */
+  .listings-header {
+    padding: 0 !important;
+    margin-bottom: 1rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   BREAKPOINT 2 — max-width: 768px
+   (phones & small tablets)
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* General containers */
+  .page__container,
+  .animals-container,
+  .search-container,
+  .profile-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box;
+  }
+
+  /* Card image 16:9 */
+  .card-image-wrapper {
+    padding-top: 56.25% !important;
+  }
+
+  /* Forms */
   .login-card,
   .register-wizard-card {
     width: 100% !important;
@@ -130,7 +176,6 @@ body {
     /* prevent iOS zoom */
   }
 
-  /* Submit buttons — only in login/register forms */
   .login-card button[type="submit"],
   .register-wizard-card button[type="submit"],
   .login-card .btn,
@@ -139,7 +184,7 @@ body {
     box-sizing: border-box;
   }
 
-  /* Password eye icon — keep inside input */
+  /* Password eye icon */
   .input-with-icon {
     position: relative;
   }
@@ -155,9 +200,9 @@ body {
     transform: translateY(-50%) !important;
   }
 
-  /* ── 8. Headings scale down ───────────────────────── */
+  /* Headings */
   h1 {
-    font-size: clamp(1.3rem, 5vw, 1.75rem) !important;
+    font-size: clamp(1.25rem, 5vw, 1.75rem) !important;
   }
 
   h2 {
@@ -168,7 +213,7 @@ body {
     font-size: clamp(1rem, 4vw, 1.25rem) !important;
   }
 
-  /* ── 9. Animals list header actions ──────────────── */
+  /* Animals list */
   .animals-header {
     flex-direction: column !important;
     align-items: flex-start !important;
@@ -181,30 +226,17 @@ body {
     gap: 0.5rem;
   }
 
-  /* ── 10. Profile layout ───────────────────────────── */
+  /* Profile */
   .profile-header {
     flex-direction: column !important;
     align-items: flex-start;
     gap: 1rem;
   }
-
-  /* ── 11. Section padding ──────────────────────────── */
-  .recommended-section {
-    padding: 1rem !important;
-  }
-
-  .section-title {
-    font-size: 1.1rem !important;
-  }
-
-  /* ── 12. Listings header ──────────────────────────── */
-  .listings-header {
-    padding: 0 !important;
-    margin-bottom: 1rem;
-  }
 }
 
-/* Extra small: phones < 480px */
+/* ═══════════════════════════════════════════════════════
+   BREAKPOINT 3 — max-width: 480px (extra small phones)
+   ═══════════════════════════════════════════════════════ */
 @media (max-width: 480px) {
   .home-container {
     padding: 0.75rem !important;

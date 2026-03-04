@@ -341,3 +341,84 @@
     background-color: var(--bg-gray);
     border-radius: 4px;
 }
+
+/* ── Accordion (mobile-friendly expandable sections) ── */
+.detail-accordion {
+    margin-top: 1rem;
+}
+
+/* Desktop: always open, flat appearance */
+.accordion-header {
+    display: none;
+}
+
+.accordion-body {
+    display: block;
+}
+
+/* Mobile: collapsible */
+@media (max-width: 900px) {
+    .accordion-item {
+        border: 1px solid var(--border-color, #e2e8f0);
+        border-radius: 10px;
+        margin-bottom: 0.75rem;
+        overflow: hidden;
+        background: var(--bg-card, #fff);
+    }
+
+    .accordion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 0.9rem 1rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-primary, #1a1a2e);
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        min-height: 48px;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .accordion-chevron {
+        font-size: 0.65rem;
+        color: var(--text-muted, #94a3b8);
+        transition: transform 0.2s;
+    }
+
+    /* Closed: body hidden */
+    .accordion-body {
+        display: none;
+        padding: 0 1rem 1rem;
+    }
+
+    /* Open: body visible */
+    .accordion-item.open .accordion-body {
+        display: block;
+    }
+
+    .accordion-item.open .accordion-header {
+        border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+
+    .detail-container {
+        padding: 1rem;
+    }
+
+    .main-image {
+        height: 260px;
+    }
+
+    .detail-info h1 {
+        font-size: 1.35rem;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        margin-bottom: 0;
+    }
+}

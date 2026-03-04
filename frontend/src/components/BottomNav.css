@@ -1,0 +1,103 @@
+/* BottomNav — mobile only (≤ 900px) */
+.bottom-nav {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        background: var(--bg-card, #fff);
+        border-top: 1px solid var(--border-color, #e2e8f0);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+        height: 64px;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 0.25rem;
+        padding-bottom: env(safe-area-inset-bottom);
+        /* iPhone notch */
+    }
+
+    .bottom-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        flex: 1;
+        min-height: 48px;
+        color: var(--text-muted, #94a3b8);
+        text-decoration: none;
+        font-size: 0.65rem;
+        font-weight: 500;
+        border: none;
+        background: none;
+        cursor: pointer;
+        transition: color 0.2s;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .bottom-nav-item.active {
+        color: var(--primary, #2d6a4f);
+    }
+
+    .bottom-nav-item.active svg {
+        stroke: var(--primary, #2d6a4f);
+    }
+
+    /* Center CTA button */
+    .bottom-nav-cta {
+        flex: 0 0 64px;
+        color: var(--primary, #2d6a4f);
+    }
+
+    .bottom-nav-plus {
+        width: 44px;
+        height: 44px;
+        background: var(--primary, #2d6a4f);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(45, 106, 79, 0.35);
+        transition: transform 0.15s, box-shadow 0.15s;
+        margin-bottom: 1px;
+    }
+
+    .bottom-nav-plus svg {
+        stroke: #fff !important;
+    }
+
+    .bottom-nav-cta:active .bottom-nav-plus {
+        transform: scale(0.93);
+        box-shadow: 0 2px 6px rgba(45, 106, 79, 0.3);
+    }
+
+    .bottom-nav-cta span {
+        font-size: 0.6rem;
+        color: var(--text-muted, #94a3b8);
+    }
+
+    /* Avatar circle for profile tab */
+    .bottom-nav-avatar {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--primary, #2d6a4f);
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bottom-nav-item.active .bottom-nav-avatar {
+        box-shadow: 0 0 0 2px var(--primary, #2d6a4f);
+        background: var(--primary, #2d6a4f);
+    }
+}

@@ -8,6 +8,7 @@ import AppRouter from './routes/AppRouter';
 import Header from './components/Header';
 import HamburgerDrawer from './components/HamburgerDrawer';
 import FloatingMessages from './components/FloatingMessages';
+import BottomNav from './components/BottomNav';
 import './App.css';
 
 const AppContent = () => {
@@ -23,6 +24,7 @@ const AppContent = () => {
       />
       {user && <MessagesWidget />}
       <AppRouter />
+      <BottomNav />
     </>
   );
 };

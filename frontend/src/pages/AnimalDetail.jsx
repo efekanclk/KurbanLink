@@ -28,6 +28,9 @@ const AnimalDetail = () => {
     const [messagingLoading, setMessagingLoading] = useState(false);
     const [messagingError, setMessagingError] = useState(null);
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', message: '', onConfirm: null, type: 'warning', showCancel: true });
+    const [openSection, setOpenSection] = useState('specs'); // accordion — 'specs' | 'description'
+
+    const toggleSection = (section) => setOpenSection(prev => prev === section ? '' : section);
 
     // Use ref to track latest request ID to prevent race conditions
     const requestIdRef = useRef(0);
@@ -335,46 +338,64 @@ const AnimalDetail = () => {
                         <div className="inline-error">{messagingError}</div>
                     )}
 
-                    <div className="info-grid">
-                        <div className="info-item">
-                            <span className="label">Fiyat</span>
-                            <span className="value price">₺{listing.price}</span>
-                        </div>
-                        <div className="info-item">
-                            <span className="label">Konum</span>
-                            <span className="value">{listing.location}</span>
-                        </div>
-                        {listing.age && (
-                            <div className="info-item">
-                                <span className="label">Yaş</span>
-                                <span className="value">{listing.age} yaşında</span>
+                    <div className="detail-accordion">
+                        {/* Accordion: Hayvan Bilgileri */}
+                        <div className={`accordion-item ${openSection === 'specs' ? 'open' : ''}`}>
+                            <button className="accordion-header" onClick={() => toggleSection('specs')}>
+                                <span>🐄 Hayvan Bilgileri</span>
+                                <span className="accordion-chevron">{openSection === 'specs' ? '▲' : '▼'}</span>
+                            </button>
+                            <div className="accordion-body">
+                                <div className="info-grid">
+                                    <div className="info-item">
+                                        <span className="label">Fiyat</span>
+                                        <span className="value price">₺{listing.price}</span>
+                                    </div>
+                                    <div className="info-item">
+                                        <span className="label">Konum</span>
+                                        <span className="value">{listing.location}</span>
+                                    </div>
+                                    {listing.age && (
+                                        <div className="info-item">
+                                            <span className="label">Yaş</span>
+                                            <span className="value">{listing.age} yaşında</span>
+                                        </div>
+                                    )}
+                                    {listing.weight && (
+                                        <div className="info-item">
+                                            <span className="label">Ağırlık</span>
+                                            <span className="value">{listing.weight} kg</span>
+                                        </div>
+                                    )}
+                                    {(!user || user.id !== listing.seller) && (
+                                        <div className="info-item">
+                                            <span className="label">Satıcı</span>
+                                            <span className="value seller">{listing.seller_username || listing.seller_email}</span>
+                                        </div>
+                                    )}
+                                    <div className="info-item">
+                                        <span className="label">Eklenme Tarihi</span>
+                                        <span className="value">{new Date(listing.created_at).toLocaleDateString()}</span>
+                                    </div>
+                                </div>
                             </div>
-                        )}
-                        {listing.weight && (
-                            <div className="info-item">
-                                <span className="label">Ağırlık</span>
-                                <span className="value">{listing.weight} kg</span>
-                            </div>
-                        )}
-                        {/* Only show seller info if not the owner */}
-                        {(!user || user.id !== listing.seller) && (
-                            <div className="info-item">
-                                <span className="label">Satıcı</span>
-                                <span className="value seller">{listing.seller_username || listing.seller_email}</span>
-                            </div>
-                        )}
-                        <div className="info-item">
-                            <span className="label">Eklenme Tarihi</span>
-                            <span className="value">{new Date(listing.created_at).toLocaleDateString()}</span>
                         </div>
-                    </div>
 
-                    {listing.description && (
-                        <div className="description-section">
-                            <h3>Açıklama</h3>
-                            <p>{listing.description}</p>
-                        </div>
-                    )}
+                        {/* Accordion: Açıklama */}
+                        {listing.description && (
+                            <div className={`accordion-item ${openSection === 'description' ? 'open' : ''}`}>
+                                <button className="accordion-header" onClick={() => toggleSection('description')}>
+                                    <span>📝 Açıklama</span>
+                                    <span className="accordion-chevron">{openSection === 'description' ? '▲' : '▼'}</span>
+                                </button>
+                                <div className="accordion-body">
+                                    <div className="description-section">
+                                        <p>{listing.description}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 

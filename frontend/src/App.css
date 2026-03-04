@@ -11,3 +11,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Padding so page content doesn't hide behind fixed bottom nav on mobile */
+@media (max-width: 900px) {
+
+  #root>*>main,
+  .home-page,
+  .animals-page,
+  .search-page,
+  .profile-page,
+  .page-container,
+  .login-page,
+  .register-wizard-page {
+    padding-bottom: 72px;
+  }
+}
