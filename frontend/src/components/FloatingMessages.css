@@ -270,16 +270,16 @@
 }
 
 /* Mobile Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+
+    /* Float above the bottom nav (64px) */
     .floating-messages-btn {
-        bottom: 1.5rem;
-        right: 1.5rem;
-        padding: 0.75rem 1.25rem;
-        font-size: 0.9375rem;
+        display: none;
+        /* handled by bottom nav Mesajlar tab */
     }
 
     .messages-panel {
-        bottom: 5rem;
+        bottom: 72px;
         right: 1rem;
         left: 1rem;
         width: auto;
@@ -290,7 +290,6 @@
 
 @media (max-width: 480px) {
     .messages-panel {
-        bottom: 4.5rem;
         height: 350px;
     }
 }

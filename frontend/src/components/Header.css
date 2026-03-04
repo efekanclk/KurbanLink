@@ -212,6 +212,12 @@
         display: none !important;
     }
 
+    /* Hide duplicate nav elements — bottom nav covers these */
+    .create-listing-header-btn,
+    .hamburger-btn {
+        display: none !important;
+    }
+
     /* Smaller auth buttons — still same row as logo */
     .login-btn,
     .register-btn {
