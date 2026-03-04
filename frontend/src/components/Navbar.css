@@ -291,7 +291,7 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
 
     .navbar-nav,
     .navbar-actions {
@@ -307,7 +307,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
     .mobile-drawer {
         width: 100%;
         right: -100%;
