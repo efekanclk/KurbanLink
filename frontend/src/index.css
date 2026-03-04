@@ -6,3 +6,220 @@
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+/* ═══════════════════════════════════════════════════════
+   GLOBAL RESPONSIVE — max-width: 768px
+   ═══════════════════════════════════════════════════════ */
+
+/* 1. Prevent horizontal scroll globally */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+#root {
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+
+  /* ── 2. Global containers ─────────────────────────── */
+  .container,
+  .main-content,
+  .page__container,
+  .animals-container,
+  .search-container,
+  .profile-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box;
+  }
+
+  /* ── 3. Home layout: hide sidebar, full-width content ── */
+  .home-container {
+    flex-direction: column;
+    padding: 1rem !important;
+    gap: 1rem;
+  }
+
+  .home-sidebar,
+  .desktop-only {
+    display: none !important;
+  }
+
+  .home-content {
+    width: 100%;
+  }
+
+  /* ── 4. Hero welcome buttons ──────────────────────── */
+  .hero-welcome {
+    padding: 1.25rem 1rem !important;
+    text-align: center;
+  }
+
+  .hero-welcome-inner {
+    max-width: 100% !important;
+  }
+
+  .hero-welcome-title {
+    font-size: 1.3rem !important;
+  }
+
+  .hero-welcome-subtitle {
+    font-size: 0.9rem !important;
+    text-align: center;
+  }
+
+  .hero-welcome-actions {
+    flex-direction: column !important;
+    align-items: stretch;
+    gap: 0.75rem !important;
+  }
+
+  .hero-btn {
+    width: 100% !important;
+    justify-content: center;
+  }
+
+  /* ── 5. Recommended & featured listing grids ──────── */
+  .listings-grid,
+  .skeleton-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .featured-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* ── 6. Listing card image aspect ratio ───────────── */
+  .card-image-wrapper {
+    padding-top: 56.25% !important;
+    /* 16:9 */
+  }
+
+  /* ── 7. Forms — login & register ─────────────────── */
+  .login-card,
+  .register-wizard-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 12px;
+  }
+
+  .login-page,
+  .register-wizard-page {
+    padding: 1rem !important;
+    align-items: flex-start;
+  }
+
+  .login-container,
+  .register-wizard-container {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100% !important;
+    box-sizing: border-box;
+    font-size: 16px !important;
+    /* prevent iOS zoom */
+  }
+
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  button[type="submit"] {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Password eye icon — keep inside input */
+  .input-with-icon {
+    position: relative;
+  }
+
+  .input-with-icon input {
+    padding-right: 3rem !important;
+  }
+
+  .input-eye-btn {
+    position: absolute !important;
+    right: 0.75rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+
+  /* ── 8. Headings scale down ───────────────────────── */
+  h1 {
+    font-size: clamp(1.3rem, 5vw, 1.75rem) !important;
+  }
+
+  h2 {
+    font-size: clamp(1.1rem, 4.5vw, 1.5rem) !important;
+  }
+
+  h3 {
+    font-size: clamp(1rem, 4vw, 1.25rem) !important;
+  }
+
+  /* ── 9. Animals list header actions ──────────────── */
+  .animals-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* ── 10. Profile layout ───────────────────────────── */
+  .profile-header {
+    flex-direction: column !important;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  /* ── 11. Section padding ──────────────────────────── */
+  .recommended-section {
+    padding: 1rem !important;
+  }
+
+  .section-title {
+    font-size: 1.1rem !important;
+  }
+
+  /* ── 12. Listings header ──────────────────────────── */
+  .listings-header {
+    padding: 0 !important;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Extra small: phones < 480px */
+@media (max-width: 480px) {
+  .home-container {
+    padding: 0.75rem !important;
+  }
+
+  .hero-welcome-title {
+    font-size: 1.15rem !important;
+  }
+
+  .card-title {
+    font-size: 0.95rem !important;
+  }
+
+  .card-price {
+    font-size: 1rem !important;
+  }
+}
