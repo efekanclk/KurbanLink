@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { ButcherIcon } from '../ui/icons';
+import { ButcherIcon, PartnershipIcon } from '../ui/icons';
 import './BottomNav.css';
 
 const HomeIcon = () => (
@@ -55,19 +55,11 @@ const BottomNav = () => {
                 <span>Kasap</span>
             </NavLink>
 
-            <NavLink to="/profile" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
-                {user ? (
-                    <div className="bottom-nav-avatar">
-                        {(user.username?.[0] || 'U').toUpperCase()}
-                    </div>
-                ) : (
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg>
-                )}
-                <span>{user ? 'Profil' : 'Giriş'}</span>
+            <NavLink to="/partnerships" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
+                <PartnershipIcon size={22} />
+                <span>Ortaklık</span>
             </NavLink>
+
         </nav>
     );
 };

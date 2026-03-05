@@ -1,0 +1,104 @@
+.legal-page {
+    min-height: 100vh;
+    background: var(--bg-secondary, #f8fafc);
+    padding: 2rem 1rem 3rem;
+}
+
+.legal-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--bg-card, #fff);
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.legal-breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 1.5rem;
+}
+
+.legal-breadcrumb a {
+    color: var(--primary, #2d6a4f);
+    text-decoration: none;
+}
+
+.legal-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.legal-container h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary, #1a202c);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--primary, #2d6a4f);
+}
+
+.legal-container section {
+    margin-bottom: 2rem;
+}
+
+.legal-container h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary, #2d6a4f);
+    margin-bottom: 0.75rem;
+}
+
+.legal-container p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-secondary, #475569);
+    margin-bottom: 0.75rem;
+}
+
+.legal-container ul {
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.legal-container li {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-secondary, #475569);
+    margin-bottom: 0.4rem;
+}
+
+.legal-container a {
+    color: var(--primary, #2d6a4f);
+    text-decoration: underline;
+}
+
+.legal-footer-note {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color, #e2e8f0);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.legal-link {
+    display: inline-block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary, #2d6a4f);
+    text-decoration: none;
+}
+
+.legal-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .legal-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .legal-container h1 {
+        font-size: 1.35rem;
+    }
+}

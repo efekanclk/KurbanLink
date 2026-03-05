@@ -16,6 +16,7 @@ const RegisterWizard = () => {
     const [showPasswordTooltip, setShowPasswordTooltip] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+    const [kvkkAccepted, setKvkkAccepted] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState({
         hasMinLength: false,
         hasUppercase: false,
@@ -576,11 +577,29 @@ const RegisterWizard = () => {
                                 </div>
                             </div>
 
+                            {/* KVKK Onay Kutusu */}
+                            <div className="kvkk-consent">
+                                <label className="kvkk-label">
+                                    <input
+                                        type="checkbox"
+                                        checked={kvkkAccepted}
+                                        onChange={e => setKvkkAccepted(e.target.checked)}
+                                        id="kvkk-checkbox"
+                                    />
+                                    <span>
+                                        <a href="/kvkk" target="_blank" rel="noopener noreferrer">KVKK Aydınlatma Metni</a>'ni
+                                        okudum ve kişisel verilerimin işlenmesine onay veriyorum. *
+                                    </span>
+                                </label>
+                                {errors.kvkk && <span className="error-text">{errors.kvkk}</span>}
+                            </div>
+
                             <button
                                 type="button"
                                 className="complete-btn"
                                 onClick={handleRegister}
-                                disabled={loading || authLoading}
+                                disabled={loading || authLoading || !kvkkAccepted}
+                                title={!kvkkAccepted ? 'Lütfen önce KVKK metnini onaylayın' : ''}
                             >
                                 {loading || authLoading ? 'Kaydediliyor...' : 'Kaydı Tamamla'}
                             </button>

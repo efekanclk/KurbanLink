@@ -14,15 +14,7 @@ body {
 
 /* Padding so page content doesn't hide behind fixed bottom nav on mobile */
 @media (max-width: 900px) {
-
-  #root>*>main,
-  .home-page,
-  .animals-page,
-  .search-page,
-  .profile-page,
-  .page-container,
-  .login-page,
-  .register-wizard-page {
+  body {
     padding-bottom: 72px;
   }
 }

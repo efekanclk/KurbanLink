@@ -9,6 +9,7 @@ import Header from './components/Header';
 import HamburgerDrawer from './components/HamburgerDrawer';
 import FloatingMessages from './components/FloatingMessages';
 import BottomNav from './components/BottomNav';
+import Footer from './components/Footer';
 import './App.css';
 
 const AppContent = () => {
@@ -24,6 +25,7 @@ const AppContent = () => {
       />
       {user && <MessagesWidget />}
       <AppRouter />
+      <Footer />
       <BottomNav />
     </>
   );

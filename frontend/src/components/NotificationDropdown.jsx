@@ -39,11 +39,10 @@ const NotificationDropdown = () => {
     const loadNotifications = async () => {
         try {
             const data = await fetchNotifications();
-            const notifs = Array.isArray(data) ? data : data.results || [];
-            setNotifications(notifs.slice(0, 5)); // Show last 5
-
-            // Calculate unread count (assuming API returns all notifications)
-            // Ideally API should provide unread_count
+            const all = Array.isArray(data) ? data : data.results || [];
+            // Exclude favorite notifications
+            const notifs = all.filter(n => n.type !== 'FAVORITED_LISTING');
+            setNotifications(notifs.slice(0, 5));
             const count = notifs.filter(n => !n.is_read).length;
             setUnreadCount(count);
         } catch (error) {

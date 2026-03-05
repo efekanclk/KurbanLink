@@ -100,4 +100,16 @@
         box-shadow: 0 0 0 2px var(--primary, #2d6a4f);
         background: var(--primary, #2d6a4f);
     }
+
+    .bottom-nav-avatar-img {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid transparent;
+    }
+
+    .bottom-nav-item.active .bottom-nav-avatar-img {
+        border-color: var(--primary, #2d6a4f);
+    }
 }

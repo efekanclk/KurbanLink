@@ -42,16 +42,21 @@ import Notifications from '../pages/Notifications';
 import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
 
+// Legal pages
+import KvkkPage from '../pages/legal/KvkkPage';
+import GizlilikPage from '../pages/legal/GizlilikPage';
+
 const AppRouter = () => {
     return (
         <Routes>
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
-
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/animals/:id" element={<AnimalDetail />} />
+            <Route path="/kvkk" element={<KvkkPage />} />
+            <Route path="/gizlilik" element={<GizlilikPage />} />
 
             {/* Protected routes */}
             <Route path="/coming-soon" element={<ProtectedRoute><ComingSoon /></ProtectedRoute>} />
