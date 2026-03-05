@@ -103,9 +103,6 @@ const Home = () => {
                 <HomeSidebar />
 
                 <main className="home-content">
-                    {/* Recommendations Section */}
-                    <RecommendedListings />
-
                     {/* Hero / Welcome Section */}
                     <section className="hero-welcome">
                         <div className="hero-welcome-inner">
@@ -117,16 +114,11 @@ const Home = () => {
                                 Hisseli veya tekil kurbanlık ilanlarını inceleyin,
                                 kasap ve nakliye hizmetlerine tek tıkla ulaşın.
                             </p>
-                            <div className="hero-welcome-actions">
-                                <Link to="/" className="hero-btn hero-btn-primary">
-                                    İlanları İncele
-                                </Link>
-                                <Link to="/create-listing" className="hero-btn hero-btn-outline">
-                                    İlan Ver
-                                </Link>
-                            </div>
                         </div>
                     </section>
+
+                    {/* Recommendations Section */}
+                    <RecommendedListings />
 
                     {/* Header for listings */}
                     <div className="listings-header">
