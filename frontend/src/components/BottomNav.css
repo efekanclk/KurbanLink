@@ -49,37 +49,16 @@
         stroke: var(--primary, #2d6a4f);
     }
 
-    /* Center CTA button */
-    .bottom-nav-cta {
-        flex: 0 0 64px;
-        color: var(--primary, #2d6a4f);
-    }
-
+    /* Regular style for CTA button instead of large circle */
     .bottom-nav-plus {
-        width: 44px;
-        height: 44px;
-        background: var(--primary, #2d6a4f);
-        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 12px rgba(45, 106, 79, 0.35);
-        transition: transform 0.15s, box-shadow 0.15s;
-        margin-bottom: 1px;
+        margin-bottom: 2px;
     }
 
     .bottom-nav-plus svg {
-        stroke: #fff !important;
-    }
-
-    .bottom-nav-cta:active .bottom-nav-plus {
-        transform: scale(0.93);
-        box-shadow: 0 2px 6px rgba(45, 106, 79, 0.3);
-    }
-
-    .bottom-nav-cta span {
-        font-size: 0.6rem;
-        color: var(--text-muted, #94a3b8);
+        stroke: currentColor;
     }
 
     /* Avatar circle for profile tab */

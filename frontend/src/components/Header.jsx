@@ -69,7 +69,6 @@ const Header = ({ onMenuClick }) => {
 
                 <div className="header-actions">
 
-
                     {user ? (
                         <>
                             {user.roles?.includes('BUTCHER') && (
@@ -123,8 +122,6 @@ const Header = ({ onMenuClick }) => {
                                 )}
                             </div>
 
-                            <NotificationDropdown />
-
                             <button
                                 className="header-icon-btn hamburger-btn"
                                 title="Menü"
@@ -132,15 +129,15 @@ const Header = ({ onMenuClick }) => {
                             >
                                 <Menu size={24} />
                             </button>
-
                         </>
                     ) : (
-                        <div className="header-actions public-actions">
-
+                        <div className="public-actions">
                             <Link to="/login" className="login-btn">Giriş Yap</Link>
                             <Link to="/register" className="register-btn">Kayıt Ol</Link>
                         </div>
                     )}
+
+                    <NotificationDropdown />
                 </div>
             </div>
         </header>
