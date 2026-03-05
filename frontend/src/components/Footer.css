@@ -82,9 +82,22 @@
     text-align: center;
 }
 
-/* Hide footer on mobile — bottom nav replaces it */
+/* Mobile styling for footer */
 @media (max-width: 900px) {
     .site-footer {
-        display: none;
+        padding-bottom: 80px;
+        /* Add extra padding so it clears the bottom nav */
+    }
+
+    .footer-container {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-links {
+        justify-content: center;
+        gap: 1.5rem;
     }
 }
