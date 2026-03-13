@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { cities, getDistrictsForCity } from '../data/locations';
 import axios from 'axios';
+import { compressImage } from '../utils/imageUtils';
 import './ProfileEdit.css';
 import { User } from '../ui/icons';
 
@@ -50,21 +51,27 @@ const ProfileEdit = () => {
         }));
     };
 
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            // Validate size (5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                setError('Dosya boyutu 5MB\'dan küçük olmalıdır.');
-                return;
+            try {
+                // Compress image before saving to state
+                const compressed = await compressImage(file, { maxWidth: 1024, maxHeight: 1024, quality: 0.7 });
+                setFormData(prev => ({ ...prev, profile_image: compressed }));
+
+                // Preview using compressed file
+                const reader = new FileReader();
+                reader.onloadend = () => setPreviewImage(reader.result);
+                reader.readAsDataURL(compressed);
+            } catch (err) {
+                console.error("Compression failed", err);
+                setFormData(prev => ({ ...prev, profile_image: file }));
+
+                // Preview fallback
+                const reader = new FileReader();
+                reader.onloadend = () => setPreviewImage(reader.result);
+                reader.readAsDataURL(file);
             }
-
-            setFormData(prev => ({ ...prev, profile_image: file }));
-
-            // Preview
-            const reader = new FileReader();
-            reader.onloadend = () => setPreviewImage(reader.result);
-            reader.readAsDataURL(file);
         }
     };
 

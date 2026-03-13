@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { Eye, EyeOff } from 'lucide-react';
 import SEO from '../components/SEO';
+import { compressImage } from '../utils/imageUtils';
 import './RegisterWizard.css';
 
 const RegisterWizard = () => {
@@ -33,7 +34,7 @@ const RegisterWizard = () => {
         passwordConfirm: '',
         firstName: '',
         lastName: '',
-        countryCode: '+90',
+        countryCode: '+1',
         phone: '',
         is_butcher: false,
         profileImage: null,
@@ -66,14 +67,27 @@ const RegisterWizard = () => {
         }
     };
 
-    const handleFileChange = (e) => {
+    const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            setFormData(prev => ({
-                ...prev,
-                profileImage: file,
-                profileImagePreview: URL.createObjectURL(file)
-            }));
+            try {
+                // Compress image before saving to state
+                const compressedFile = await compressImage(file, { maxWidth: 1024, maxHeight: 1024, quality: 0.7 });
+
+                setFormData(prev => ({
+                    ...prev,
+                    profileImage: compressedFile,
+                    profileImagePreview: URL.createObjectURL(compressedFile)
+                }));
+            } catch (err) {
+                console.error("Image compression failed:", err);
+                // Fallback to original file if compression fails
+                setFormData(prev => ({
+                    ...prev,
+                    profileImage: file,
+                    profileImagePreview: URL.createObjectURL(file)
+                }));
+            }
         }
     };
 

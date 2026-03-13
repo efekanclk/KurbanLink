@@ -58,7 +58,7 @@ const Home = () => {
     return (
         <div className="home-page">
             <SEO
-                title="Kurban Al | Kurbanlık Hayvan İlanları"
+                title="KurbanLink"
                 description="Kurban al, kurban sat — Türkiye'nin güvenilir kurbanlık hayvan platformu. Büyükbaş (dana, tosun) ve küçükbaş (koyun, kuzu) kurban ilanları. Hisseli kurban ve kasap randevusu imkânı."
                 keywords="kurban al, büyükbaş kurban, küçükbaş kurban, hisseli kurban, kurbanlık hayvan ilanı, kurban link, online kurban alım"
                 url="https://kurbanlink.com/"

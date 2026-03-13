@@ -139,38 +139,58 @@ const MessagesPage = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!messageInput.trim() || !selectedConversation) return;
+    const content = messageInput.trim();
+    if (!content || !selectedConversation) return;
+
+    // Create optimistic temporary message
+    const tempId = `temp-${Date.now()}`;
+    const optimisticMessage = {
+      id: tempId,
+      content: content,
+      created_at: new Date().toISOString(),
+      sender: user.id || user, // fallback if user is an object
+      sender_username: user.username,
+    };
+
+    // 1. Instantly update messages UI
+    setMessages(prev => [...prev, optimisticMessage]);
+    setMessageInput('');
+
+    // 2. Instantly update the side conversation list
+    setConversations(prev =>
+      prev.map(conv =>
+        conv.id === selectedConversation.id && conv.type === selectedConversation.type
+          ? {
+            ...conv,
+            last_message: {
+              content: optimisticMessage.content,
+              created_at: optimisticMessage.created_at,
+              sender_username: user.username
+            },
+            updated_at: optimisticMessage.created_at
+          }
+          : conv
+      ).sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+    );
 
     setSending(true);
     try {
       let newMessage;
+      // Define a timeout or just await directly
       if (selectedConversation.type === 'GROUP') {
-        newMessage = await sendGroupMessage(selectedConversation.id, messageInput.trim());
+        newMessage = await sendGroupMessage(selectedConversation.id, content);
       } else {
-        newMessage = await sendMessage(selectedConversation.id, messageInput.trim());
+        newMessage = await sendMessage(selectedConversation.id, content);
       }
 
-      setMessages(prev => [...prev, newMessage]);
-      setMessageInput('');
+      // Replace the temporary message with the real one from the server
+      setMessages(prev => prev.map(msg => msg.id === tempId ? newMessage : msg));
 
-      // Update last message in conversations list
-      setConversations(prev =>
-        prev.map(conv =>
-          conv.id === selectedConversation.id && conv.type === selectedConversation.type
-            ? {
-              ...conv,
-              last_message: {
-                content: newMessage.content,
-                created_at: newMessage.created_at,
-                sender_username: user.username
-              },
-              updated_at: newMessage.created_at
-            }
-            : conv
-        ).sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
-      );
     } catch (error) {
       console.error('Failed to send message:', error);
+      // Revert optimistic update on failure
+      setMessages(prev => prev.filter(msg => msg.id !== tempId));
+      // Optionally notify user
     } finally {
       setSending(false);
     }

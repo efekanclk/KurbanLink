@@ -18,6 +18,14 @@ body {
   overflow-x: hidden;
 }
 
+/* Bottom padding for mobile navigation */
+@media (max-width: 900px) {
+  #root {
+    padding-bottom: 70px;
+    /* Tall enough for BottomNav */
+  }
+}
+
 /* ═══════════════════════════════════════════════════════
    TOUCH TARGETS — minimum 44px (mobile accessibility)
    ═══════════════════════════════════════════════════════ */

@@ -224,11 +224,25 @@
     margin-bottom: 4px;
 }
 
+.sidebar-avatar-img,
+.header-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.message__sender-avatar-container {
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
 .message__sender-avatar {
     width: 32px;
     height: 32px;
     border-radius: 50%;
     object-fit: cover;
+    border: 1px solid var(--border-light);
 }
 
 .message__sender-avatar-placeholder {

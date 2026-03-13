@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createListing, uploadListingImages } from '../../api/sellers';
 import { cities, getDistrictsForCity } from '../../data/locations';
+import { compressImage } from '../../utils/imageUtils';
 import './Seller.css';
 
 const NewListing = () => {
@@ -52,15 +53,27 @@ const NewListing = () => {
         }
     };
 
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         const files = Array.from(e.target.files);
 
-        // Create objects with preview URLs
-        const newImages = files.map(file => ({
-            file,
-            preview: URL.createObjectURL(file)
-        }));
+        // Compress all selected images in parallel
+        const compressionPromises = files.map(async (file) => {
+            try {
+                const compressed = await compressImage(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.7 });
+                return {
+                    file: compressed,
+                    preview: URL.createObjectURL(compressed)
+                };
+            } catch (err) {
+                console.error("Compression failed for", file.name, err);
+                return {
+                    file,
+                    preview: URL.createObjectURL(file)
+                };
+            }
+        });
 
+        const newImages = await Promise.all(compressionPromises);
         const updatedImages = [...selectedImages, ...newImages].slice(0, 20);
 
         if (updatedImages.length > 20) {
@@ -110,7 +123,7 @@ const NewListing = () => {
     };
 
     // File drop handlers (for dropping files from desktop)
-    const handleFileDrop = (e) => {
+    const handleFileDrop = async (e) => {
         e.preventDefault();
         e.stopPropagation();
         setIsDraggingOver(false);
@@ -124,11 +137,24 @@ const NewListing = () => {
 
         if (files.length === 0) return;
 
-        const newImages = files.map(file => ({
-            file,
-            preview: URL.createObjectURL(file)
-        }));
+        // Compress dropped files in parallel
+        const compressionPromises = files.map(async (file) => {
+            try {
+                const compressed = await compressImage(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.7 });
+                return {
+                    file: compressed,
+                    preview: URL.createObjectURL(compressed)
+                };
+            } catch (err) {
+                console.error("Compression failed for", file.name, err);
+                return {
+                    file,
+                    preview: URL.createObjectURL(file)
+                };
+            }
+        });
 
+        const newImages = await Promise.all(compressionPromises);
         const updatedImages = [...selectedImages, ...newImages].slice(0, 20);
 
         if (selectedImages.length + files.length > 20) {

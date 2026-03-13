@@ -21,7 +21,7 @@ const SEO = ({
     useEffect(() => {
         // Update page title
         if (title) {
-            document.title = `${title} | KurbanLink`;
+            document.title = title === 'KurbanLink' ? title : `${title} | KurbanLink`;
         }
 
         // Helper function to update or create meta tags

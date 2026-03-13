@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { compressImage } from '../utils/imageUtils';
 import './ImageManager.css';
 
 /**
@@ -15,7 +16,7 @@ const ImageManager = ({
     const [draggedIndex, setDraggedIndex] = useState(null);
     const [isDraggingOver, setIsDraggingOver] = useState(false);
 
-    const handleFileSelect = (e) => {
+    const handleFileSelect = async (e) => {
         const files = Array.from(e.target.files).filter(file => file.type.startsWith('image/'));
 
         if (files.length === 0) return;
@@ -25,19 +26,35 @@ const ImageManager = ({
             return;
         }
 
-        const newImages = files.map((file, idx) => ({
-            kind: 'local',
-            id: `temp-${Date.now()}-${idx}`,
-            file,
-            url: URL.createObjectURL(file),
-            order: images.length + idx
-        }));
+        // Compress all selected files in parallel
+        const compressionPromises = files.map(async (file, idx) => {
+            try {
+                const compressed = await compressImage(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.7 });
+                return {
+                    kind: 'local',
+                    id: `temp-${Date.now()}-${idx}`,
+                    file: compressed,
+                    url: URL.createObjectURL(compressed),
+                    order: images.length + idx
+                };
+            } catch (err) {
+                console.error("Compression failed for", file.name, err);
+                return {
+                    kind: 'local',
+                    id: `temp-${Date.now()}-${idx}`,
+                    file,
+                    url: URL.createObjectURL(file),
+                    order: images.length + idx
+                };
+            }
+        });
 
+        const newImages = await Promise.all(compressionPromises);
         onChange([...images, ...newImages]);
         e.target.value = '';
     };
 
-    const handleFileDrop = (e) => {
+    const handleFileDrop = async (e) => {
         e.preventDefault();
         e.stopPropagation();
         setIsDraggingOver(false);
@@ -56,14 +73,30 @@ const ImageManager = ({
             return;
         }
 
-        const newImages = files.map((file, idx) => ({
-            kind: 'local',
-            id: `temp-${Date.now()}-${idx}`,
-            file,
-            url: URL.createObjectURL(file),
-            order: images.length + idx
-        }));
+        // Compress all dropped files in parallel
+        const compressionPromises = files.map(async (file, idx) => {
+            try {
+                const compressed = await compressImage(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.7 });
+                return {
+                    kind: 'local',
+                    id: `temp-${Date.now()}-${idx}`,
+                    file: compressed,
+                    url: URL.createObjectURL(compressed),
+                    order: images.length + idx
+                };
+            } catch (err) {
+                console.error("Compression failed for", file.name, err);
+                return {
+                    kind: 'local',
+                    id: `temp-${Date.now()}-${idx}`,
+                    file,
+                    url: URL.createObjectURL(file),
+                    order: images.length + idx
+                };
+            }
+        });
 
+        const newImages = await Promise.all(compressionPromises);
         onChange([...images, ...newImages]);
     };
 
