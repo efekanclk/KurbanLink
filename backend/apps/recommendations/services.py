@@ -5,6 +5,7 @@ from django.utils import timezone
 from apps.animals.models import AnimalListing
 from apps.accounts.models import User
 from .models import ListingInteraction
+from .ml_services import ml_model
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,8 @@ class RecommendationEngine:
             'price_match': 0.20,
             'popularity': 0.10,
             'recency': 0.05,
-            'diversity_penalty': 0.10
+            'diversity_penalty': 0.10,
+            'ml_similarity': 0.80  # High weight for AI matches
         }
 
     def get_recommendations(self, user=None, city=None, district=None, limit=20, exclude_ids=None):
@@ -42,20 +44,38 @@ class RecommendationEngine:
             if not target_district:
                 target_district = user.district
         
-        # 2. Candidate Generation
-        candidates = self._generate_candidates(user, target_city, exclude_ids)
+        # 2. Get User Interactions for ML
+        user_interacted_ids = []
+        user_identifier = user.id if user and user.is_authenticated else None
         
-        # 3. Scoring
+        # If no user ID, try to get from somewhere else if possible, but views.py might have IP
+        # We need to rely on what was logged. Let's fetch historical interactions for this user.
+        if user_identifier:
+            user_interacted_ids = list(ListingInteraction.objects.filter(
+                user_id=user_identifier
+            ).values_list('listing_id', flat=True).distinct())
+            
+        # Get ML Suggestions
+        ml_suggestions = {}
+        if ml_model.is_trained and user_interacted_ids:
+            ml_results = ml_model.get_similar_listings(user_interacted_ids, top_n=50, exclude_ids=exclude_ids)
+            ml_suggestions = {item['listing_id']: item['ml_score'] for item in ml_results}
+
+        # 3. Candidate Generation
+        candidates = self._generate_candidates(user, target_city, exclude_ids, list(ml_suggestions.keys()))
+        
+        # 4. Scoring
         scored_listings = []
         for listing in candidates:
-            score, reasons = self._score_listing(listing, user, target_city, target_district)
+            ml_score = ml_suggestions.get(listing.id, 0.0)
+            score, reasons = self._score_listing(listing, user, target_city, target_district, ml_score)
             scored_listings.append({
                 'listing': listing,
                 'score': score,
                 'reasons': reasons
             })
             
-        # 4. Sorting & Re-ranking (Diversity)
+        # 5. Sorting & Re-ranking (Diversity)
         # Sort by score desc
         scored_listings.sort(key=lambda x: x['score'], reverse=True)
         
@@ -64,7 +84,7 @@ class RecommendationEngine:
         
         return final_list[:limit]
 
-    def _generate_candidates(self, user, target_city, exclude_ids):
+    def _generate_candidates(self, user, target_city, exclude_ids, ml_candidate_ids):
         """
         Fetch active listings to be scored.
         """
@@ -79,23 +99,25 @@ class RecommendationEngine:
         if user and user.is_authenticated:
             queryset = queryset.exclude(seller=user)
             
-        # For MVP optimization: 
-        # If we have a target city, fetch all from that city + some popular/recent from others
-        # Use simple union or just fetch top 100 recent/popular to score
+        # If we have ML candidates, make sure they are included.
+        # Fallback to city/recent if ML candidates don't fill the pool.
+        q_conditions = Q()
+        if ml_candidate_ids:
+            q_conditions |= Q(id__in=ml_candidate_ids)
+            
         if target_city:
             # Priority: Same city OR Recent
-            queryset = queryset.filter(
-                Q(city__iexact=target_city) | 
-                Q(created_at__gte=timezone.now() - timedelta(days=30))
-            )
+            q_conditions |= Q(city__iexact=target_city) | Q(created_at__gte=timezone.now() - timedelta(days=30))
         else:
             # No location context: just recent listings
-            queryset = queryset.filter(created_at__gte=timezone.now() - timedelta(days=60))
+            q_conditions |= Q(created_at__gte=timezone.now() - timedelta(days=60))
+            
+        queryset = queryset.filter(q_conditions)
             
         # Limit candidate pool size for performance (score max 200 items)
         return queryset.select_related('seller').order_by('-created_at')[:200]
 
-    def _score_listing(self, listing, user, target_city, target_district):
+    def _score_listing(self, listing, user, target_city, target_district, ml_score=0.0):
         """
         Calculate score for a single listing.
         Returns (score, reasons_list)
@@ -103,7 +125,12 @@ class RecommendationEngine:
         score = 0.0
         reasons = []
         
-        # 1. Location Match
+        # 1. AI/ML Suggestion (Collaborative Filtering)
+        if ml_score > 0:
+            score += ml_score * self.weights['ml_similarity']
+            reasons.append('AI_RECOMMENDED')
+
+        # 2. Location Match
         if target_city and listing.city and listing.city.lower() == target_city.lower():
             score += self.weights['location_city']
             reasons.append('SAME_CITY')

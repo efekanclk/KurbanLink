@@ -8,12 +8,17 @@ django-filter==24.3
 Pillow>=10.0.0
 django-cors-headers==4.9.0
 
-# Production Server
-gunicorn==21.2.0
-whitenoise==6.6.0
-
 # Database
 psycopg2-binary==2.9.9
+psycopg-binary==3.3.2
 
-# Environment variables
+# Production Server Environments
+gunicorn==21.2.0
+whitenoise==6.6.0
 python-dotenv==1.0.1
+
+# AI Recommendation Engine (Collaborative Filtering)
+scikit-learn==1.8.0
+pandas==3.0.1
+numpy==2.4.3
+scipy==1.17.1
