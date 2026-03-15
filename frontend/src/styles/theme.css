@@ -379,3 +379,7 @@ a:hover {
 .icon-btn--primary:hover:not(:disabled) {
     background-color: var(--primary-hover);
 }
+
+.icon-btn--primary:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+}
