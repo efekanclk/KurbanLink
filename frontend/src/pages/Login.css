@@ -22,6 +22,29 @@
     width: 100%;
 }
 
+.back-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.back-btn:hover:not(:disabled) {
+    background: var(--bg-gray);
+}
+
+.login-navigation {
+    display: flex;
+    gap: 12px;
+    margin-top: 2rem;
+}
+
 .login-header {
     text-align: center;
     margin-bottom: var(--space-4);

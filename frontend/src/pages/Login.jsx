@@ -91,9 +91,19 @@ const Login = () => {
 
                         {error && <div className="error">{error}</div>}
 
-                        <button type="submit" disabled={loading} className="submit-btn">
-                            {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
-                        </button>
+                        <div className="login-navigation">
+                            <button
+                                type="button"
+                                className="back-btn"
+                                onClick={() => navigate('/')}
+                                disabled={loading}
+                            >
+                                ← Geri
+                            </button>
+                            <button type="submit" disabled={loading} className="submit-btn" style={{ flex: 1 }}>
+                                {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
+                            </button>
+                        </div>
                     </form>
 
                     <p className="register-link">

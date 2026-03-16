@@ -247,13 +247,14 @@
 }
 
 .back-btn {
-    background: #e5e7eb;
-    color: #1a1a1a;
+    background: transparent;
+    border: 2px solid #1F7A4D;
+    color: #1F7A4D;
     font-weight: 600;
 }
 
 .back-btn:hover:not(:disabled) {
-    background: #d1d5db;
+    background: #f0fdf4;
 }
 
 .nav-btn:disabled,
