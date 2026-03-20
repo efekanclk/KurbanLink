@@ -6,6 +6,7 @@ import RecommendedListings from '../components/home/RecommendedListings';
 import SEO from '../components/SEO';
 import { fetchAnimals, fetchAnimalImages } from '../api/animals';
 import { useAuth } from '../auth/AuthContext';
+import { generateOrganizationStructuredData, generateBreadcrumbStructuredData } from '../utils/structuredData';
 import './Home.css';
 
 const Home = () => {
@@ -97,6 +98,18 @@ const Home = () => {
                     ]
                 })
             }} />
+
+            {/* Organization & Website Schema */}
+            <script type="application/ld+json">
+                {generateOrganizationStructuredData()}
+            </script>
+
+            {/* Breadcrumb Schema */}
+            <script type="application/ld+json">
+                {generateBreadcrumbStructuredData([
+                    { name: "Ana Sayfa", item: "https://kurbanlink.com/" }
+                ])}
+            </script>
 
 
             <div className="home-container">

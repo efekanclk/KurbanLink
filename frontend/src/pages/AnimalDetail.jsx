@@ -10,7 +10,7 @@ import { Edit3, Eye, MessageCircle, Heart, Trash2 } from '../ui/icons';
 import ConfirmDialog from '../components/ui/ConfirmDialog';
 import SimilarListings from '../components/animals/SimilarListings';
 import SEO from '../components/SEO';
-import { generateListingStructuredData } from '../utils/structuredData';
+import { generateListingStructuredData, generateBreadcrumbStructuredData } from '../utils/structuredData';
 
 const AnimalDetail = () => {
     const { id } = useParams();
@@ -235,6 +235,15 @@ const AnimalDetail = () => {
                     {/* JSON-LD Structured Data */}
                     <script type="application/ld+json">
                         {generateListingStructuredData({ ...listing, images })}
+                    </script>
+
+                    {/* Breadcrumb Schema */}
+                    <script type="application/ld+json">
+                        {generateBreadcrumbStructuredData([
+                            { name: "Ana Sayfa", item: "https://kurbanlink.com/" },
+                            { name: listing.animal_type === 'SMALL' ? 'Küçükbaş' : 'Büyükbaş', item: `https://kurbanlink.com/?animal_type=${listing.animal_type}` },
+                            { name: listing.title || listing.breed, item: `https://kurbanlink.com/animals/${id}` }
+                        ])}
                     </script>
                 </>
             )}

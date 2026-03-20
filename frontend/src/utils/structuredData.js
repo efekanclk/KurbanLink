@@ -32,19 +32,64 @@ export const generateListingStructuredData = (listing) => {
 };
 
 /**
- * Generate JSON-LD for organization/website
+ * Generate JSON-LD for organization/website with SearchAction
  */
 export const generateOrganizationStructuredData = () => {
     const structuredData = {
         "@context": "https://schema.org",
-        "@type": "Organization",
+        "@type": "WebSite",
         "name": "KurbanLink",
         "url": "https://kurbanlink.com",
-        "logo": "https://kurbanlink.com/logo.png",
-        "description": "Kurban hayvanı alım satım platformu",
-        "sameAs": [
-            // Add social media links here when available
-        ]
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://kurbanlink.com/?search={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        }
+    };
+
+    return JSON.stringify(structuredData);
+};
+
+/**
+ * Generate Breadcrumb structured data
+ * @param {Array} items - Array of { name, item } objects
+ */
+export const generateBreadcrumbStructuredData = (items) => {
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": items.map((item, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": item.name,
+            "item": item.item
+        }))
+    };
+
+    return JSON.stringify(structuredData);
+};
+
+/**
+ * Generate LocalBusiness structured data for a butcher
+ * @param {Object} butcher - Butcher profile object
+ */
+export const generateButcherStructuredData = (butcher) => {
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": butcher.butcher_name,
+        "image": butcher.profile_image_url || "https://kurbanlink.com/default-butcher.png",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": butcher.city,
+            "addressCountry": "TR"
+        },
+        "description": `${butcher.city} bölgesinde ${butcher.experience_years} yıllık tecrübeli kasap hizmeti.`,
+        "url": `https://kurbanlink.com/butchers/${butcher.id}`,
+        "priceRange": butcher.price_range || "$$"
     };
 
     return JSON.stringify(structuredData);

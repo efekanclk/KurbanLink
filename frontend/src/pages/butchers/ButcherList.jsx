@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ButcherCard from '../../components/butchers/ButcherCard';
 import { fetchButcherProfiles } from '../../api/butchers';
 import { ButcherIcon } from '../../ui/icons';
+import SEO from '../../components/SEO';
 import './ButcherList.css';
 
 const ButcherList = () => {
@@ -30,7 +31,12 @@ const ButcherList = () => {
 
     return (
         <div className="butcher-list-page">
-
+            <SEO 
+                title="Kasap Bul"
+                description="Türkiye genelindeki uzman kasapları keşfedin, randevu alın ve kurban kesim hizmetlerinden yararlanın."
+                keywords="kasap bul, kasap randevu, kurban kesimi, profesyonel kasap, kurban parçalama"
+                url="https://kurbanlink.com/butchers"
+            />
 
             <div className="container">
                 <div className="page-header">

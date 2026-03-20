@@ -5,6 +5,8 @@ import { useAuth } from '../../auth/AuthContext';
 import { fetchButcherProfile } from '../../api/butchers';
 import './ButcherDetail.css';
 import { MapPin } from '../../ui/icons';
+import SEO from '../../components/SEO';
+import { generateButcherStructuredData } from '../../utils/structuredData';
 
 const ButcherDetail = () => {
     const { id } = useParams();
@@ -59,6 +61,19 @@ const ButcherDetail = () => {
 
     return (
         <div className="butcher-detail-page">
+            {butcher && (
+                <>
+                    <SEO 
+                        title={`Kasap ${butcher.butcher_name}`}
+                        description={`${butcher.city} bölgesinde ${butcher.experience_years} yıllık tecrübesiyle hizmet veren profesyonel kasap.`}
+                        keywords={`kasap, ${butcher.city} kasap, kurban kesimi, ${butcher.butcher_name}`}
+                        url={`https://kurbanlink.com/butchers/${id}`}
+                    />
+                    <script type="application/ld+json">
+                        {generateButcherStructuredData(butcher)}
+                    </script>
+                </>
+            )}
 
 
             <div className="container detail-content">
