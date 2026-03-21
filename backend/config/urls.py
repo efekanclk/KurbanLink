@@ -55,6 +55,9 @@ urlpatterns = [
     
     # Partnerships API
     path('api/partnerships/', include('apps.partnerships.urls')),
+
+    # Reviews API (butcher ratings)
+    path('api/reviews/', include('apps.reviews.urls')),
 ]
 
 # Serve media files in development
