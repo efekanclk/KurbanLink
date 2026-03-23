@@ -1,0 +1,327 @@
+@startuml KurbanLink_Database_Schema
+!define TABLENAME(name) class name << (T,#FFAAAA) >>
+!define PRIMARY_KEY {id}
+!define FOREIGN_KEY {*}
+
+' ============================================================
+' ACCOUNTS MODULE
+' ============================================================
+
+TABLENAME(User) {
+  id: BigAutoField (PK)
+  email: EmailField (UNIQUE)
+  username: CharField (UNIQUE, nullable)
+  phone_number: CharField
+  country_code: CharField
+  first_name: CharField
+  last_name: CharField
+  profile_image: ImageField
+  city: CharField
+  district: CharField
+  email_verified: BooleanField (default=False)
+  is_active: BooleanField (default=True)
+  is_staff: BooleanField (default=False)
+  is_superuser: BooleanField (default=False)
+  date_joined: DateTimeField (auto_now_add)
+  last_login: DateTimeField (nullable)
+}
+
+TABLENAME(Role) {
+  id: BigAutoField (PK)
+  code: CharField (UNIQUE) — BUYER, SELLER, BUTCHER
+  name: CharField
+  created_at: DateTimeField (auto_now_add)
+}
+
+TABLENAME(UserRole) {
+  id: BigAutoField (PK)
+  user_id: ForeignKey (User) — ON_DELETE.CASCADE
+  role_id: ForeignKey (Role) — ON_DELETE.CASCADE
+  assigned_at: DateTimeField (auto_now_add)
+  is_active: BooleanField (default=True)
+}
+
+TABLENAME(EmailOTPVerification) {
+  id: UUIDField (PK)
+  email: EmailField (db_index)
+  user_id: ForeignKey (User, nullable) — ON_DELETE.CASCADE
+  otp_hash: CharField — bcrypt hashed
+  created_at: DateTimeField (auto_now_add)
+  expires_at: DateTimeField
+  consumed_at: DateTimeField (nullable)
+  attempt_count: IntegerField (default=0)
+  resend_count: IntegerField (default=0)
+  last_sent_at: DateTimeField (nullable)
+  purpose: CharField — registration, password_reset
+}
+
+' ============================================================
+' ANIMALS MODULE
+' ============================================================
+
+TABLENAME(AnimalListing) {
+  id: BigAutoField (PK)
+  seller_id: ForeignKey (User) — ON_DELETE.CASCADE
+  animal_type: CharField — SMALL (Küçükbaş) / BUYUKBAS (Büyükbaş)
+  species: CharField (nullable) — deprecated
+  title: CharField
+  breed: CharField (nullable) — Koyun, Keçi, Dana, Tosun
+  gender: CharField (nullable) — ERKEK / DISI
+  age_months: IntegerField (nullable)
+  weight: DecimalField (nullable) — kg cinsinden
+  price: DecimalField — TL
+  location: CharField (nullable) — backward compatibility
+  city: CharField (nullable)
+  district: CharField (nullable)
+  ear_tag_no: CharField (UNIQUE, nullable)
+  company: CharField (nullable)
+  description: TextField
+  is_active: BooleanField (default=True)
+  view_count: PositiveIntegerField (default=0)
+  created_at: DateTimeField (auto_now_add)
+  updated_at: DateTimeField (auto_now)
+}
+
+TABLENAME(AnimalImage) {
+  id: BigAutoField (PK)
+  listing_id: ForeignKey (AnimalListing) — ON_DELETE.CASCADE
+  image: ImageField — upload_to='animal_images/'
+  is_primary: BooleanField (default=False)
+  order: IntegerField (default=0) — display sırası
+  created_at: DateTimeField (auto_now_add)
+}
+
+' ============================================================
+' FAVORITES MODULE
+' ============================================================
+
+TABLENAME(Favorite) {
+  id: BigAutoField (PK)
+  user_id: ForeignKey (User) — ON_DELETE.CASCADE
+  animal_id: ForeignKey (AnimalListing) — ON_DELETE.CASCADE
+  created_at: DateTimeField (auto_now_add)
+  -- unique_together: (user, animal)
+}
+
+' ============================================================
+' MESSAGES MODULE
+' ============================================================
+
+TABLENAME(Conversation) {
+  id: BigAutoField (PK)
+  listing_id: ForeignKey (AnimalListing, nullable) — ON_DELETE.CASCADE
+  buyer_id: ForeignKey (User) — ON_DELETE.CASCADE
+  seller_id: ForeignKey (User) — ON_DELETE.CASCADE
+  created_at: DateTimeField (auto_now_add)
+  updated_at: DateTimeField (auto_now)
+}
+
+TABLENAME(Message) {
+  id: BigAutoField (PK)
+  conversation_id: ForeignKey (Conversation) — ON_DELETE.CASCADE
+  sender_id: ForeignKey (User) — ON_DELETE.CASCADE
+  content: TextField
+  is_read: BooleanField (default=False)
+  created_at: DateTimeField (auto_now_add)
+}
+
+TABLENAME(GroupConversation) {
+  id: BigAutoField (PK)
+  partnership_id: ForeignKey (PartnershipListing, OneToOne) — ON_DELETE.CASCADE
+  created_at: DateTimeField (auto_now_add)
+}
+
+TABLENAME(GroupConversationParticipant) {
+  id: BigAutoField (PK)
+  conversation_id: ForeignKey (GroupConversation) — ON_DELETE.CASCADE
+  user_id: ForeignKey (User) — ON_DELETE.CASCADE
+  joined_at: DateTimeField (auto_now_add)
+  last_read_at: DateTimeField (nullable)
+  is_active: BooleanField (default=True)
+}
+
+TABLENAME(GroupMessage) {
+  id: BigAutoField (PK)
+  conversation_id: ForeignKey (GroupConversation) — ON_DELETE.CASCADE
+  sender_id: ForeignKey (User) — ON_DELETE.CASCADE
+  content: TextField
+  created_at: DateTimeField (auto_now_add)
+}
+
+' ============================================================
+' NOTIFICATIONS MODULE
+' ============================================================
+
+TABLENAME(Notification) {
+  id: BigAutoField (PK)
+  user_id: ForeignKey (User) — ON_DELETE.CASCADE
+  type: CharField — LISTING_INTERESTED, MESSAGE_RECEIVED, APPOINTMENT_SCHEDULED
+  title: CharField
+  message: TextField
+  data: JSONField — extra context
+  is_read: BooleanField (default=False)
+  created_at: DateTimeField (auto_now_add)
+}
+
+' ============================================================
+' BUTCHERS MODULE
+' ============================================================
+
+TABLENAME(ButcherProfile) {
+  id: BigAutoField (PK)
+  user_id: ForeignKey (User, OneToOne) — ON_DELETE.CASCADE
+  first_name: CharField (nullable)
+  last_name: CharField (nullable)
+  city: CharField
+  district: CharField (nullable)
+  services: JSONField — list of services
+  price_range: CharField (nullable) — e.g., "500-1000"
+  rating: FloatField (default=0.0) — 0-5 arası
+  is_active: BooleanField (default=True)
+  created_at: DateTimeField (auto_now_add)
+  updated_at: DateTimeField (auto_now)
+}
+
+TABLENAME(Appointment) {
+  id: BigAutoField (PK)
+  butcher_id: ForeignKey (ButcherProfile) — ON_DELETE.CASCADE
+  user_id: ForeignKey (User) — ON_DELETE.CASCADE
+  listing_id: ForeignKey (AnimalListing, nullable) — ON_DELETE.CASCADE
+  status: CharField — PENDING, CONFIRMED, COMPLETED, CANCELLED
+  note: TextField (nullable)
+  appointment_date: DateField
+  appointment_time: TimeField
+  created_at: DateTimeField (auto_now_add)
+  updated_at: DateTimeField (auto_now)
+}
+
+' ============================================================
+' PARTNERSHIPS MODULE
+' ============================================================
+
+TABLENAME(PartnershipListing) {
+  id: BigAutoField (PK)
+  creator_id: ForeignKey (User) — ON_DELETE.CASCADE
+  animal_id: ForeignKey (AnimalListing, nullable) — ON_DELETE.SET_NULL
+  city: CharField
+  person_count: PositiveIntegerField — kaç kişi gerekli
+  description: TextField (nullable)
+  status: CharField — OPEN, CLOSED
+  created_at: DateTimeField (auto_now_add)
+  updated_at: DateTimeField (auto_now)
+}
+
+TABLENAME(PartnershipMembership) {
+  id: BigAutoField (PK)
+  partnership_id: ForeignKey (PartnershipListing) — ON_DELETE.CASCADE
+  user_id: ForeignKey (User) — ON_DELETE.CASCADE
+  joined_at: DateTimeField (auto_now_add)
+  is_active: BooleanField (default=True)
+}
+
+TABLENAME(PartnershipJoinRequest) {
+  id: BigAutoField (PK)
+  partnership_id: ForeignKey (PartnershipListing) — ON_DELETE.CASCADE
+  user_id: ForeignKey (User) — ON_DELETE.CASCADE
+  status: CharField — PENDING, APPROVED, REJECTED
+  created_at: DateTimeField (auto_now_add)
+  decided_at: DateTimeField (nullable)
+}
+
+' ============================================================
+' RECOMMENDATIONS MODULE
+' ============================================================
+
+TABLENAME(ListingInteraction) {
+  id: BigAutoField (PK)
+  user_id: ForeignKey (User, nullable) — ON_DELETE.CASCADE
+  listing_id: ForeignKey (AnimalListing) — ON_DELETE.CASCADE
+  ip_address: GenericIPAddressField — anonim kullanıcılar için
+  interaction_type: CharField — VIEW, FAVORITE, PHONE_CLICK, WHATSAPP_CLICK
+  created_at: DateTimeField (auto_now_add)
+  -- indexes: (ip_address, created_at), (user_id), (listing_id)
+}
+
+TABLENAME(Recommendation) {
+  id: BigAutoField (PK)
+  user_id: ForeignKey (User) — ON_DELETE.CASCADE
+  type: CharField — ITEM_BASED, POPULARITY_BASED
+  object_id: PositiveIntegerField — AnimalListing ID
+  score: FloatField — 0-1 arası benzerlik skoru
+  reason: CharField
+  created_at: DateTimeField (auto_now_add)
+}
+
+' ============================================================
+' REVIEWS MODULE
+' ============================================================
+
+TABLENAME(Review) {
+  id: BigAutoField (PK)
+  reviewer_id: ForeignKey (User) — ON_DELETE.CASCADE
+  butcher_id: ForeignKey (ButcherProfile, nullable) — ON_DELETE.CASCADE
+  seller_id: ForeignKey (User, nullable) — ON_DELETE.CASCADE
+  rating: IntegerField — 1-5 arası
+  comment: TextField (nullable)
+  created_at: DateTimeField (auto_now_add)
+  updated_at: DateTimeField (auto_now)
+}
+
+' ============================================================
+' LOGS MODULE
+' ============================================================
+
+TABLENAME(ActivityLog) {
+  id: BigAutoField (PK)
+  user_id: ForeignKey (User, nullable) — ON_DELETE.SET_NULL
+  action_type: CharField — LOGIN, CREATE, UPDATE, DELETE, ERROR
+  object_type: CharField — LISTING, MESSAGE, APPOINTMENT
+  object_id: PositiveIntegerField (nullable)
+  details: JSONField (nullable)
+  ip_address: GenericIPAddressField (nullable)
+  created_at: DateTimeField (auto_now_add)
+}
+
+' ============================================================
+' RELATIONSHIPS / ASSOCIATIONS
+' ============================================================
+
+User "1" -- "0..*" UserRole : "has"
+Role "1" -- "0..*" UserRole : "assigned to"
+
+User "1" -- "0..*" AnimalListing : "creates (seller)"
+AnimalListing "1" -- "0..*" AnimalImage : "has"
+
+User "1" -- "0..*" Favorite : "saves"
+AnimalListing "1" -- "0..*" Favorite : "is favorited by"
+
+Conversation "1" -- "0..*" Message : "contains"
+User "1" -- "0..*" Message : "sends"
+
+PartnershipListing "1" -- "1" GroupConversation : "has"
+GroupConversation "1" -- "0..*" GroupConversationParticipant : "includes"
+GroupConversation "1" -- "0..*" GroupMessage : "contains"
+User "1" -- "0..*" GroupMessage : "sends"
+
+User "1" -- "0..*" Notification : "receives"
+
+User "1" -- "0..*" ButcherProfile : "is"
+ButcherProfile "1" -- "0..*" Appointment : "receives"
+User "1" -- "0..*" Appointment : "books"
+
+User "1" -- "0..*" PartnershipListing : "creates"
+PartnershipListing "1" -- "0..*" PartnershipMembership : "has members"
+PartnershipListing "1" -- "0..*" PartnershipJoinRequest : "receives"
+User "1" -- "0..*" PartnershipJoinRequest : "sends"
+
+User "1" -- "0..*" ListingInteraction : "has"
+AnimalListing "1" -- "0..*" ListingInteraction : "is interacted with"
+
+User "1" -- "0..*" Recommendation : "receives"
+
+User "1" -- "0..*" Review : "writes"
+ButcherProfile "1" -- "0..*" Review : "receives"
+
+User "1" -- "0..*" ActivityLog : "generates"
+
+@enduml
