@@ -173,6 +173,13 @@
 
 .hamburger-btn {
     font-size: 1.75rem;
+    display: none; /* Hidden by default on desktop */
+}
+
+/* Show only when authenticated on desktop if that was the intent, 
+   but user wants it on mobile for sure. */
+.user-menu-container ~ .hamburger-btn {
+    display: flex;
 }
 
 @media (max-width: 900px) {
@@ -245,9 +252,16 @@
     /* Hide everything not needed in mobile header — handled by bottom nav */
     .public-actions,
     .user-menu-container,
-    .create-listing-header-btn,
-    .hamburger-btn {
+    .create-listing-header-btn {
         display: none !important;
+    }
+
+    .hamburger-btn {
+        display: flex !important;
+        position: absolute;
+        left: 0.5rem;
+        top: 0.5rem;
+        z-index: 20;
     }
 }
 

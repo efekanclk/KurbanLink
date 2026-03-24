@@ -121,14 +121,6 @@ const Header = ({ onMenuClick }) => {
                                     </div>
                                 )}
                             </div>
-
-                            <button
-                                className="header-icon-btn hamburger-btn"
-                                title="Menü"
-                                onClick={onMenuClick}
-                            >
-                                <Menu size={24} />
-                            </button>
                         </>
                     ) : (
                         <div className="public-actions">
@@ -138,6 +130,14 @@ const Header = ({ onMenuClick }) => {
                     )}
 
                     <NotificationDropdown />
+
+                    <button
+                        className="header-icon-btn hamburger-btn"
+                        title="Menü"
+                        onClick={onMenuClick}
+                    >
+                        <Menu size={24} />
+                    </button>
                 </div>
             </div>
         </header>
