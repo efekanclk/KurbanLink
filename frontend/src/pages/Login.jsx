@@ -100,7 +100,7 @@ const Login = () => {
                             >
                                 ← Geri
                             </button>
-                            <button type="submit" disabled={loading} className="submit-btn" style={{ flex: 1 }}>
+                            <button type="submit" disabled={loading} className="submit-btn">
                                 {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
                             </button>
                         </div>

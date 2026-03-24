@@ -22,27 +22,63 @@
     width: 100%;
 }
 
+.login-navigation {
+    display: flex;
+    gap: 16px;
+    margin-top: 2rem;
+    width: 100%;
+}
+
 .back-btn {
     flex: 1;
-    padding: 14px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
+    padding: 12px;
+    border-radius: var(--radius-md) !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
     cursor: pointer;
-    transition: all 0.3s;
-    background: transparent;
-    border: 2px solid var(--primary);
-    color: var(--primary);
+    transition: all 0.2s;
+    background: #f8fafc !important; /* Extremely light gray/blue to avoid true white */
+    border: 2px solid #1f7a4d !important;
+    color: #1f7a4d !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .back-btn:hover:not(:disabled) {
-    background: var(--bg-gray);
+    background: #f1f5f9 !important;
+    transform: translateY(-1px);
 }
 
-.login-navigation {
-    display: flex;
-    gap: 12px;
-    margin-top: 2rem;
+.submit-btn {
+    flex: 2; /* Make the submit button wider if desired, or keep 1 for equal */
+    padding: 12px;
+    background-color: var(--primary);
+    color: white;
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-md);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+    .login-navigation {
+        flex-direction: column-reverse;
+        gap: 12px;
+    }
+    
+    .back-btn, .submit-btn {
+        width: 100%;
+        flex: none;
+    }
 }
 
 .login-header {
@@ -104,27 +140,6 @@
     padding: 0.75rem;
     background-color: #FEE2E2;
     border-radius: var(--radius-sm);
-}
-
-.submit-btn {
-    padding: 0.875rem;
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-base);
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.submit-btn:hover {
-    background-color: var(--primary-hover);
-}
-
-.submit-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
 }
 
 .register-link {
