@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { ButcherIcon, PartnershipIcon } from '../ui/icons';
 import './BottomNav.css';
@@ -25,11 +25,21 @@ const PlusIcon = () => (
 
 const BottomNav = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const location = useLocation();
 
     // Hide on auth pages
     const hiddenPaths = ['/login', '/register'];
     if (hiddenPaths.some(p => location.pathname.startsWith(p))) return null;
+
+    const protectedPaths = ['/messages', '/seller/listings/new', '/butchers', '/partnerships', '/profile'];
+
+    const handleProtectedClick = (e, path) => {
+        if (!user && protectedPaths.includes(path)) {
+            e.preventDefault();
+            navigate('/login');
+        }
+    };
 
     return (
         <nav className="bottom-nav" role="navigation" aria-label="Alt menü">
@@ -38,29 +48,49 @@ const BottomNav = () => {
                 <span>İlanlar</span>
             </NavLink>
 
-            <NavLink to="/messages" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
+            <NavLink 
+                to="/messages" 
+                className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}
+                onClick={(e) => handleProtectedClick(e, '/messages')}
+            >
                 <MessageIcon />
                 <span>Mesajlar</span>
             </NavLink>
 
-            <NavLink to="/seller/listings/new" className="bottom-nav-item bottom-nav-cta">
+            <NavLink 
+                to="/seller/listings/new" 
+                className="bottom-nav-item bottom-nav-cta"
+                onClick={(e) => handleProtectedClick(e, '/seller/listings/new')}
+            >
                 <div className="bottom-nav-plus">
                     <PlusIcon />
                 </div>
                 <span>İlan Ver</span>
             </NavLink>
 
-            <NavLink to="/butchers" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
+            <NavLink 
+                to="/butchers" 
+                className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}
+                onClick={(e) => handleProtectedClick(e, '/butchers')}
+            >
                 <ButcherIcon size={22} />
                 <span>Kasap</span>
             </NavLink>
 
-            <NavLink to="/partnerships" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
+            <NavLink 
+                to="/partnerships" 
+                className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}
+                onClick={(e) => handleProtectedClick(e, '/partnerships')}
+            >
                 <PartnershipIcon size={22} />
                 <span>Ortaklık</span>
             </NavLink>
 
-            <NavLink to="/profile" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
+            <NavLink 
+                to="/profile" 
+                className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}
+                onClick={(e) => handleProtectedClick(e, '/profile')}
+            >
                 {user ? (
                     user.profile_image_url ? (
                         <img

@@ -20,8 +20,7 @@ const RegisterWizard = () => {
     const [kvkkAccepted, setKvkkAccepted] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState({
         hasMinLength: false,
-        hasUppercase: false,
-        hasLowercase: false,
+        hasUpperAndLower: false,
         hasNumber: false,
         hasSpecial: false
     });
@@ -55,8 +54,7 @@ const RegisterWizard = () => {
         if (name === 'password') {
             setPasswordStrength({
                 hasMinLength: value.length >= 8,
-                hasUppercase: /[A-Z]/.test(value),
-                hasLowercase: /[a-z]/.test(value),
+                hasUpperAndLower: /[A-Z]/.test(value) && /[a-z]/.test(value),
                 hasNumber: /[0-9]/.test(value),
                 hasSpecial: /[^A-Za-z0-9]/.test(value)
             });
@@ -116,14 +114,14 @@ const RegisterWizard = () => {
             } else {
                 // Count how many criteria are met
                 const criteriaCount = [
-                    passwordStrength.hasUppercase,
-                    passwordStrength.hasLowercase,
+                    passwordStrength.hasUpperAndLower,
                     passwordStrength.hasNumber,
-                    passwordStrength.hasSpecial
+                    passwordStrength.hasSpecial,
+                    passwordStrength.hasMinLength
                 ].filter(Boolean).length;
 
-                if (criteriaCount < 3) {
-                    newErrors.password = 'Şifre en az 3 farklı karakter türü içermelidir (büyük harf, küçük harf, rakam, özel karakter)';
+                if (criteriaCount < 4) {
+                    newErrors.password = 'Şifre tüm kriterleri karşılamalıdır';
                 }
             }
 
@@ -296,59 +294,39 @@ const RegisterWizard = () => {
                                         name="password"
                                         value={formData.password}
                                         onChange={handleChange}
-                                        onFocus={() => setShowPasswordTooltip(true)}
-                                        onBlur={() => setTimeout(() => setShowPasswordTooltip(false), 200)}
-                                        className={errors.password ? 'error' : ''}
-                                        placeholder="En az 8 karakter"
-                                        style={{ paddingRight: '40px' }}
+                                        className={`password-input ${errors.password ? 'error' : ''}`}
+                                        placeholder="••••••••••"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword((prev) => !prev)}
-                                        style={{
-                                            position: 'absolute',
-                                            right: '12px',
-                                            top: '50%',
-                                            transform: 'translateY(-50%)',
-                                            background: 'transparent',
-                                            border: 'none',
-                                            cursor: 'pointer',
-                                            color: '#6b7280',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            padding: 0
-                                        }}
+                                        className="password-toggle-btn"
                                     >
-                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                        {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
                                     </button>
-
-                                    {/* Password Strength Tooltip */}
-                                    {showPasswordTooltip && (
-                                        <div className="password-tooltip">
-                                            <p className="tooltip-title">
-                                                Şifre en az 8 karakter uzunluğunda olmalı ve aşağıdakilerden en az 3 tanesini içermelidir:
-                                            </p>
-                                            <div className="strength-criteria">
-                                                <div className={`criteria-item ${passwordStrength.hasUppercase ? 'valid' : ''}`}>
-                                                    <span className="criteria-icon">{passwordStrength.hasUppercase ? '✓' : '○'}</span>
-                                                    <span>Büyük harfler</span>
-                                                </div>
-                                                <div className={`criteria-item ${passwordStrength.hasLowercase ? 'valid' : ''}`}>
-                                                    <span className="criteria-icon">{passwordStrength.hasLowercase ? '✓' : '○'}</span>
-                                                    <span>Küçük harfler</span>
-                                                </div>
-                                                <div className={`criteria-item ${passwordStrength.hasNumber ? 'valid' : ''}`}>
-                                                    <span className="criteria-icon">{passwordStrength.hasNumber ? '✓' : '○'}</span>
-                                                    <span>Rakamlar</span>
-                                                </div>
-                                                <div className={`criteria-item ${passwordStrength.hasSpecial ? 'valid' : ''}`}>
-                                                    <span className="criteria-icon">{passwordStrength.hasSpecial ? '✓' : '○'}</span>
-                                                    <span>Özel karakterler (!@#$%^&* vb.)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
+                                </div>
+                                
+                                <div className="password-requirements-list">
+                                    <div className={`requirement-item ${passwordStrength.hasMinLength ? 'met' : ''}`}>
+                                        <span className="bullet">•</span>
+                                        <span>En az 8 karakter</span>
+                                        {passwordStrength.hasMinLength && <span className="check-icon">✓</span>}
+                                    </div>
+                                    <div className={`requirement-item ${passwordStrength.hasNumber ? 'met' : ''}`}>
+                                        <span className="bullet">•</span>
+                                        <span>En az 1 rakam</span>
+                                        {passwordStrength.hasNumber && <span className="check-icon">✓</span>}
+                                    </div>
+                                    <div className={`requirement-item ${passwordStrength.hasSpecial ? 'met' : ''}`}>
+                                        <span className="bullet">•</span>
+                                        <span>En az 1 özel karakter (, : ! * ? - / & # = “ vb.)</span>
+                                        {passwordStrength.hasSpecial && <span className="check-icon">✓</span>}
+                                    </div>
+                                    <div className={`requirement-item ${passwordStrength.hasUpperAndLower ? 'met' : ''}`}>
+                                        <span className="bullet">•</span>
+                                        <span>En az 1 büyük ve 1 küçük harf</span>
+                                        {passwordStrength.hasUpperAndLower && <span className="check-icon">✓</span>}
+                                    </div>
                                 </div>
                                 {errors.password && <span className="error-text">{errors.password}</span>}
                             </div>
