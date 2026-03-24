@@ -37,6 +37,7 @@ const BottomNav = () => {
     const handleProtectedClick = (e, path) => {
         if (!user && protectedPaths.includes(path)) {
             e.preventDefault();
+            alert('Bu işlem için giriş yapmalısınız!');
             navigate('/login');
         }
     };
