@@ -21,7 +21,7 @@
 
 /* Brand - Always Left */
 .header-brand {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
     text-decoration: none;
     color: var(--primary, #2d6a4f);
@@ -200,7 +200,7 @@
     /* Row 1: Logo Centered */
     .header-brand {
         flex: 0 0 100%;
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         text-align: center;
         order: 1;
     }

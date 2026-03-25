@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { ButcherIcon, PartnershipIcon } from '../ui/icons';
+import ConfirmDialog from './ui/ConfirmDialog';
 import './BottomNav.css';
 
 const HomeIcon = () => (
@@ -27,6 +28,8 @@ const BottomNav = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    const [isAuthDialogOpen, setIsAuthDialogOpen] = React.useState(false);
+    const [pendingPath, setPendingPath] = React.useState(null);
 
     // Hide on auth pages
     const hiddenPaths = ['/login', '/register'];
@@ -37,13 +40,33 @@ const BottomNav = () => {
     const handleProtectedClick = (e, path) => {
         if (!user && protectedPaths.includes(path)) {
             e.preventDefault();
-            alert('Bu işlem için giriş yapmalısınız!');
+            setPendingPath(path);
+            setIsAuthDialogOpen(true);
+        }
+    };
+
+    const handleAuthConfirm = () => {
+        setIsAuthDialogOpen(false);
+        if (pendingPath) {
+            navigate(`/login?next=${encodeURIComponent(pendingPath)}`);
+        } else {
             navigate('/login');
         }
     };
 
     return (
-        <nav className="bottom-nav" role="navigation" aria-label="Alt menü">
+        <>
+            <ConfirmDialog
+                isOpen={isAuthDialogOpen}
+                title="Giriş Gerekli"
+                message="Bu işlemi yapmak için giriş yapmalısınız!"
+                confirmText="Giriş Yap"
+                cancelText="Kapat"
+                onConfirm={handleAuthConfirm}
+                onCancel={() => setIsAuthDialogOpen(false)}
+                type="primary"
+            />
+            <nav className="bottom-nav" role="navigation" aria-label="Alt menü">
             <NavLink to="/" end className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
                 <HomeIcon />
                 <span>İlanlar</span>
@@ -113,6 +136,7 @@ const BottomNav = () => {
                 <span>{user ? 'Profil' : 'Giriş'}</span>
             </NavLink>
         </nav>
+        </>
     );
 };
 
