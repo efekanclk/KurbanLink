@@ -182,86 +182,113 @@
     display: flex;
 }
 
+.header-brand {
+    order: 1;
+}
+
+.header-search {
+    order: 2;
+}
+
+.header-actions {
+    order: 3;
+}
+
+.hamburger-btn {
+    order: 4;
+}
+
 @media (max-width: 900px) {
     .app-header {
         height: auto;
-        padding: 0;
+        padding: 0.5rem 0;
     }
 
     .header-container {
-        position: relative;
+        display: flex;
+        flex-direction: row;
         flex-wrap: wrap;
-        padding: 0.5rem 1rem 0.25rem;
-        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        gap: 0.5rem;
         align-items: center;
+        justify-content: space-between;
         height: auto;
     }
 
-    /* Row 1: Logo Centered */
+    /* Top Row: Brand Centered */
     .header-brand {
         flex: 0 0 100%;
-        font-size: 1.6rem;
+        font-size: 1.5rem;
         text-align: center;
         order: 1;
+        padding: 0.25rem 0;
     }
 
-    /* Row 2: Search bar centered, Actions (Bell) right aligned */
     .header-search {
-        order: 2;
-        flex: 0 0 100%;
+        order: 3;
+        flex: 1;
         margin: 0;
-        padding: 0.3rem 0 0 0;
+        max-width: none;
         display: flex;
         justify-content: center;
-        width: 100%;
     }
 
     .header-search form {
         width: 100%;
-        margin: 0 3.5rem;
-        /* Symmetric margins to perfectly center the gray box */
-        padding: 0.25rem 0.75rem;
-        /* Reset padding to normal */
+        margin: 0;
+    }
+
+    .hamburger-btn,
+    .header-actions .notification-btn {
+        display: flex !important;
+        position: static;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 50%;
+        transition: all 0.2s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        border: 1px solid #e9ecef;
+        color: #495057;
+    }
+
+    .hamburger-btn {
+        order: 2;
     }
 
     .header-actions {
-        position: absolute;
-        right: 1rem;
-        bottom: 0.6rem;
-        /* Align vertically with the search bar */
-        order: 2;
-        flex: 0 0 auto;
-        gap: 0.5rem;
+        order: 4;
+        position: static;
+        padding: 0;
+        gap: 0;
         display: flex;
         align-items: center;
-        justify-content: flex-end;
-        z-index: 10;
+    }
+
+    .hamburger-btn:active,
+    .header-actions .notification-btn:active {
+        background: #e9ecef;
+        transform: scale(0.95);
+    }
+
+    .header-actions .notification-dropdown-container {
+        /* Add a circular background to notification too for consistency */
+        background: #f1f3f5;
+        border-radius: 50%;
     }
 
     .header-username {
         display: none;
     }
 
-    /* Small round avatar in header on mobile */
     .header-avatar {
         width: 32px;
         height: 32px;
-        font-size: 0.9rem;
     }
 
-    /* Hide everything not needed in mobile header — handled by bottom nav */
     .public-actions,
     .user-menu-container,
     .create-listing-header-btn {
         display: none !important;
-    }
-
-    .hamburger-btn {
-        display: flex !important;
-        position: absolute;
-        left: 0.5rem;
-        top: 0.5rem;
-        z-index: 20;
     }
 }
 

@@ -38,6 +38,14 @@ const Header = ({ onMenuClick }) => {
     return (
         <header className="app-header">
             <div className="header-container">
+                                <button
+                    className="header-icon-btn hamburger-btn"
+                    title="Menü"
+                    onClick={onMenuClick}
+                >
+                    <Menu size={24} />
+                </button>
+
                 {/* Brand - Always Left */}
                 <Link to="/" className="header-brand">
                     Kurban<span className="brand-accent">Link</span>
@@ -130,14 +138,6 @@ const Header = ({ onMenuClick }) => {
                     )}
 
                     <NotificationDropdown />
-
-                    <button
-                        className="header-icon-btn hamburger-btn"
-                        title="Menü"
-                        onClick={onMenuClick}
-                    >
-                        <Menu size={24} />
-                    </button>
                 </div>
             </div>
         </header>
