@@ -64,14 +64,43 @@ export const AuthProvider = ({ children }) => {
             console.log('[AuthContext] Login success:', userData);
             return true;
         } catch (err) {
-            let errorMsg = 'Giriş başarısız';
+            let errorMsg = 'Giriş başarısız. Lütfen tekrar deneyin.';
 
             if (err.response) {
-                if (err.response.status === 401) {
+                const status = err.response.status;
+                const data = err.response.data;
+
+                if (status === 401) {
+                    // simplejwt returns detail on 401
                     errorMsg = 'E-posta veya şifre hatalı.';
-                } else if (err.response.data?.detail) {
-                    errorMsg = err.response.data.detail;
+                } else if (status === 400) {
+                    // Extract from various DRF error formats
+                    if (data?.detail) {
+                        errorMsg = data.detail;
+                    } else if (data?.non_field_errors?.length) {
+                        errorMsg = data.non_field_errors[0];
+                    } else if (data?.email?.length) {
+                        errorMsg = `E-posta: ${data.email[0]}`;
+                    } else if (data?.password?.length) {
+                        errorMsg = `Şifre: ${data.password[0]}`;
+                    } else {
+                        // Fallback: grab first error from any field
+                        const firstFieldErrors = Object.values(data || {}).flat();
+                        if (firstFieldErrors.length) {
+                            errorMsg = firstFieldErrors[0];
+                        }
+                    }
+                } else if (status === 429) {
+                    errorMsg = data?.detail || 'Çok fazla deneme yapıldı. Lütfen bir süre bekleyip tekrar deneyin.';
+                } else if (status === 500) {
+                    errorMsg = 'Sunucu hatası oluştu. Lütfen daha sonra tekrar deneyin.';
+                } else if (data?.detail) {
+                    errorMsg = data.detail;
                 }
+            } else if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+                errorMsg = 'Bağlantı zaman aşımına uğradı. İnternet bağlantınızı kontrol edin.';
+            } else if (!navigator.onLine) {
+                errorMsg = 'İnternet bağlantısı bulunamadı.';
             }
 
             setError(errorMsg);

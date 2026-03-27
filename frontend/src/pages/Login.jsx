@@ -89,7 +89,12 @@ const Login = () => {
 
                         {successMessage && <div className="success-message" style={{ backgroundColor: '#d4edda', color: '#155724', padding: '1rem', borderRadius: '4px', marginBottom: '1rem', textAlign: 'center' }}>{successMessage}</div>}
 
-                        {error && <div className="error">{error}</div>}
+                        {error && (
+                            <div className="error-message login-error">
+                                <span className="error-icon">⚠️</span>
+                                <span>{error}</span>
+                            </div>
+                        )}
 
                         <div className="login-navigation">
                             <button
