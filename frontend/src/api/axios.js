@@ -29,6 +29,13 @@ apiClient.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
+        // Ignore 401s for auth endpoints (prevents infinite loops and unwanted page reloads)
+        if (originalRequest.url?.includes('/api/auth/login') ||
+            originalRequest.url?.includes('/api/auth/register') ||
+            originalRequest.url?.includes('/api/auth/refresh')) {
+            return Promise.reject(error);
+        }
+
         // If 401 and haven't retried yet
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
