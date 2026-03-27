@@ -51,6 +51,12 @@ const Header = ({ onMenuClick }) => {
                     Kurban<span className="brand-accent">Link</span>
                 </Link>
 
+                {/* Desktop Navigation */}
+                <nav className="header-nav">
+                    <Link to="/butchers" className="header-nav-link">Kasap Bul</Link>
+                    <Link to="/partnerships" className="header-nav-link">Kurban Ortaklığı</Link>
+                </nav>
+
                 {/* Search Bar - Center/Right */}
                 <div className="header-search">
                     <form onSubmit={(e) => {
