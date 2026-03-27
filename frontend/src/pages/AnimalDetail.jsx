@@ -89,7 +89,7 @@ const AnimalDetail = () => {
                 isOpen: true,
                 title: 'Giriş Yapmalısınız',
                 message: 'Bu işlem için giriş yapmalısınız.',
-                type: 'info',
+                type: 'primary',
                 showCancel: false,
                 confirmText: 'Giriş Yap',
                 onConfirm: () => {
