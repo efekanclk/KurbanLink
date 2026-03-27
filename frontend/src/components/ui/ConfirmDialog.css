@@ -66,6 +66,11 @@
     color: white;
 }
 
+.confirm-dialog-header.primary {
+    background: linear-gradient(135deg, #1F7A4D 0%, #16603C 100%);
+    color: white;
+}
+
 .confirm-dialog-header h3 {
     margin: 0;
     font-size: 1.25rem;
@@ -144,6 +149,16 @@
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.confirm-btn-confirm.primary {
+    background: linear-gradient(135deg, #1F7A4D 0%, #16603C 100%);
+}
+
+.confirm-btn-confirm.primary:hover {
+    background: linear-gradient(135deg, #16603C 0%, #0d4a2a 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(31, 122, 77, 0.4);
 }
 
 /* Mobile responsive */

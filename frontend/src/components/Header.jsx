@@ -1,15 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import NotificationDropdown from './NotificationDropdown';
-import './Header.css';
 import { Search, User, LogOut, Menu } from '../ui/icons';
+import NotificationDropdown from './NotificationDropdown';
+import ConfirmDialog from './ui/ConfirmDialog';
+import './Header.css';
 
 const Header = ({ onMenuClick }) => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+    const [pendingPath, setPendingPath] = useState(null);
     const profileRef = useRef(null);
 
     const getInitials = (name) => {
@@ -35,6 +37,23 @@ const Header = ({ onMenuClick }) => {
         navigate('/login');
     };
 
+    const handleProtectedClick = (e, path) => {
+        if (!user) {
+            e.preventDefault();
+            setPendingPath(path);
+            setIsAuthDialogOpen(true);
+        }
+    };
+
+    const handleAuthConfirm = () => {
+        setIsAuthDialogOpen(false);
+        if (pendingPath) {
+            navigate(`/login?next=${encodeURIComponent(pendingPath)}`);
+        } else {
+            navigate('/login');
+        }
+    };
+
     return (
         <header className="app-header">
             <div className="header-container">
@@ -53,8 +72,20 @@ const Header = ({ onMenuClick }) => {
 
                 {/* Desktop Navigation */}
                 <nav className="header-nav">
-                    <Link to="/butchers" className="header-nav-link">Kasap Bul</Link>
-                    <Link to="/partnerships" className="header-nav-link">Kurban Ortaklığı</Link>
+                    <Link 
+                        to="/butchers" 
+                        className="header-nav-link"
+                        onClick={(e) => handleProtectedClick(e, '/butchers')}
+                    >
+                        Kasap Bul
+                    </Link>
+                    <Link 
+                        to="/partnerships" 
+                        className="header-nav-link"
+                        onClick={(e) => handleProtectedClick(e, '/partnerships')}
+                    >
+                        Kurban Ortaklığı
+                    </Link>
                 </nav>
 
                 {/* Search Bar - Center/Right */}
@@ -145,6 +176,17 @@ const Header = ({ onMenuClick }) => {
 
                     <NotificationDropdown />
                 </div>
+
+                <ConfirmDialog
+                    isOpen={isAuthDialogOpen}
+                    title="Giriş Gerekli"
+                    message="Bu işlemi yapmak için giriş yapmalısınız!"
+                    confirmText="Giriş Yap"
+                    cancelText="Kapat"
+                    onConfirm={handleAuthConfirm}
+                    onCancel={() => setIsAuthDialogOpen(false)}
+                    type="primary"
+                />
             </div>
         </header>
     );
