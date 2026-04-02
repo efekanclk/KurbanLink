@@ -64,6 +64,26 @@
     box-shadow: 0 4px 6px rgba(45, 106, 79, 0.3);
 }
 
+.kasap-paneli-header-btn {
+    background-color: transparent;
+    color: var(--primary, #2d6a4f);
+    border: 2px solid var(--primary, #2d6a4f);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.kasap-paneli-header-btn:hover {
+    background-color: var(--bg-gray, #f0fdf4);
+    transform: translateY(-1px);
+}
+
 /* Profile Dropdown Container */
 .user-menu-container {
     position: relative;
@@ -292,6 +312,7 @@
     .public-actions,
     .user-menu-container,
     .create-listing-header-btn,
+    .kasap-paneli-header-btn,
     .header-nav {
         display: none !important;
     }

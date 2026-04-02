@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { Search, User, LogOut, Menu } from '../ui/icons';
+import { Search, User, LogOut, Menu, ButcherIcon } from '../ui/icons';
 import NotificationDropdown from './NotificationDropdown';
 import ConfirmDialog from './ui/ConfirmDialog';
 import './Header.css';
@@ -86,11 +86,6 @@ const Header = ({ onMenuClick }) => {
                     >
                         Kurban Ortaklığı
                     </Link>
-                    {user?.roles?.includes('BUTCHER') && (
-                        <Link to="/butcher/appointments" className="header-nav-link">
-                            Kasap Paneli
-                        </Link>
-                    )}
                 </nav>
 
                 {/* Search Bar - Center/Right */}
@@ -121,6 +116,12 @@ const Header = ({ onMenuClick }) => {
 
                     {user ? (
                         <>
+                            {user?.roles?.includes('BUTCHER') && (
+                                <Link to="/butcher/appointments" className="kasap-paneli-header-btn">
+                                    <ButcherIcon size={18} />
+                                    Kasap Paneli
+                                </Link>
+                            )}
                             <Link to="/seller/listings/new" className="create-listing-header-btn">
                                 + İlan Ver
                             </Link>
