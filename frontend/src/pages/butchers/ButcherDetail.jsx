@@ -266,7 +266,16 @@ const ButcherDetail = () => {
                     </section>
 
                     <section className="cta-section">
-                        {user ? (
+                        {isOwner ? (
+                            <div className="owner-actions">
+                                <Link to="/butcher/appointments" className="btn-primary btn-large">
+                                    Randevularımı Yönet
+                                </Link>
+                                <Link to="/profile" className="btn-secondary btn-large" style={{ marginTop: '1rem', display: 'block', textAlign: 'center' }}>
+                                    Profilimi Düzenle
+                                </Link>
+                            </div>
+                        ) : user ? (
                             <Link to={`/butchers/${id}/book`} className="btn-primary btn-large">
                                 Randevu Al
                             </Link>

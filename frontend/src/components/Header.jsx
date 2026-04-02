@@ -86,6 +86,11 @@ const Header = ({ onMenuClick }) => {
                     >
                         Kurban Ortaklığı
                     </Link>
+                    {user?.roles?.includes('BUTCHER') && (
+                        <Link to="/butcher/appointments" className="header-nav-link">
+                            Kasap Paneli
+                        </Link>
+                    )}
                 </nav>
 
                 {/* Search Bar - Center/Right */}
@@ -116,12 +121,6 @@ const Header = ({ onMenuClick }) => {
 
                     {user ? (
                         <>
-                            {user.roles?.includes('BUTCHER') && (
-                                <Link to="/butcher/appointments" className="nav-link" style={{ marginRight: '15px' }}>
-                                    Kasap Paneli
-                                </Link>
-                            )}
-
                             <Link to="/seller/listings/new" className="create-listing-header-btn">
                                 + İlan Ver
                             </Link>

@@ -1,9 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/AuthContext';
 import './ButcherCard.css';
 
 const ButcherCard = ({ butcher }) => {
     const navigate = useNavigate();
+    const { user } = useAuth();
+
+    const isOwner = user && butcher.user === user.id;
 
     return (
         <div className="butcher-card">
@@ -28,18 +32,37 @@ const ButcherCard = ({ butcher }) => {
             )}
 
             <div className="butcher-actions">
-                <button
-                    className="btn-primary btn-book"
-                    onClick={() => navigate(`/butchers/${butcher.id}/book`)}
-                >
-                    Randevu Al
-                </button>
-                <button
-                    className="btn-secondary btn-view"
-                    onClick={() => navigate(`/butchers/${butcher.id}`)}
-                >
-                    Profili Gör
-                </button>
+                {isOwner ? (
+                    <>
+                        <button
+                            className="btn-primary btn-manage"
+                            onClick={() => navigate('/butcher/appointments')}
+                        >
+                            Randevularımı Yönet
+                        </button>
+                        <button
+                            className="btn-secondary btn-view"
+                            onClick={() => navigate(`/butchers/${butcher.id}`)}
+                        >
+                            Profilimi Gör
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <button
+                            className="btn-primary btn-book"
+                            onClick={() => navigate(`/butchers/${butcher.id}/book`)}
+                        >
+                            Randevu Al
+                        </button>
+                        <button
+                            className="btn-secondary btn-view"
+                            onClick={() => navigate(`/butchers/${butcher.id}`)}
+                        >
+                            Profili Gör
+                        </button>
+                    </>
+                )}
             </div>
         </div>
     );
