@@ -12,6 +12,7 @@
     gap: 3rem;
     align-items: flex-start;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 /* Brand column */
@@ -42,6 +43,7 @@
     display: flex;
     gap: 2.5rem;
     flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 
 .footer-col {
