@@ -36,7 +36,7 @@ const Footer = () => {
             </div>
 
             <div className="footer-bottom">
-                <span>© 2025 KurbanLink. Tüm hakları saklıdır.</span>
+                <span>© {new Date().getFullYear()} KurbanLink. Tüm hakları saklıdır.</span>
             </div>
         </footer>
     );

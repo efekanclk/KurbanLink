@@ -19,8 +19,8 @@
 }
 
 .sidebar-title {
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 1.1rem;
+    font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 0.75rem;
     padding-bottom: 0.5rem;
@@ -45,8 +45,8 @@
     text-align: left;
     background: none;
     border: none;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.95rem;
+    padding: 0.6rem 0.75rem;
+    font-size: 1.05rem;
     color: var(--text-secondary);
     text-decoration: none;
     border-radius: 6px;

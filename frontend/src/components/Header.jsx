@@ -70,23 +70,7 @@ const Header = ({ onMenuClick }) => {
                     Kurban<span className="brand-accent">Link</span>
                 </Link>
 
-                {/* Desktop Navigation */}
-                <nav className="header-nav">
-                    <Link 
-                        to="/butchers" 
-                        className="header-nav-link"
-                        onClick={(e) => handleProtectedClick(e, '/butchers')}
-                    >
-                        Kasap Bul
-                    </Link>
-                    <Link 
-                        to="/partnerships" 
-                        className="header-nav-link"
-                        onClick={(e) => handleProtectedClick(e, '/partnerships')}
-                    >
-                        Kurban Ortaklığı
-                    </Link>
-                </nav>
+                {/* Navigation moved to sidebar and header actions */}
 
                 {/* Search Bar - Center/Right */}
                 <div className="header-search">
