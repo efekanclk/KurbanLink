@@ -74,7 +74,7 @@
 
 .not-found button {
     padding: 0.75rem 2rem;
-    background-color: #3498db;
+    background-color: #2d6a4f;
     color: white;
     border: none;
     border-radius: 4px;
@@ -83,7 +83,7 @@
 }
 
 .not-found button:hover {
-    background-color: #2980b9;
+    background-color: #245a3f;
 }
 
 .error-container {
@@ -102,7 +102,7 @@
 
 .error-container button {
     padding: 0.75rem 2rem;
-    background-color: #3498db;
+    background-color: #2d6a4f;
     color: white;
     border: none;
     border-radius: 4px;
@@ -111,7 +111,7 @@
 }
 
 .error-container button:hover {
-    background-color: #2980b9;
+    background-color: #245a3f;
 }
 
 .inline-error {
@@ -189,11 +189,11 @@
 }
 
 .thumbnail:hover {
-    border-color: #3498db;
+    border-color: #2d6a4f;
 }
 
 .thumbnail.active {
-    border-color: #2980b9;
+    border-color: #245a3f;
 }
 
 .thumbnail img {
@@ -277,7 +277,7 @@
 }
 
 .info-item .seller {
-    color: #3498db;
+    color: #2d6a4f;
     font-size: 0.95rem;
 }
 

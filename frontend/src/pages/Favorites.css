@@ -72,7 +72,7 @@
 
 .retry-btn {
     padding: 0.75rem 2rem;
-    background-color: #3498db;
+    background-color: #2d6a4f;
     color: white;
     border: none;
     border-radius: 6px;
@@ -85,7 +85,7 @@
 }
 
 .retry-btn:hover {
-    background-color: #2980b9;
+    background-color: #245a3f;
 }
 
 /* Empty state */
