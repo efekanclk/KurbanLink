@@ -262,3 +262,35 @@ body {
     font-size: 1rem !important;
   }
 }
+/* ═══════════════════════════════════════════════════════
+   MODERN BACK BUTTON
+   ═══════════════════════════════════════════════════════ */
+.back-btn, .panel-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 0.6rem 1.25rem;
+  border-radius: 12px;
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.back-btn:hover, .panel-back-btn:hover {
+  background-color: #f8fafc;
+  color: #2d6a4f;
+  border-color: #2d6a4f;
+  transform: translateX(-4px);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.back-btn svg, .panel-back-btn svg {
+  transition: transform 0.2s ease;
+}

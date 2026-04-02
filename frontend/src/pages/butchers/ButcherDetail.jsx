@@ -11,7 +11,7 @@ import {
     deleteReview,
 } from '../../api/reviews';
 import './ButcherDetail.css';
-import { MapPin } from '../../ui/icons';
+import { MapPin, ArrowLeft } from '../../ui/icons';
 import SEO from '../../components/SEO';
 import { generateButcherStructuredData } from '../../utils/structuredData';
 
@@ -241,8 +241,8 @@ const ButcherDetail = () => {
                             )}
                         </div>
                     </div>
-                    <button onClick={() => navigate('/butchers')} className="btn-secondary">
-                        ← Geri
+                    <button onClick={() => navigate('/butchers')} className="back-btn">
+                        <ArrowLeft size={18} /> Geri
                     </button>
                 </div>
 

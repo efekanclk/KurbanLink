@@ -6,6 +6,7 @@ import { fetchAnimalImages, deleteAnimalImage, reorderAnimalImages } from '../..
 import ImageManager from '../../components/ImageManager';
 import PriceInput from '../../components/PriceInput';
 import './Seller.css';
+import { ArrowLeft } from '../../ui/icons';
 
 const EditListing = () => {
     const { id } = useParams();
@@ -190,7 +191,7 @@ const EditListing = () => {
                 <h1>İlan Düzenle</h1>
                 <div className="header-actions">
                     <button onClick={() => navigate('/seller/listings')} className="back-btn">
-                        ← Geri
+                        <ArrowLeft size={18} /> Geri
                     </button>
                 </div>
             </div>

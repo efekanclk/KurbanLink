@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { fetchConversations } from '../../api/messages';
 import './Messages.css';
+import { ArrowLeft } from '../../ui/icons';
 
 const ConversationList = () => {
     const navigate = useNavigate();
@@ -85,7 +86,9 @@ const ConversationList = () => {
             <div className="page__container">
                 <div className="messages-header">
                     <h1>Mesajlar</h1>
-                    <button onClick={() => navigate('/')} className="back-btn">← Geri</button>
+                    <button onClick={() => navigate('/')} className="back-btn">
+                        <ArrowLeft size={18} /> Geri
+                    </button>
                 </div>
 
                 {conversations.length === 0 ? (

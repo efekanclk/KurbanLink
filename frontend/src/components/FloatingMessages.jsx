@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchConversations, fetchConversationMessages, sendMessage as sendMessageAPI, markAllRead } from '../api/messages';
 import { useAuth } from '../auth/AuthContext';
 import './FloatingMessages.css';
-import { MessageCircle } from '../ui/icons';
+import { MessageCircle, ArrowLeft } from '../ui/icons';
 
 const FloatingMessages = () => {
     const navigate = useNavigate();
@@ -165,7 +165,9 @@ const FloatingMessages = () => {
                         <>
                             {/* Message Thread */}
                             <div className="panel-header">
-                                <button onClick={handleBack} className="panel-back-btn">← Geri</button>
+                                <button onClick={handleBack} className="panel-back-btn">
+                                    <ArrowLeft size={16} /> Geri
+                                </button>
                                 <h3>{getCounterparty(selectedConversation)}</h3>
                                 <button onClick={() => setIsOpen(false)} className="panel-close-btn">✕</button>
                             </div>

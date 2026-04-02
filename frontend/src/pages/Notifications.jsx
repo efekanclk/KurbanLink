@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { fetchNotifications, markNotificationRead } from '../api/notifications';
 import './Notifications.css';
-import { MessageCircle, Heart, Calendar, Bell } from '../ui/icons';
+import { MessageCircle, Heart, Calendar, Bell, ArrowLeft } from '../ui/icons';
 
 const Notifications = () => {
     const navigate = useNavigate();
@@ -144,7 +144,9 @@ const Notifications = () => {
             <div className="page__container">
                 <div className="notifications-header">
                     <h1>Bildirimler</h1>
-                    <button onClick={() => navigate('/')} className="back-btn">← Geri</button>
+                    <button onClick={() => navigate('/')} className="back-btn">
+                        <ArrowLeft size={18} /> Geri
+                    </button>
                 </div>
 
                 {notifications.length === 0 ? (

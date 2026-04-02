@@ -5,7 +5,7 @@ import { cities, getDistrictsForCity } from '../data/locations';
 import axios from 'axios';
 import { compressImage } from '../utils/imageUtils';
 import './ProfileEdit.css';
-import { User } from '../ui/icons';
+import { User, ArrowLeft } from '../ui/icons';
 
 const ProfileEdit = () => {
     const navigate = useNavigate();
@@ -144,7 +144,9 @@ const ProfileEdit = () => {
             <div className="profile-edit-container">
                 <div className="edit-header">
                     <h1>Profili Düzenle</h1>
-                    <button onClick={handleCancel} className="back-btn">← Geri</button>
+                    <button onClick={handleCancel} className="back-btn">
+                        <ArrowLeft size={18} /> Geri
+                    </button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="edit-form">

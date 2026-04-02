@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, ArrowRight } from 'lucide-react';
 import SEO from '../components/SEO';
 import { compressImage } from '../utils/imageUtils';
 import './RegisterWizard.css';
@@ -607,7 +607,7 @@ const RegisterWizard = () => {
                                 onClick={handleBack}
                                 disabled={loading}
                             >
-                                ← Geri
+                                <ArrowLeft size={18} /> Geri
                             </button>
                         )}
 
@@ -618,7 +618,7 @@ const RegisterWizard = () => {
                                 onClick={handleNext}
                                 disabled={loading}
                             >
-                                İleri →
+                                İleri <ArrowRight size={18} />
                             </button>
                         )}
                     </div>

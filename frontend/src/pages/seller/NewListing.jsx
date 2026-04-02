@@ -4,6 +4,7 @@ import { createListing, uploadListingImages } from '../../api/sellers';
 import { cities, getDistrictsForCity } from '../../data/locations';
 import { compressImage } from '../../utils/imageUtils';
 import './Seller.css';
+import { ArrowLeft } from '../../ui/icons';
 
 const NewListing = () => {
     const navigate = useNavigate();
@@ -291,7 +292,7 @@ const NewListing = () => {
                 <h1>Yeni İlan</h1>
                 <div className="header-actions">
                     <button onClick={() => navigate('/seller/listings')} className="back-btn">
-                        ← Geri
+                        <ArrowLeft size={18} /> Geri
                     </button>
                 </div>
             </div>

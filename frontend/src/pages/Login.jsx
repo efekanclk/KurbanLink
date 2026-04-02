@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link, useSearchParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import SEO from '../components/SEO';
 import './Login.css';
 
@@ -103,7 +103,7 @@ const Login = () => {
                                 onClick={() => navigate('/')}
                                 disabled={loading}
                             >
-                                ← Geri
+                                <ArrowLeft size={18} /> Geri
                             </button>
                             <button type="submit" disabled={loading} className="submit-btn">
                                 {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
