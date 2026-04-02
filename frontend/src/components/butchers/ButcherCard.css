@@ -14,8 +14,33 @@
     box-shadow: var(--shadow-lg);
 }
 
+.butcher-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.butcher-avatar, .butcher-avatar-placeholder {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.butcher-avatar-placeholder {
+    background: var(--bg-gray);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
 .butcher-header h3 {
-    margin: 0 0 0.5rem 0;
+    margin: 0;
     font-size: 1.25rem;
     color: var(--text);
     font-weight: 700;

@@ -15,6 +15,7 @@ class ButcherProfileSerializer(serializers.ModelSerializer):
     
     user_email = serializers.EmailField(source='user.email', read_only=True)
     butcher_name = serializers.SerializerMethodField()
+    profile_image_url = serializers.SerializerMethodField()
     
     class Meta:
         model = ButcherProfile
@@ -22,6 +23,7 @@ class ButcherProfileSerializer(serializers.ModelSerializer):
             'id',
             'user',
             'user_email',
+            'profile_image_url',
             'first_name',
             'last_name',
             'butcher_name',  # Computed field for display
@@ -48,6 +50,15 @@ class ButcherProfileSerializer(serializers.ModelSerializer):
     def get_butcher_name(self, obj):
         """Return full name for display."""
         return f"{obj.first_name} {obj.last_name}"
+    
+    def get_profile_image_url(self, obj):
+        """Return associated user's profile image URL."""
+        if obj.user.profile_image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.user.profile_image.url)
+            return obj.user.profile_image.url
+        return None
     
     def validate(self, attrs):
         """

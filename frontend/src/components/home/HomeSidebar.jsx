@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { cities } from '../../data/locations';
-import { Search, PartnershipIcon, Filter, X, Heart, ClipboardList, Calendar } from '../../ui/icons';
+import { Search, PartnershipIcon, Filter, X, Heart, ClipboardList, Calendar, ButcherIcon } from '../../ui/icons';
 import './HomeSidebar.css';
 
 const HomeSidebar = () => {
@@ -73,6 +73,29 @@ const HomeSidebar = () => {
     // Render filter content (shared between desktop sidebar and mobile modal)
     const renderFilterContent = () => (
         <>
+            {/* 0. Hızlı Erişim (Üst Menü) */}
+            <div className="sidebar-section">
+                <h3 className="sidebar-title">Hızlı Erişim</h3>
+                <ul className="sidebar-list">
+                    <li>
+                        <Link to="/butchers" className="sidebar-link partnership-link">
+                            <ButcherIcon size={16} />
+                            Kasap Bul
+                        </Link>
+                    </li>
+                    <li>
+                        <Link 
+                            to="/partnerships" 
+                            className="sidebar-link partnership-link"
+                            onClick={(e) => handleProtectedLink(e, '/partnerships')}
+                        >
+                            <PartnershipIcon size={16} />
+                            Ortak Bul (Hisse)
+                        </Link>
+                    </li>
+                </ul>
+            </div>
+
             {/* 0. Hızlı İşlemler (Sadece Giriş Yapmış Kullanıcılar İçin) */}
             {user && (
                 <div className="sidebar-section">
@@ -228,25 +251,15 @@ const HomeSidebar = () => {
                 </div>
             </div>
 
-            {/* 3. Hızlı Erişim */}
+            {/* 3. Diğer */}
             <div className="sidebar-section">
-                <h3 className="sidebar-title">Hızlı Erişim</h3>
+                <h3 className="sidebar-title">Diğer</h3>
                 <ul className="sidebar-list">
                     <li>
                         <Link to="/search" className="sidebar-link">
                             <Search size={16} style={{ marginRight: '0.5rem' }} />
                             Detaylı Arama
                         </Link>
-                    </li>
-                    <li>
-                        <a
-                            href="/partnerships"
-                            className="sidebar-link partnership-link"
-                            onClick={(e) => handleProtectedLink(e, '/partnerships')}
-                        >
-                            <PartnershipIcon size={16} style={{ marginRight: '0.5rem' }} />
-                            Kurban Ortaklığı
-                        </a>
                     </li>
                 </ul>
             </div>

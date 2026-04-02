@@ -11,8 +11,33 @@
 .detail-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 2rem;
+}
+
+.detail-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.detail-avatar, .detail-avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.detail-avatar-placeholder {
+    background: var(--bg-gray);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 800;
 }
 
 .detail-header h1 {

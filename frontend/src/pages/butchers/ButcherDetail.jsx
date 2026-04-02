@@ -213,20 +213,33 @@ const ButcherDetail = () => {
 
             <div className="container detail-content">
                 <div className="detail-header">
-                    <div>
-                        <h1>{butcher.butcher_name}</h1>
-                        <p className="location">
-                            <MapPin size={14} style={{ marginRight: '0.25rem' }} />
-                            {butcher.city}
-                        </p>
-                        {/* Aggregate rating display */}
-                        {butcher.rating > 0 && (
-                            <div className="aggregate-rating">
-                                <StarRating value={Math.round(butcher.rating)} readonly size={20} />
-                                <span className="rating-value">{butcher.rating.toFixed(1)}</span>
-                                <span className="rating-count">({reviews.length} değerlendirme)</span>
+                    <div className="detail-header-left">
+                        {butcher.profile_image_url ? (
+                            <img
+                                src={butcher.profile_image_url}
+                                alt={butcher.butcher_name}
+                                className="detail-avatar"
+                            />
+                        ) : (
+                            <div className="detail-avatar-placeholder">
+                                {butcher.butcher_name?.charAt(0).toUpperCase()}
                             </div>
                         )}
+                        <div className="header-text">
+                            <h1>{butcher.butcher_name}</h1>
+                            <p className="location">
+                                <MapPin size={14} style={{ marginRight: '0.25rem' }} />
+                                {butcher.city}
+                            </p>
+                            {/* Aggregate rating display */}
+                            {butcher.rating > 0 && (
+                                <div className="aggregate-rating">
+                                    <StarRating value={Math.round(butcher.rating)} readonly size={20} />
+                                    <span className="rating-value">{butcher.rating.toFixed(1)}</span>
+                                    <span className="rating-count">({reviews.length} değerlendirme)</span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <button onClick={() => navigate('/butchers')} className="btn-secondary">
                         ← Geri

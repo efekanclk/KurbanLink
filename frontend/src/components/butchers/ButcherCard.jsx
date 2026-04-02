@@ -12,8 +12,21 @@ const ButcherCard = ({ butcher }) => {
     return (
         <div className="butcher-card">
             <div className="butcher-header">
-                <h3>{butcher.butcher_name}</h3>
-                <p className="city">{butcher.city}</p>
+                {butcher.profile_image_url ? (
+                    <img
+                        src={butcher.profile_image_url}
+                        alt={butcher.butcher_name}
+                        className="butcher-avatar"
+                    />
+                ) : (
+                    <div className="butcher-avatar-placeholder">
+                        {butcher.butcher_name?.charAt(0).toUpperCase()}
+                    </div>
+                )}
+                <div className="butcher-title-info">
+                    <h3>{butcher.butcher_name}</h3>
+                    <p className="city">{butcher.city}</p>
+                </div>
             </div>
 
             {butcher.services && butcher.services.length > 0 && (
