@@ -93,6 +93,12 @@ const HomeSidebar = () => {
                             Ortak Bul (Hisse)
                         </Link>
                     </li>
+                    <li>
+                        <Link to="/search" className="sidebar-link partnership-link">
+                            <Search size={16} />
+                            Detaylı Arama
+                        </Link>
+                    </li>
                     {user && (
                         <>
                             <li>
@@ -244,19 +250,6 @@ const HomeSidebar = () => {
                         </label>
                     </div>
                 </div>
-            </div>
-
-            {/* 3. Diğer */}
-            <div className="sidebar-section">
-                <h3 className="sidebar-title">Diğer</h3>
-                <ul className="sidebar-list">
-                    <li>
-                        <Link to="/search" className="sidebar-link">
-                            <Search size={16} style={{ marginRight: '0.5rem' }} />
-                            Detaylı Arama
-                        </Link>
-                    </li>
-                </ul>
             </div>
         </>
     );
