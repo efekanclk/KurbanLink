@@ -4,9 +4,138 @@
     padding-bottom: 4rem;
 }
 
+/* ── Banner Header ── */
+.butcher-panel-banner {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.butcher-panel-banner__bg {
+    height: 100px;
+    background: linear-gradient(135deg, #2d6a4f 0%, #40916c 50%, #52b788 100%);
+}
+
+.butcher-back-btn {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px);
+    border-color: transparent !important;
+    color: #2d6a4f !important;
+    margin-bottom: 0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.butcher-back-btn:hover {
+    background: white !important;
+}
+
+.butcher-panel-banner__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+}
+
+.butcher-panel-banner__info h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0 0 0.25rem 0;
+}
+
+.butcher-panel-banner__info p {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.butcher-edit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #2d6a4f;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.butcher-edit-btn:hover {
+    background: #245a3f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(45, 106, 79, 0.3);
+}
+
+/* ── Profile Form Card ── */
+.butcher-profile-form-card {
+    max-width: 600px;
+    margin: 2rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.form-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.form-card-header h1 {
+    font-size: 1.4rem;
+    color: #1a202c;
+    margin: 0;
+    font-weight: 700;
+}
+
+.form-card-subtitle {
+    color: #64748b;
+    margin: 0 0 1.5rem 0;
+    font-size: 0.95rem;
+}
+
+.butcher-profile-form-card .form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    background: white;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+.butcher-profile-form-card .form-group select:focus {
+    border-color: #2d6a4f;
+    outline: none;
+}
+
+.butcher-profile-form-card .error-banner {
+    margin-bottom: 1.25rem;
+}
+
+.butcher-profile-form-card .complete-btn {
+    margin-top: 0.75rem;
+}
+
+/* ── Appointments ── */
 .appointments-content {
     padding-top: 2rem;
 }
+
 
 .appointments-sections {
     display: flex;
@@ -208,5 +337,30 @@
 
     .section-title {
         font-size: 1.25rem;
+    }
+
+    .butcher-panel-banner__bg {
+        height: 80px;
+    }
+
+    .butcher-panel-banner__content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .butcher-panel-banner__info h1 {
+        font-size: 1.3rem;
+    }
+
+    .butcher-edit-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .butcher-profile-form-card {
+        margin: 1rem;
+        padding: 1.5rem;
     }
 }

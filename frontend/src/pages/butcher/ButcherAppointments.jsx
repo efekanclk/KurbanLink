@@ -10,7 +10,7 @@ import {
     updateButcherProfile
 } from '../../api/butchers';
 import './ButcherAppointments.css';
-import { Calendar, Clock } from '../../ui/icons';
+import { Calendar, Clock, ArrowLeft, Edit3 } from '../../ui/icons';
 import { cities, getDistrictsForCity } from '../../data/locations';
 
 const ButcherPanel = () => {
@@ -57,9 +57,6 @@ const ButcherPanel = () => {
             }
         } catch (err) {
             console.error('Profile check failed:', err);
-            // If 404/403 or network error, assume no profile or handle gracefully
-            // If backend returns null for 'me' (as seen in views.py), it goes to 'if (profile)' check above.
-            // But if it errors out, setHasProfile(false) might be safe or show error.
             setHasProfile(false);
         } finally {
             setProfileLoading(false);
@@ -94,7 +91,7 @@ const ButcherPanel = () => {
 
             await createButcherProfile(payload);
             setHasProfile(true);
-            loadAppointments(); // Load appointments (likely empty)
+            loadAppointments();
         } catch (err) {
             console.error('Create profile failed:', err);
             const msg = err.response?.data?.error?.message ||
@@ -121,7 +118,7 @@ const ButcherPanel = () => {
 
             await updateButcherProfile(currentProfile.id, payload);
             setIsEditing(false);
-            await checkProfile(); // Reload data
+            await checkProfile();
         } catch (err) {
             console.error('Update profile failed:', err);
             const msg = err.response?.data?.detail || 'Profil güncellenemedi.';
@@ -289,28 +286,28 @@ const ButcherPanel = () => {
         return (
             <div className="butcher-appointments-page">
                 <div className="container">
-                    <div className="create-profile-card" style={{ maxWidth: '600px', margin: '40px auto', background: 'white', padding: '30px', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                            <h1 style={{ fontSize: '24px', color: '#1a1a1a', margin: 0 }}>
+                    <div className="butcher-profile-form-card">
+                        <div className="form-card-header">
+                            <h1>
                                 {isEditMode ? 'Profili Düzenle' : 'Kasap İlanı Oluştur'}
                             </h1>
                             {isEditMode && (
                                 <button
                                     onClick={() => setIsEditing(false)}
-                                    style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '14px' }}
+                                    className="back-btn"
                                 >
-                                    İptal
+                                    <ArrowLeft size={16} /> Geri
                                 </button>
                             )}
                         </div>
-                        <p style={{ color: '#666', marginBottom: '24px' }}>
+                        <p className="form-card-subtitle">
                             {isEditMode
                                 ? 'Profil bilgilerinizi aşağıdan güncelleyebilirsiniz.'
                                 : 'Kasaplık hizmetlerinizi sunmak ve randevu alabilmek için profilinizi oluşturun.'}
                         </p>
 
                         {createError && (
-                            <div className="error-banner" style={{ marginBottom: '20px' }}>
+                            <div className="error-banner">
                                 {createError}
                             </div>
                         )}
@@ -345,7 +342,6 @@ const ButcherPanel = () => {
                                     value={profileData.city}
                                     onChange={handleInputChange}
                                     required
-                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '2px solid #e0e0e0', background: 'white' }}
                                 >
                                     <option value="">Şehir Seçin</option>
                                     {cities.map(city => (
@@ -359,7 +355,6 @@ const ButcherPanel = () => {
                                     name="district"
                                     value={profileData.district}
                                     onChange={handleInputChange}
-                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '2px solid #e0e0e0', background: 'white' }}
                                     disabled={!profileData.city}
                                 >
                                     <option value="">{profileData.city ? 'İlçe Seçin' : 'Önce Şehir Seçin'}</option>
@@ -393,7 +388,6 @@ const ButcherPanel = () => {
                                 type="submit"
                                 className="complete-btn"
                                 disabled={createLoading}
-                                style={{ marginTop: '10px' }}
                             >
                                 {createLoading
                                     ? (isEditMode ? 'Güncelleniyor...' : 'Oluşturuluyor...')
@@ -410,18 +404,22 @@ const ButcherPanel = () => {
     return (
         <div className="butcher-appointments-page">
             <div className="container appointments-content">
-                <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div>
-                        <h1>Kasap Paneli</h1>
-                        <p className="subtitle">Gelen randevu isteklerinizi ve ilanınızı yönetin</p>
-                    </div>
-                    <button
-                        onClick={startEditing}
-                        className="btn-primary"
-                        style={{ padding: '8px 16px', fontSize: '14px', background: '#2d6a4f', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
-                    >
-                        Profili Düzenle
+                {/* Modern Banner Header */}
+                <div className="butcher-panel-banner">
+                    <div className="butcher-panel-banner__bg"></div>
+                    <button onClick={() => navigate('/')} className="back-btn butcher-back-btn">
+                        <ArrowLeft size={18} /> Ana Sayfa
                     </button>
+                    <div className="butcher-panel-banner__content">
+                        <div className="butcher-panel-banner__info">
+                            <h1>Kasap Paneli</h1>
+                            <p>Gelen randevu isteklerinizi ve ilanınızı yönetin</p>
+                        </div>
+                        <button onClick={startEditing} className="butcher-edit-btn">
+                            <Edit3 size={16} />
+                            Profili Düzenle
+                        </button>
+                    </div>
                 </div>
 
                 {loading ? (
