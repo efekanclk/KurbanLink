@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { fetchMyListings, deleteListing, permanentlyDeleteListing } from '../../api/sellers';
 import { getUserIdFromToken } from '../../utils/jwt';
-import { ClipboardList, Trash2, Plus, ArrowLeft, LogOut, MapPin, Tag, CheckCircle2, Image as ImageIcon } from '../../ui/icons';
+import { ClipboardList, Trash2, Plus, ArrowLeft, MapPin, Tag, CheckCircle2, Image as ImageIcon } from '../../ui/icons';
 import './Seller.css';
 
 const SellerListings = () => {
@@ -104,9 +104,6 @@ const SellerListings = () => {
                     </button>
                     <button onClick={() => navigate('/')} className="back-btn">
                         <ArrowLeft size={18} /> Geri
-                    </button>
-                    <button onClick={logout} className="logout-btn">
-                        <LogOut size={18} /> Çıkış
                     </button>
                 </div>
             </div>
