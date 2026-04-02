@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import SEO from '../components/SEO';
 import './Profile.css';
-import { MapPin, Edit3, Heart, MessageCircle, Calendar, Mail, Phone, ClipboardList } from '../ui/icons';
+import { MapPin, Edit3, Heart, MessageCircle, Calendar, Mail, Phone, ClipboardList, ArrowLeft } from '../ui/icons';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -33,56 +33,52 @@ const Profile = () => {
                 url="https://kurbanlink.com/profile"
             />
             <div className="page__container">
-                <div className="profile-header">
-                    <button onClick={() => navigate('/')} className="back-btn" style={{ background: 'transparent', color: '#64748b', border: '1px solid #e2e8f0' }}>
-                        ← İlanlara Dön
+                {/* Modern Profile Banner */}
+                <div className="profile-banner">
+                    <div className="profile-banner__bg"></div>
+                    <button onClick={() => navigate('/')} className="back-btn profile-back-btn">
+                        <ArrowLeft size={18} /> İlanlara Dön
                     </button>
-                    <h1>Profilim</h1>
-                    <div style={{ width: '100px' }}></div> {/* Spacer for centering if needed, or just auto */}
-                </div>
-
-                {/* Main Profile Card */}
-                <div className="profile-main-card">
-                    <div className="profile-avatar-section">
-                        {user?.profile_image_url ? (
-                            <img
-                                src={user.profile_image_url}
-                                alt={user.username}
-                                className="profile-avatar"
-                            />
-                        ) : (
-                            <div className="profile-avatar">
-                                {getInitials(user?.username)}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="profile-info-section">
-                        <h2 className="profile-name">{user?.username}</h2>
-                        <div className="profile-location">
-                            <MapPin size={14} style={{ marginRight: '0.25rem' }} />
-                            {getLocation()}
+                    <div className="profile-banner__content">
+                        <div className="profile-avatar-wrapper">
+                            {user?.profile_image_url ? (
+                                <img
+                                    src={user.profile_image_url}
+                                    alt={user.username}
+                                    className="profile-avatar"
+                                />
+                            ) : (
+                                <div className="profile-avatar">
+                                    {getInitials(user?.username)}
+                                </div>
+                            )}
                         </div>
-                        <div className="profile-contact">
-                            <div className="contact-item">
-                                <Mail size={14} style={{ marginRight: '0.25rem' }} />
-                                {user?.email}
+                        <div className="profile-info-section">
+                            <h1 className="profile-name">{user?.username}</h1>
+                            <div className="profile-location">
+                                <MapPin size={15} />
+                                {getLocation()}
                             </div>
-                            <div className="contact-item">
-                                <Phone size={14} style={{ marginRight: '0.25rem' }} />
-                                {formatPhone(user?.phone_number, user?.country_code)}
+                            <div className="profile-contact">
+                                <div className="contact-item">
+                                    <Mail size={14} />
+                                    {user?.email}
+                                </div>
+                                <div className="contact-item">
+                                    <Phone size={14} />
+                                    {formatPhone(user?.phone_number, user?.country_code)}
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="profile-actions-section">
-                        <button
-                            onClick={() => navigate('/profile/edit')}
-                            className="edit-profile-btn"
-                        >
-                            <Edit3 size={16} style={{ marginRight: '0.5rem' }} />
-                            Profili Düzenle
-                        </button>
+                        <div className="profile-actions-section">
+                            <button
+                                onClick={() => navigate('/profile/edit')}
+                                className="edit-profile-btn"
+                            >
+                                <Edit3 size={16} />
+                                Profili Düzenle
+                            </button>
+                        </div>
                     </div>
                 </div>
 
