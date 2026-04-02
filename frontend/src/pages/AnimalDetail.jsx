@@ -6,7 +6,7 @@ import { fetchAnimal, fetchAnimalImages } from '../api/animals';
 import { createConversation } from '../api/messages';
 import { deleteListing } from '../api/sellers';
 import './AnimalDetail.css';
-import { Edit3, Eye, MessageCircle, Heart, Trash2 } from '../ui/icons';
+import { Edit3, Eye, MessageCircle, Heart, Trash2, ArrowLeft } from '../ui/icons';
 import ConfirmDialog from '../components/ui/ConfirmDialog';
 import SimilarListings from '../components/animals/SimilarListings';
 import SEO from '../components/SEO';
@@ -135,10 +135,11 @@ const AnimalDetail = () => {
         return (
             <div className="detail-container">
                 <div className="detail-header">
-                    <button onClick={() => navigate('/')} className="back-btn">← İlanlara Dön</button>
+                    <button onClick={() => navigate('/')} className="back-btn">
+                        <ArrowLeft size={18} /> İlanlara Dön
+                    </button>
                     <div className="header-actions">
                         <button onClick={() => navigate('/favorites')} className="favorites-link-btn">Favorilerim</button>
-                        <button onClick={logout} className="logout-btn">Çıkış</button>
                     </div>
                 </div>
                 <div className="loading">İlan yükleniyor...</div>
@@ -150,10 +151,11 @@ const AnimalDetail = () => {
         return (
             <div className="detail-container">
                 <div className="detail-header">
-                    <button onClick={() => navigate('/')} className="back-btn">← İlanlara Dön</button>
+                    <button onClick={() => navigate('/')} className="back-btn">
+                        <ArrowLeft size={18} /> İlanlara Dön
+                    </button>
                     <div className="header-actions">
                         <button onClick={() => navigate('/favorites')} className="favorites-link-btn">Favorilerim</button>
-                        <button onClick={logout} className="logout-btn">Çıkış</button>
                     </div>
                 </div>
                 <div className="not-found">
@@ -169,10 +171,11 @@ const AnimalDetail = () => {
         return (
             <div className="detail-container">
                 <div className="detail-header">
-                    <button onClick={() => navigate('/')} className="back-btn">← İlanlara Dön</button>
+                    <button onClick={() => navigate('/')} className="back-btn">
+                        <ArrowLeft size={18} /> İlanlara Dön
+                    </button>
                     <div className="header-actions">
                         <button onClick={() => navigate('/favorites')} className="favorites-link-btn">Favorilerim</button>
-                        <button onClick={logout} className="logout-btn">Çıkış</button>
                     </div>
                 </div>
                 <div className="error-container">
@@ -249,10 +252,11 @@ const AnimalDetail = () => {
             )}
 
             <div className="detail-header">
-                <button onClick={() => navigate('/')} className="back-btn">← İlanlara Dön</button>
+                <button onClick={() => navigate('/')} className="back-btn">
+                    <ArrowLeft size={18} /> İlanlara Dön
+                </button>
                 <div className="header-actions">
                     <button onClick={() => navigate('/favorites')} className="favorites-link-btn">Favorilerim</button>
-                    <button onClick={logout} className="logout-btn">Çıkış</button>
                 </div>
             </div>
 
