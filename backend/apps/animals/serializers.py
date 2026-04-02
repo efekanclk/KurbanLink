@@ -17,6 +17,7 @@ class AnimalListingSerializer(serializers.ModelSerializer):
     seller_username = serializers.CharField(source='seller.username', read_only=True)
     seller_phone_number = serializers.CharField(source='seller.phone_number', read_only=True)
     age_display = serializers.SerializerMethodField()
+    primary_image_url = serializers.SerializerMethodField()
     
     class Meta:
         model = AnimalListing
@@ -43,6 +44,7 @@ class AnimalListingSerializer(serializers.ModelSerializer):
             'description',
             'is_active',
             'view_count',
+            'primary_image_url',
             'created_at',
         ]
         read_only_fields = ['id', 'seller', 'created_at']
@@ -66,6 +68,20 @@ class AnimalListingSerializer(serializers.ModelSerializer):
             return f"{years} yaş"
         else:
             return f"{years} yaş {months} ay"
+    
+    def get_primary_image_url(self, obj):
+        """Return URL for the primary image if it exists."""
+        primary_image = obj.images.filter(is_primary=True).first()
+        if not primary_image:
+            # Fallback to first image if no primary is set
+            primary_image = obj.images.first()
+            
+        if primary_image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(primary_image.image.url)
+            return primary_image.image.url
+        return None
     
 
     

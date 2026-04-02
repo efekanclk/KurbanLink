@@ -9,15 +9,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 2rem;
+    padding: 1rem 2rem;
     background: white;
-    border-bottom: 1px solid #ecf0f1;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #edf2f7;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .seller-header h1 {
     margin: 0;
-    color: #2c3e50;
+    color: #1a202c;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 .header-actions {
@@ -28,138 +30,250 @@
 .back-btn,
 .logout-btn,
 .create-btn {
-    padding: 0.5rem 1.25rem;
+    padding: 0.6rem 1.25rem;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
-}
-
-.back-btn {
-    background-color: #3498db;
-    color: white;
-}
-
-.back-btn:hover {
-    background-color: #2980b9;
-}
-
-.logout-btn {
-    background-color: #e74c3c;
-    color: white;
-}
-
-.logout-btn:hover {
-    background-color: #c0392b;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .create-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #2d6a4f;
     color: white;
 }
 
 .create-btn:hover {
+    background-color: #1b4332;
     transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(45, 106, 79, 0.2);
+}
+
+.back-btn {
+    background-color: white;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+.back-btn:hover {
+    background-color: #f7fafc;
+    border-color: #cbd5e0;
+}
+
+.logout-btn {
+    background-color: #ebf8ff;
+    color: #2b6cb0;
+    border: 1px solid #bee3f8;
+}
+
+.logout-btn:hover {
+    background-color: #bee3f8;
+}
+
+/* Page Layout */
+.seller-page-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Sidebar Navigation */
+.seller-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: #4a5568;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.sidebar-item:hover {
+    background-color: #edf2f7;
+    color: #2d3748;
+}
+
+.sidebar-item.active {
+    background-color: #e6fffa;
+    color: #2d6a4f;
+    font-weight: 600;
 }
 
 /* Listings Grid */
-.listings-container {
-    max-width: 1200px !important;
+.seller-content {
+    min-width: 0;
 }
 
 .listings-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
 }
 
 .listing-card {
     background: white;
     border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #edf2f7;
+    display: flex;
+    flex-direction: column;
 }
 
 .listing-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.listing-image {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background-color: #f7fafc;
+    position: relative;
+    overflow: hidden;
+}
+
+.listing-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.no-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f5f9;
+    color: #94a3b8;
+}
+
+.listing-info {
+    padding: 1.25rem;
+    flex-grow: 1;
 }
 
 .listing-info h3 {
-    margin: 0 0 0.5rem 0;
-    color: #2c3e50;
+    margin: 0 0 0.75rem 0;
+    color: #1a202c;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
 }
 
 .type-badge {
     display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background-color: #e8f0fe;
-    color: #667eea;
-    border-radius: 12px;
-    font-size: 0.875rem;
-    font-weight: 500;
+    padding: 0.2rem 0.6rem;
+    background-color: #f0fff4;
+    color: #2d6a4f;
+    border: 1px solid #c6f6d5;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
 }
 
 .details {
-    margin: 1rem 0;
+    margin-bottom: 1rem;
 }
 
 .details p {
-    margin: 0.5rem 0;
+    margin: 0.4rem 0;
     font-size: 0.9rem;
-    color: #555;
+    color: #4a5568;
+    display: flex;
+    justify-content: space-between;
+}
+
+.details p strong {
+    color: #718096;
+    font-weight: 500;
+}
+
+.listing-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2d6a4f;
+    margin-top: 0.5rem;
 }
 
 .status {
-    margin: 1rem 0 0.5rem 0;
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
 }
 
 .status .active {
-    color: #27ae60;
-    font-weight: 500;
+    color: #38a169;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
-.status .inactive {
-    color: #e74c3c;
-    font-weight: 500;
+.status .active::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background-color: #38a169;
+    border-radius: 50%;
 }
 
 .listing-actions {
     display: flex;
     gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    background-color: #f8fafc;
+    border-top: 1px solid #edf2f7;
 }
 
 .edit-btn,
 .delete-btn {
     flex: 1;
-    padding: 0.5rem;
+    padding: 0.6rem;
     border: none;
     border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.85rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .edit-btn {
-    background-color: #3498db;
-    color: white;
+    background-color: #edf2f7;
+    color: #2d3748;
 }
 
 .edit-btn:hover {
-    background-color: #2980b9;
+    background-color: #e2e8f0;
 }
 
 .delete-btn {
-    background-color: #e74c3c;
-    color: white;
+    background-color: #fff5f5;
+    color: #c53030;
 }
 
 .delete-btn:hover {
-    background-color: #c0392b;
+    background-color: #fed7d7;
 }
 
 /* Form Styles */
