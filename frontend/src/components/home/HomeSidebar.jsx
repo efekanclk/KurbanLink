@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { cities } from '../../data/locations';
-import { Search, PartnershipIcon, Filter, X } from '../../ui/icons';
+import { Search, PartnershipIcon, Filter, X, Heart, ClipboardList, Calendar } from '../../ui/icons';
 import './HomeSidebar.css';
 
 const HomeSidebar = () => {
@@ -73,6 +73,35 @@ const HomeSidebar = () => {
     // Render filter content (shared between desktop sidebar and mobile modal)
     const renderFilterContent = () => (
         <>
+            {/* 0. Hızlı İşlemler (Sadece Giriş Yapmış Kullanıcılar İçin) */}
+            {user && (
+                <div className="sidebar-section">
+                    <h3 className="sidebar-title">Hızlı İşlemler</h3>
+                    <ul className="sidebar-list">
+                        <li>
+                            <Link to="/favorites" className="sidebar-link partnership-link">
+                                <Heart size={16} />
+                                Favorilerim
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/seller/listings" className="sidebar-link partnership-link">
+                                <ClipboardList size={16} />
+                                İlanlarım
+                            </Link>
+                        </li>
+                        {user.roles?.includes('BUTCHER') && (
+                            <li>
+                                <Link to="/butcher/appointments" className="sidebar-link partnership-link">
+                                    <Calendar size={16} />
+                                    Randevularım
+                                </Link>
+                            </li>
+                        )}
+                    </ul>
+                </div>
+            )}
+
             {/* 1. Kategoriler */}
             <div className="sidebar-section">
                 <h3 className="sidebar-title">Kategoriler</h3>

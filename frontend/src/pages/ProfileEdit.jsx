@@ -43,6 +43,17 @@ const ProfileEdit = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        
+        // Special handling for phone_number: only numbers and max 10 digits
+        if (name === 'phone_number') {
+            const numericValue = value.replace(/\D/g, '').slice(0, 10);
+            setFormData(prev => ({
+                ...prev,
+                [name]: numericValue
+            }));
+            return;
+        }
+
         setFormData(prev => ({
             ...prev,
             [name]: value,
@@ -186,8 +197,11 @@ const ProfileEdit = () => {
                             name="phone_number"
                             value={formData.phone_number}
                             onChange={handleChange}
+                            placeholder="5xx xxx xxxx"
+                            maxLength={10}
                             required
                         />
+                        <small className="form-hint">Başında sıfır olmadan 10 hane giriniz.</small>
                     </div>
 
                     {/* Country Code for Phone */}
