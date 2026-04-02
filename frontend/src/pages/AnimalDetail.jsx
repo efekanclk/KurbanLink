@@ -139,7 +139,9 @@ const AnimalDetail = () => {
                         <ArrowLeft size={18} /> İlanlara Dön
                     </button>
                     <div className="header-actions">
-                        <button onClick={() => navigate('/favorites')} className="favorites-link-btn">Favorilerim</button>
+                        <button onClick={() => navigate('/favorites')} className="favorites-link-btn">
+                            <Heart size={18} /> Favorilerim
+                        </button>
                     </div>
                 </div>
                 <div className="loading">İlan yükleniyor...</div>
@@ -155,7 +157,9 @@ const AnimalDetail = () => {
                         <ArrowLeft size={18} /> İlanlara Dön
                     </button>
                     <div className="header-actions">
-                        <button onClick={() => navigate('/favorites')} className="favorites-link-btn">Favorilerim</button>
+                        <button onClick={() => navigate('/favorites')} className="favorites-link-btn">
+                            <Heart size={18} /> Favorilerim
+                        </button>
                     </div>
                 </div>
                 <div className="not-found">
@@ -175,7 +179,9 @@ const AnimalDetail = () => {
                         <ArrowLeft size={18} /> İlanlara Dön
                     </button>
                     <div className="header-actions">
-                        <button onClick={() => navigate('/favorites')} className="favorites-link-btn">Favorilerim</button>
+                        <button onClick={() => navigate('/favorites')} className="favorites-link-btn">
+                            <Heart size={18} /> Favorilerim
+                        </button>
                     </div>
                 </div>
                 <div className="error-container">
@@ -256,7 +262,9 @@ const AnimalDetail = () => {
                     <ArrowLeft size={18} /> İlanlara Dön
                 </button>
                 <div className="header-actions">
-                    <button onClick={() => navigate('/favorites')} className="favorites-link-btn">Favorilerim</button>
+                    <button onClick={() => navigate('/favorites')} className="favorites-link-btn">
+                        <Heart size={18} /> Favorilerim
+                    </button>
                 </div>
             </div>
 
