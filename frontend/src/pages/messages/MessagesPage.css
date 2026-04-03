@@ -239,18 +239,19 @@
 
 /* Footer Input Area */
 .messages-main__footer {
-    padding: 20px 40px 30px;
-    background: transparent;
+    padding: 15px 30px 25px;
+    background: white;
+    border-top: 1px solid var(--border-soft);
 }
 
 .messages-main__footer form {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: white;
-    padding: 8px 8px 8px 20px;
-    border-radius: 24px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    background: #f0f2f5;
+    padding: 6px 6px 6px 20px;
+    border-radius: 30px;
+    width: 100%;
 }
 
 .messages-main__footer input {
@@ -259,11 +260,13 @@
     outline: none;
     font-size: 15px;
     padding: 10px 0;
+    background: transparent;
+    color: #1a1a1a;
 }
 
 .messages-main__footer button {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background: var(--msg-mine);
     color: white;
@@ -272,12 +275,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s;
+    transition: all 0.2s;
+    flex-shrink: 0;
 }
 
 .messages-main__footer button:hover {
-    transform: scale(1.05);
-    background: #1a6a43;
+    transform: scale(1.08);
+    filter: brightness(1.1);
 }
 
 .messages-main__footer button:disabled {

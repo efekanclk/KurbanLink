@@ -17,6 +17,22 @@ const FloatingMessages = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [sending, setSending] = useState(false);
+    const inputRef = React.useRef(null);
+    const messagesEndRef = React.useRef(null);
+
+    // Handle focus management
+    useEffect(() => {
+        if (!sending && (view === 'thread' || isOpen)) {
+            inputRef.current?.focus();
+        }
+    }, [sending, view, isOpen]);
+
+    // Auto scroll to bottom
+    useEffect(() => {
+        if (view === 'thread') {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
 
     useEffect(() => {
         if (isOpen && view === 'list' && conversations.length === 0) {
@@ -84,8 +100,13 @@ const FloatingMessages = () => {
     };
 
     const formatTime = (dateStr) => {
+        if (!dateStr) return '';
         const date = new Date(dateStr);
-        return date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+        const now = new Date();
+        const isToday = date.toDateString() === now.toDateString();
+        const timeStr = date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', hour12: false });
+        if (isToday) return timeStr;
+        return `${date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })} ${timeStr}`;
     };
 
     // ... lines skipped ...
@@ -185,10 +206,12 @@ const FloatingMessages = () => {
                                         <div className="bubble-time">{formatTime(msg.created_at)}</div>
                                     </div>
                                 ))}
+                                <div ref={messagesEndRef} />
                             </div>
 
-                            <div className="panel-footer">
+                             <div className="panel-footer">
                                 <input
+                                    ref={inputRef}
                                     type="text"
                                     className="message-input"
                                     placeholder="Mesaj yaz..."
@@ -202,7 +225,9 @@ const FloatingMessages = () => {
                                     onClick={sendMessage}
                                     disabled={!messageInput.trim() || sending}
                                 >
-                                    {sending ? '...' : 'Gönder'}
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                                    </svg>
                                 </button>
                             </div>
                         </>
