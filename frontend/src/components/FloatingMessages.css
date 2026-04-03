@@ -179,7 +179,7 @@
 /* Message Thread */
 .messages-body {
     padding: 16px;
-    background-image: url('/Users/efekancelik/.gemini/antigravity/brain/d9796f59-5b40-4505-b16d-e64185204476/animal_doodle_wallpaper_1775230098739.png');
+    background-image: url('/assets/chat-bg.png');
     background-size: 200px;
     background-repeat: repeat;
     background-color: #f0f2f5;
@@ -188,7 +188,7 @@
 .message-bubble {
     max-width: 85%;
     margin-bottom: 12px;
-    padding: 10px 14px;
+    padding: 10px 14px 20px;
     border-radius: 18px;
     font-size: 14px;
     line-height: 1.4;
@@ -212,19 +212,27 @@
 }
 
 .bubble-time-status {
+    position: absolute;
+    bottom: 4px;
+    right: 10px;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     gap: 4px;
     font-size: 11px;
-    margin-top: 4px;
-    opacity: 0.9;
-    font-weight: 500;
+    opacity: 0.8;
+}
+
+.message-bubble.mine .bubble-time-status {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.message-bubble.theirs .bubble-time-status {
+    color: #64748b;
 }
 
 .status-icon {
-    font-size: 12px;
-    font-weight: bold;
+    font-size: 13px;
+    line-height: 1;
 }
 
 .status-read {
