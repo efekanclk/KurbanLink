@@ -180,6 +180,7 @@ class MessageSerializer(serializers.ModelSerializer):
             'parent_message',
             'parent_message_details',
             'is_read',
+            'is_deleted',
             'created_at'
         ]
         read_only_fields = ['id', 'sender', 'sender_email', 'created_at', 'parent_message_details']

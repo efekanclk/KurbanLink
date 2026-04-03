@@ -271,6 +271,24 @@
     color: #94a3b8;
 }
 
+.message__deleted {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-style: italic;
+    opacity: 0.75;
+    font-size: 14px;
+    padding-bottom: 2px;
+}
+
+.message.mine .message__deleted {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.message.theirs .message__deleted {
+    color: #64748b;
+}
+
 .message__reply-quote {
     background: rgba(0,0,0,0.05);
     border-left: 3px solid var(--msg-mine);

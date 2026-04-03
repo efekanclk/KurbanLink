@@ -200,15 +200,17 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer.save(sender=self.request.user)
 
     def destroy(self, request, *args, **kwargs):
-        """Allow any conversation participant to delete any message."""
+        """Soft-delete: mark message as deleted for everyone."""
         message = self.get_object()
         user = request.user
         conv = message.conversation
-        # Only participants (buyer/seller) may delete
         if user not in [conv.buyer, conv.seller]:
             return Response({'detail': 'Bu mesajı silemezsiniz.'}, status=status.HTTP_403_FORBIDDEN)
-        message.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        message.is_deleted = True
+        message.content = ''
+        message.save(update_fields=['is_deleted', 'content'])
+        serializer = self.get_serializer(message)
+        return Response(serializer.data)
 
 
 @api_view(['GET'])

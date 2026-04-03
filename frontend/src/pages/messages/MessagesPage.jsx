@@ -319,16 +319,18 @@ const MessagesPage = () => {
   const handleDeleteForEveryone = async () => {
     const msg = deleteModal;
     setDeleteModal(null);
-    setMessages(prev => prev.filter(m => m.id !== msg.id));
+    // Optimistically mark as deleted
+    setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, is_deleted: true, content: '' } : m));
     try {
-      if (selectedConversation?.type === 'GROUP') {
-        await deleteGroupMessage(msg.id);
-      } else {
-        await deleteMessage(msg.id);
+      const updated = selectedConversation?.type === 'GROUP'
+        ? await deleteGroupMessage(msg.id)
+        : await deleteMessage(msg.id);
+      if (updated) {
+        setMessages(prev => prev.map(m => m.id === msg.id ? { ...updated, is_deleted: true } : m));
       }
     } catch (err) {
       console.error('Delete failed:', err);
-      setMessages(prev => [...prev, msg].sort((a, b) => new Date(a.created_at) - new Date(b.created_at)));
+      setMessages(prev => prev.map(m => m.id === msg.id ? msg : m));
     }
   };
 
@@ -458,32 +460,45 @@ const MessagesPage = () => {
                               }}
                               onTouchEnd={(e) => clearTimeout(e.currentTarget._touchTimer)}
                             >
-                              {msg.parent_message_details && (
-                                <div className="message__reply-quote">
-                                  <div className="reply-quote__sender">{msg.parent_message_details.sender_username}</div>
-                                  <div className="reply-quote__content">{msg.parent_message_details.content}</div>
+                              {msg.is_deleted ? (
+                                <div className="message__deleted">
+                                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}>
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                                  </svg>
+                                  <span>{isMe ? 'Bu mesajı sildiniz.' : 'Bu mesaj silindi.'}</span>
+                                  <span className="bubble-time" style={{marginLeft:'auto'}}>{formatTime(msg.created_at)}</span>
                                 </div>
-                              )}
-                              <div className="message__text">{msg.content}</div>
-                              <div className="bubble-time-status">
-                                <span className="bubble-time">{formatTime(msg.created_at)}</span>
-                                {isMe && (
-                                  <span className={`tick-status ${msg.is_read ? 'tick-read' : 'tick-sent'}`}>
-                                    {msg.id?.toString()?.startsWith('temp-') ? (
-                                      <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><circle cx="8" cy="8" r="3" opacity="0.4"/></svg>
-                                    ) : msg.is_read ? (
-                                      <svg viewBox="0 0 24 10" width="20" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <polyline points="1,5 5,9 13,1"/>
-                                        <polyline points="8,5 12,9 20,1"/>
-                                      </svg>
-                                    ) : (
-                                      <svg viewBox="0 0 14 10" width="16" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <polyline points="1,5 5,9 13,1"/>
-                                      </svg>
+                              ) : (
+                                <>
+                                  {msg.parent_message_details && (
+                                    <div className="message__reply-quote">
+                                      <div className="reply-quote__sender">{msg.parent_message_details.sender_username}</div>
+                                      <div className="reply-quote__content">{msg.parent_message_details.content}</div>
+                                    </div>
+                                  )}
+                                  <div className="message__text">{msg.content}</div>
+                                  <div className="bubble-time-status">
+                                    <span className="bubble-time">{formatTime(msg.created_at)}</span>
+                                    {isMe && (
+                                      <span className={`tick-status ${msg.is_read ? 'tick-read' : 'tick-sent'}`}>
+                                        {msg.id?.toString()?.startsWith('temp-') ? (
+                                          <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><circle cx="8" cy="8" r="3" opacity="0.4"/></svg>
+                                        ) : msg.is_read ? (
+                                          <svg viewBox="0 0 24 10" width="20" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <polyline points="1,5 5,9 13,1"/>
+                                            <polyline points="8,5 12,9 20,1"/>
+                                          </svg>
+                                        ) : (
+                                          <svg viewBox="0 0 14 10" width="16" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <polyline points="1,5 5,9 13,1"/>
+                                          </svg>
+                                        )}
+                                      </span>
                                     )}
-                                  </span>
-                                )}
-                              </div>
+                                  </div>
+                                </>
+                              )}
                             </div>
                           </div>
                         </React.Fragment>

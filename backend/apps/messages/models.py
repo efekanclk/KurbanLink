@@ -97,6 +97,10 @@ class Message(models.Model):
         default=False,
         help_text="Whether message has been read"
     )
+    is_deleted = models.BooleanField(
+        default=False,
+        help_text="Whether message has been deleted for everyone"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     parent_message = models.ForeignKey(
         'self',
