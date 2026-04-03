@@ -92,7 +92,10 @@ const MessagesPage = () => {
   }, [messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesEndRef.current) {
+        const container = messagesEndRef.current.parentNode;
+        container.scrollTop = container.scrollHeight;
+    }
   };
 
   const loadConversations = async (showLoading = true) => {
