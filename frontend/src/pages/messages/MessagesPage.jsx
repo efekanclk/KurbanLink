@@ -93,6 +93,13 @@ const MessagesPage = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Handle focus management
+  useEffect(() => {
+    if (!sending && selectedConversation) {
+      inputRef.current?.focus();
+    }
+  }, [sending, selectedConversation]);
+
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
         const container = messagesEndRef.current.parentNode;
@@ -245,16 +252,9 @@ const MessagesPage = () => {
       // Replace the temporary message with the real one from the server
       setMessages(prev => prev.map(msg => msg.id === tempId ? { ...newMessage, is_read: false } : msg));
 
-      // Regain focus
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 0);
-
     } catch (error) {
       console.error('Failed to send message:', error);
       setMessages(prev => prev.filter(msg => msg.id !== tempId));
-      // Regain focus even on error
-      inputRef.current?.focus();
     } finally {
       setSending(false);
       sendingRef.current = false;
@@ -389,14 +389,15 @@ const MessagesPage = () => {
                                 <span className="status-sending">...</span>
                               ) : msg.is_read ? (
                                 <span className="status-read" title="Okundu">
-                                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                                    <path d="M22.33 5.41l-1.34-1.34c-.19-.19-.44-.29-.7-.29s-.51.1-.7.29l-9.59 9.59L6.41 10.1c-.19-.19-.44-.29-.7-.29s-.51.1-.7.29l-1.34 1.34c-.19.19-.29.44-.29.7s.1.51.29.7l5.34 5.34c.19.19.44.29.7.29s.51-.1.7-.29L22.33 6.81c.19-.19.29-.44.29-.7s-.1-.51-.29-.7zM10.1 18.06l-.08-.08c-.19-.19-.44-.29-.7-.29s-.51.1-.7.29l-1.34 1.34c-.19.19-.29.44-.29.7s.1.51.29.7l1.34 1.34c.19.19.44.29.7.29s.51-.1.7-.29l1.34-1.34c.19-.19.29-.44.29-.7s-.1-.51-.29-.7l-1.34-1.34z"/>
+                                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="7 13 12 18 22 8"></polyline>
+                                    <polyline points="2 13 7 18 17 8"></polyline>
                                   </svg>
                                 </span>
                               ) : (
                                 <span className="status-delivered" title="İletildi">
-                                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
                                   </svg>
                                 </span>
                               )}
