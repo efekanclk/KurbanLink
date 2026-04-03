@@ -25,6 +25,7 @@ const MessagesPage = () => {
   const [messageInput, setMessageInput] = useState('');
   const [replyingTo, setReplyingTo] = useState(null);
   const [contextMenu, setContextMenu] = useState(null); // { msg, x, y }
+  const [deleteModal, setDeleteModal] = useState(null); // msg to delete
   const [loading, setLoading] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [sending, setSending] = useState(false);
@@ -310,9 +311,14 @@ const MessagesPage = () => {
     closeContextMenu();
   };
 
-  const handleDelete = async (msg) => {
+  const handleDelete = (msg) => {
     closeContextMenu();
-    // Optimistically remove
+    setDeleteModal(msg);
+  };
+
+  const handleDeleteForEveryone = async () => {
+    const msg = deleteModal;
+    setDeleteModal(null);
     setMessages(prev => prev.filter(m => m.id !== msg.id));
     try {
       if (selectedConversation?.type === 'GROUP') {
@@ -322,12 +328,14 @@ const MessagesPage = () => {
       }
     } catch (err) {
       console.error('Delete failed:', err);
-      // Restore on failure
-      setMessages(prev => {
-        const restored = [...prev, msg];
-        return restored.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-      });
+      setMessages(prev => [...prev, msg].sort((a, b) => new Date(a.created_at) - new Date(b.created_at)));
     }
+  };
+
+  const handleDeleteForMe = () => {
+    const msg = deleteModal;
+    setDeleteModal(null);
+    setMessages(prev => prev.filter(m => m.id !== msg.id));
   };
 
   return (
@@ -543,6 +551,24 @@ const MessagesPage = () => {
                 </svg>
                 <span>Sil</span>
               </button>
+            </div>
+          )}
+
+          {/* Delete Confirmation Modal */}
+          {deleteModal && (
+            <div className="delete-modal-overlay" onClick={() => setDeleteModal(null)}>
+              <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
+                <p className="delete-modal__title">Mesaj silinsin mi?</p>
+                <button className="delete-modal__btn delete-modal__btn--everyone" onClick={handleDeleteForEveryone}>
+                  Herkesten sil
+                </button>
+                <button className="delete-modal__btn delete-modal__btn--me" onClick={handleDeleteForMe}>
+                  Benden sil
+                </button>
+                <button className="delete-modal__btn delete-modal__btn--cancel" onClick={() => setDeleteModal(null)}>
+                  İptal
+                </button>
+              </div>
             </div>
           )}
         </div>
