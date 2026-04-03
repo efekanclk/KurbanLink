@@ -8,6 +8,34 @@ from .models import Conversation, Message, GroupConversation, GroupMessage, Grou
 from apps.animals.models import AnimalListing
 
 
+class ParentMessageSerializer(serializers.ModelSerializer):
+    """Minimal serializer for parent messages in replies."""
+    sender_username = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Message
+        fields = ['id', 'content', 'sender_username', 'created_at']
+        
+    def get_sender_username(self, obj):
+        if obj.sender.username:
+            return obj.sender.username
+        return obj.sender.email.split('@')[0] if obj.sender.email else None
+
+
+class GroupParentMessageSerializer(serializers.ModelSerializer):
+    """Minimal serializer for parent group messages in replies."""
+    sender_username = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = GroupMessage
+        fields = ['id', 'content', 'sender_username', 'created_at']
+        
+    def get_sender_username(self, obj):
+        if obj.sender.username:
+            return obj.sender.username
+        return obj.sender.email.split('@')[0] if obj.sender.email else None
+
+
 class AnimalListingBasicSerializer(serializers.ModelSerializer):
     """Basic animal listing info for conversations."""
     
@@ -149,10 +177,14 @@ class MessageSerializer(serializers.ModelSerializer):
             'sender_email',
             'sender_username',
             'content',
+            'parent_message',
+            'parent_message_details',
             'is_read',
             'created_at'
         ]
-        read_only_fields = ['id', 'sender', 'sender_email', 'created_at']
+        read_only_fields = ['id', 'sender', 'sender_email', 'created_at', 'parent_message_details']
+
+    parent_message_details = ParentMessageSerializer(source='parent_message', read_only=True)
 
     def get_sender_username(self, obj):
         """Return username or fallback to email prefix."""
@@ -215,9 +247,13 @@ class GroupMessageSerializer(serializers.ModelSerializer):
             'sender_username',
             'sender_profile_image',
             'content',
+            'parent_message',
+            'parent_message_details',
             'created_at'
         ]
-        read_only_fields = ['id', 'sender', 'created_at']
+        read_only_fields = ['id', 'sender', 'created_at', 'parent_message_details']
+
+    parent_message_details = GroupParentMessageSerializer(source='parent_message', read_only=True)
     
     def get_sender_username(self, obj):
         """Return username or fallback to email prefix."""

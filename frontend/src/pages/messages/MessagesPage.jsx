@@ -21,6 +21,7 @@ const MessagesPage = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
+  const [replyingTo, setReplyingTo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [sending, setSending] = useState(false);
@@ -185,6 +186,7 @@ const MessagesPage = () => {
   const handleConversationSelect = (conversation, updateUrl = true) => {
     setSelectedConversation(conversation);
     loadMessages(conversation);
+    setReplyingTo(null);
 
     if (updateUrl) {
       const params = new URLSearchParams();
@@ -210,17 +212,24 @@ const MessagesPage = () => {
 
     // Create optimistic temporary message
     const tempId = `temp-${Date.now()}`;
+    const parentMsg = replyingTo;
     const optimisticMessage = {
       id: tempId,
       content: content,
       created_at: new Date().toISOString(),
-      sender: user?.id || user, // fallback if user is an object
+      sender: user?.id || user,
       sender_username: user?.username,
+      parent_message_details: parentMsg ? {
+        id: parentMsg.id,
+        content: parentMsg.content,
+        sender_username: parentMsg.sender_username
+      } : null
     };
 
     // 1. Instantly update messages UI
     setMessages(prev => [...prev, optimisticMessage]);
     setMessageInput('');
+    setReplyingTo(null);
 
     // 2. Instantly update the side conversation list
     setConversations(prev =>
@@ -244,9 +253,9 @@ const MessagesPage = () => {
     try {
       let newMessage;
       if (selectedConversation.type === 'GROUP') {
-        newMessage = await sendGroupMessage(selectedConversation.id, content);
+        newMessage = await sendGroupMessage(selectedConversation.id, content, parentMsg?.id);
       } else {
-        newMessage = await sendMessage(selectedConversation.id, content);
+        newMessage = await sendMessage(selectedConversation.id, content, parentMsg?.id);
       }
 
       // Replace the temporary message with the real one from the server
@@ -393,6 +402,12 @@ const MessagesPage = () => {
                           </div>
                         )}
                         <div className="message__bubble">
+                          {msg.parent_message_details && (
+                            <div className="message__reply-quote">
+                              <div className="reply-quote__sender">{msg.parent_message_details.sender_username}</div>
+                              <div className="reply-quote__content">{msg.parent_message_details.content}</div>
+                            </div>
+                          )}
                           <div className="message__text">{msg.content}</div>
                           <div className="bubble-time-status">
                             <span className="bubble-time">{formatTime(msg.created_at)}</span>
@@ -402,6 +417,9 @@ const MessagesPage = () => {
                               </span>
                             )}
                           </div>
+                          <button className="message__reply-btn" onClick={() => setReplyingTo(msg)}>
+                            <Reply size={14} />
+                          </button>
                         </div>
                       </div>
                     );
@@ -411,20 +429,32 @@ const MessagesPage = () => {
               </div>
 
               {/* Input */}
-              <form className="messages-main__footer" onSubmit={handleSendMessage}>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  placeholder="Mesajınızı yazın..."
-                  value={messageInput}
-                  onChange={(e) => setMessageInput(e.target.value)}
-                  disabled={sending}
-                  autoFocus
-                />
-                <button type="submit" disabled={!messageInput.trim() || sending}>
-                  <Send size={20} />
-                </button>
-              </form>
+              <div className="messages-main__footer-container">
+                {replyingTo && (
+                  <div className="reply-preview">
+                    <div className="reply-preview__content">
+                      <div className="reply-preview__sender">{replyingTo.sender_username}</div>
+                      <div className="reply-preview__text">{replyingTo.content}</div>
+                    </div>
+                    <button className="reply-preview__cancel" onClick={() => setReplyingTo(null)}>
+                      <X size={16} />
+                    </button>
+                  </div>
+                )}
+                <form className="messages-main__footer" onSubmit={handleSendMessage}>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    placeholder="Mesajınızı yazın..."
+                    value={messageInput}
+                    onChange={(e) => setMessageInput(e.target.value)}
+                    disabled={sending}
+                  />
+                  <button type="submit" disabled={!messageInput.trim() || sending}>
+                    <Send size={20} />
+                  </button>
+                </form>
+              </div>
             </>
           )}
         </div>

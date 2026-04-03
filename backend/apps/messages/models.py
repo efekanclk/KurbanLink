@@ -98,6 +98,14 @@ class Message(models.Model):
         help_text="Whether message has been read"
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    parent_message = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='replies',
+        help_text="The message being replied to"
+    )
     
     class Meta:
         verbose_name = 'message'
@@ -182,7 +190,15 @@ class GroupMessage(models.Model):
     )
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    parent_message = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='replies',
+        help_text="The message being replied to"
+    )
+
     class Meta:
         ordering = ['created_at']
     

@@ -27,11 +27,14 @@ export const markAllRead = async (conversationId) => {
 /**
  * Send a new message
  */
-export const sendMessage = async (conversationId, content) => {
-    const response = await apiClient.post('/api/messages/', {
+export const sendMessage = async (conversationId, content, parentId = null) => {
+    const payload = {
         conversation: conversationId,
         content
-    });
+    };
+    if (parentId) payload.parent_message = parentId;
+    
+    const response = await apiClient.post('/api/messages/', payload);
     return response.data;
 };
 
@@ -65,10 +68,11 @@ export const fetchGroupMessages = async (groupId) => {
 /**
  * Send message to group conversation
  */
-export const sendGroupMessage = async (groupId, content) => {
-    const response = await apiClient.post(`/api/messages/groups/${groupId}/messages/send/`, {
-        content
-    });
+export const sendGroupMessage = async (groupId, content, parentId = null) => {
+    const payload = { content };
+    if (parentId) payload.parent_message = parentId;
+
+    const response = await apiClient.post(`/api/messages/groups/${groupId}/messages/send/`, payload);
     return response.data;
 };
 

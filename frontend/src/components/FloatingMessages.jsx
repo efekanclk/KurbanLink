@@ -14,6 +14,7 @@ const FloatingMessages = () => {
     const [selectedConversation, setSelectedConversation] = useState(null);
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState('');
+    const [replyingTo, setReplyingTo] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [sending, setSending] = useState(false);
@@ -83,9 +84,10 @@ const FloatingMessages = () => {
 
         setSending(true);
         try {
-            const newMessage = await sendMessageAPI(selectedConversation.id, messageInput.trim());
+            const newMessage = await sendMessageAPI(selectedConversation.id, messageInput.trim(), replyingTo?.id);
             setMessages(prev => [...prev, newMessage]);
             setMessageInput('');
+            setReplyingTo(null);
         } catch (err) {
             setError('Mesaj gönderilemedi.');
         } finally {
@@ -97,6 +99,7 @@ const FloatingMessages = () => {
         setView('list');
         setSelectedConversation(null);
         setMessages([]);
+        setReplyingTo(null);
     };
 
     const formatTime = (dateStr) => {
@@ -108,8 +111,6 @@ const FloatingMessages = () => {
         if (isToday) return timeStr;
         return `${date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })} ${timeStr}`;
     };
-
-    // ... lines skipped ...
 
     const getCounterparty = (conversation) => {
         if (!user) return 'Kullanıcı';
@@ -202,6 +203,12 @@ const FloatingMessages = () => {
                                         key={msg.id}
                                         className={`message-bubble ${msg.is_mine ? 'mine' : 'theirs'}`}
                                     >
+                                        {msg.parent_message_details && (
+                                            <div className="message__reply-quote">
+                                                <div className="reply-quote__sender">{msg.parent_message_details.sender_username}</div>
+                                                <div className="reply-quote__content">{msg.parent_message_details.content}</div>
+                                            </div>
+                                        )}
                                         <div className="bubble-content">{msg.content}</div>
                                         <div className="bubble-time-status">
                                             {formatTime(msg.created_at)}
@@ -211,12 +218,21 @@ const FloatingMessages = () => {
                                                 </span>
                                             )}
                                         </div>
+                                        <button className="message__reply-btn" onClick={() => setReplyingTo(msg)}>
+                                            <Reply size={12} />
+                                        </button>
                                     </div>
                                 ))}
                                 <div ref={messagesEndRef} />
                             </div>
 
                              <div className="panel-footer">
+                                {replyingTo && (
+                                    <div className="reply-preview">
+                                        <span>{replyingTo.content}</span>
+                                        <button onClick={() => setReplyingTo(null)}>✕</button>
+                                    </div>
+                                )}
                                 <input
                                     ref={inputRef}
                                     type="text"
