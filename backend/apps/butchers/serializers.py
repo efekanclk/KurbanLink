@@ -4,6 +4,7 @@ Serializers for butchers app.
 
 from rest_framework import serializers
 from apps.accounts.models import Role
+from apps.core.hashids_util import encode_id
 from .models import ButcherProfile, Appointment
 
 
@@ -16,11 +17,13 @@ class ButcherProfileSerializer(serializers.ModelSerializer):
     user_email = serializers.EmailField(source='user.email', read_only=True)
     butcher_name = serializers.SerializerMethodField()
     profile_image_url = serializers.SerializerMethodField()
+    hashed_id = serializers.SerializerMethodField()
     
     class Meta:
         model = ButcherProfile
         fields = [
             'id',
+            'hashed_id',
             'user',
             'user_email',
             'profile_image_url',
@@ -59,6 +62,9 @@ class ButcherProfileSerializer(serializers.ModelSerializer):
                 return request.build_absolute_uri(obj.user.profile_image.url)
             return obj.user.profile_image.url
         return None
+    
+    def get_hashed_id(self, obj):
+        return encode_id(obj.id)
     
     def validate(self, attrs):
         """

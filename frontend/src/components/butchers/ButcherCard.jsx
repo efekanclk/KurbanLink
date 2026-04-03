@@ -55,7 +55,7 @@ const ButcherCard = ({ butcher }) => {
                         </button>
                         <button
                             className="btn-secondary btn-view"
-                            onClick={() => navigate(`/butchers/${butcher.id}`)}
+                            onClick={() => navigate(`/butchers/${butcher.hashed_id || butcher.id}`)}
                         >
                             Profilimi Gör
                         </button>
@@ -64,13 +64,13 @@ const ButcherCard = ({ butcher }) => {
                     <>
                         <button
                             className="btn-primary btn-book"
-                            onClick={() => navigate(`/butchers/${butcher.id}/book`)}
+                            onClick={() => navigate(`/butchers/${butcher.hashed_id || butcher.id}/book`)}
                         >
                             Randevu Al
                         </button>
                         <button
                             className="btn-secondary btn-view"
-                            onClick={() => navigate(`/butchers/${butcher.id}`)}
+                            onClick={() => navigate(`/butchers/${butcher.hashed_id || butcher.id}`)}
                         >
                             Profili Gör
                         </button>
