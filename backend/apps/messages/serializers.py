@@ -149,6 +149,7 @@ class MessageSerializer(serializers.ModelSerializer):
             'sender_email',
             'sender_username',
             'content',
+            'is_read',
             'created_at'
         ]
         read_only_fields = ['id', 'sender', 'sender_email', 'created_at']

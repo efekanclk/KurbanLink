@@ -23,7 +23,8 @@ const MessagesPage = () => {
   const [messageInput, setMessageInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(false);
-  const [sending, setSending] = useState(false);
+  const sendingRef = useRef(false);
+  const inputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
 
@@ -120,15 +121,19 @@ const MessagesPage = () => {
         data = await fetchConversationMessages(conversation.id);
       }
       
-      // Only update if message count changed or something changed
-      // Simple check: compare length
+      // Update if message count changed OR if any existing message status changed
       setMessages(prev => {
-        if (prev.length !== data.length) {
-          // If we are refreshing and there's a new message, mark as read
+        const hasChanges = prev.length !== data.length || 
+                          prev.some((msg, idx) => msg.is_read !== data[idx]?.is_read);
+                          
+        if (hasChanges) {
+          // If we are refreshing and there's a new message for US, mark as read
           if (conversation.type === 'GROUP') {
-             markGroupAllRead(conversation.id);
+             // markGroupAllRead(conversation.id);
           } else {
-             markAllRead(conversation.id);
+             const hasNewTheirs = data.length > prev.length && 
+                                data[data.length-1].sender !== user.id;
+             if (hasNewTheirs) markAllRead(conversation.id);
           }
           return data;
         }
@@ -225,9 +230,9 @@ const MessagesPage = () => {
     );
 
     setSending(true);
+    sendingRef.current = true;
     try {
       let newMessage;
-      // Define a timeout or just await directly
       if (selectedConversation.type === 'GROUP') {
         newMessage = await sendGroupMessage(selectedConversation.id, content);
       } else {
@@ -235,15 +240,21 @@ const MessagesPage = () => {
       }
 
       // Replace the temporary message with the real one from the server
-      setMessages(prev => prev.map(msg => msg.id === tempId ? newMessage : msg));
+      setMessages(prev => prev.map(msg => msg.id === tempId ? { ...newMessage, is_read: false } : msg));
+
+      // Regain focus
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
 
     } catch (error) {
       console.error('Failed to send message:', error);
-      // Revert optimistic update on failure
       setMessages(prev => prev.filter(msg => msg.id !== tempId));
-      // Optionally notify user
+      // Regain focus even on error
+      inputRef.current?.focus();
     } finally {
       setSending(false);
+      sendingRef.current = false;
     }
   };
 
@@ -375,6 +386,25 @@ const MessagesPage = () => {
                         )}
                         <div className="message__bubble">
                           {msg.content}
+                          {isMe && (
+                            <div className="message__status">
+                              {msg.id.toString().startsWith('temp-') ? (
+                                <span className="status-sending">...</span>
+                              ) : msg.is_read ? (
+                                <span className="status-read" title="Okundu">
+                                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                    <path d="M22.33 5.41l-1.34-1.34c-.19-.19-.44-.29-.7-.29s-.51.1-.7.29l-9.59 9.59L6.41 10.1c-.19-.19-.44-.29-.7-.29s-.51.1-.7.29l-1.34 1.34c-.19.19-.29.44-.29.7s.1.51.29.7l5.34 5.34c.19.19.44.29.7.29s.51-.1.7-.29L22.33 6.81c.19-.19.29-.44.29-.7s-.1-.51-.29-.7zM10.1 18.06l-.08-.08c-.19-.19-.44-.29-.7-.29s-.51.1-.7.29l-1.34 1.34c-.19.19-.29.44-.29.7s.1.51.29.7l1.34 1.34c.19.19.44.29.7.29s.51-.1.7-.29l1.34-1.34c.19-.19.29-.44.29-.7s-.1-.51-.29-.7l-1.34-1.34z"/>
+                                  </svg>
+                                </span>
+                              ) : (
+                                <span className="status-delivered" title="İletildi">
+                                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                                  </svg>
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </div>
                         <div className="message__time">
                           {formatTime(msg.created_at)}
@@ -389,11 +419,13 @@ const MessagesPage = () => {
               {/* Input */}
               <form className="messages-main__footer" onSubmit={handleSendMessage}>
                 <input
+                  ref={inputRef}
                   type="text"
                   placeholder="Mesajınızı yazın..."
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
                   disabled={sending}
+                  autoFocus
                 />
                 <button type="submit" disabled={!messageInput.trim() || sending}>
                   <Send size={20} />

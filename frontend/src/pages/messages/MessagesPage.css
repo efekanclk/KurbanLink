@@ -282,6 +282,27 @@
     color: var(--text);
 }
 
+.message__status {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2px;
+    font-size: 10px;
+    opacity: 0.8;
+}
+
+.message.mine .message__status {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.status-read {
+    color: #4ade80 !important; /* Brighter green for read status on dark background */
+}
+
+.status-sending {
+    font-style: italic;
+    font-size: 9px;
+}
+
 .message__time {
     font-size: 12px;
     color: var(--text-muted);
