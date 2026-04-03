@@ -262,14 +262,25 @@ const MessagesPage = () => {
   };
 
   const formatTime = (dateStr) => {
+    if (!dateStr) return '';
     const date = new Date(dateStr);
     const now = new Date();
-    const diffInSeconds = Math.floor((now - date) / 1000);
+    
+    // Check if it's today
+    const isToday = date.toDateString() === now.toDateString();
+    
+    const timeStr = date.toLocaleTimeString('tr-TR', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: false 
+    });
 
-    if (diffInSeconds < 60) return 'Az önce';
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}dk`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}s`;
-    return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+    if (isToday) {
+        return timeStr;
+    }
+    
+    // If not today, show date + time
+    return `${date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })} ${timeStr}`;
   };
 
   return (
