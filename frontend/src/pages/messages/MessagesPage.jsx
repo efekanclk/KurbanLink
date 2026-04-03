@@ -393,30 +393,15 @@ const MessagesPage = () => {
                           </div>
                         )}
                         <div className="message__bubble">
-                          {msg.content}
-                          {isMe && (
-                            <div className="message__status">
-                              {msg.id?.toString()?.startsWith('temp-') ? (
-                                <span className="status-sending">...</span>
-                              ) : msg.is_read ? (
-                                <span className="status-read" title="Okundu">
-                                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <polyline points="7 13 12 18 22 8"></polyline>
-                                    <polyline points="2 13 7 18 17 8"></polyline>
-                                  </svg>
-                                </span>
-                              ) : (
-                                <span className="status-delivered" title="İletildi">
-                                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                  </svg>
-                                </span>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                        <div className="message__time">
-                          {formatTime(msg.created_at)}
+                          <div className="message__text">{msg.content}</div>
+                          <div className="bubble-time-status">
+                            <span className="bubble-time">{formatTime(msg.created_at)}</span>
+                            {isMe && (
+                              <span className={`status-icon ${msg.is_read ? 'status-read' : ''}`}>
+                                {msg.id?.toString()?.startsWith('temp-') ? '...' : (msg.is_read ? '✓✓' : '✓')}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     );
