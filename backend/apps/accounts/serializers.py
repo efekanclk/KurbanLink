@@ -171,26 +171,28 @@ class RegisterSerializer(serializers.ModelSerializer):
         UserRole.objects.create(user=user, role=user_role, is_active=True)
         
         # If butcher, assign BUTCHER role and create profile
-        if is_butcher and butcher_profile_data:
+        if is_butcher:
             butcher_role, _ = Role.objects.get_or_create(code='BUTCHER', defaults={'name': 'Kasap'})
             UserRole.objects.create(user=user, role=butcher_role, is_active=True)
             
             # Create butcher profile
             from apps.butchers.models import ButcherProfile
             
-            # Use provided profile data or default to empty dict
+            # Use provided profile data or default to empty values
             profile_data = butcher_profile_data or {}
             
-            ButcherProfile.objects.create(
+            # ButcherProfile requires a city. Use user's city if available, else empty string
+            # Note: Model might require non-empty city. In that case, user will need to update it.
+            ButcherProfile.objects.get_or_create(
                 user=user,
-                # Default to empty strings if not provided, allowing user to fill later
-                first_name=profile_data.get('first_name') or "",
-                last_name=profile_data.get('last_name') or "",
-                # Use user's location as default for business location
-                city=profile_data.get('city') or user.city,
-                district=profile_data.get('district') or user.district or "",
-                services=profile_data.get('services', []),
-                price_range=profile_data.get('price_range', ''),
+                defaults={
+                    "first_name": profile_data.get('first_name') or user.first_name,
+                    "last_name": profile_data.get('last_name') or user.last_name,
+                    "city": profile_data.get('city') or user.city or "Belirtilmemiş",
+                    "district": profile_data.get('district') or user.district or "",
+                    "services": profile_data.get('services') or [],
+                    "price_range": profile_data.get('price_range') or "",
+                }
             )
         
         return user
