@@ -23,6 +23,7 @@ const MessagesPage = () => {
   const [messageInput, setMessageInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(false);
+  const [sending, setSending] = useState(false);
   const sendingRef = useRef(false);
   const inputRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -123,8 +124,10 @@ const MessagesPage = () => {
       
       // Update if message count changed OR if any existing message status changed
       setMessages(prev => {
+        if (!Array.isArray(data)) return prev;
+        
         const hasChanges = prev.length !== data.length || 
-                          prev.some((msg, idx) => msg.is_read !== data[idx]?.is_read);
+                          prev.some((msg, idx) => msg?.is_read !== data[idx]?.is_read);
                           
         if (hasChanges) {
           // If we are refreshing and there's a new message for US, mark as read
@@ -133,7 +136,7 @@ const MessagesPage = () => {
           } else {
              const hasNewTheirs = data.length > prev.length && 
                                 data[data.length-1]?.sender !== user?.id;
-             if (hasNewTheirs && user) markAllRead(conversation.id);
+             if (hasNewTheirs && user && conversation.id) markAllRead(conversation.id);
           }
           return data;
         }
@@ -382,7 +385,7 @@ const MessagesPage = () => {
                           {msg.content}
                           {isMe && (
                             <div className="message__status">
-                              {msg.id?.toString().startsWith('temp-') ? (
+                              {msg.id?.toString()?.startsWith('temp-') ? (
                                 <span className="status-sending">...</span>
                               ) : msg.is_read ? (
                                 <span className="status-read" title="Okundu">
