@@ -188,6 +188,31 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
+.day-separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    margin: 12px 0;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.day-separator::before,
+.day-separator::after {
+    content: '';
+    flex: 1;
+    border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.day-separator span {
+    background: #eef0f3;
+    padding: 3px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
 .message.mine {
     align-self: flex-end;
 }

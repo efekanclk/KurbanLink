@@ -10,7 +10,7 @@ import {
   markAllRead,
   markGroupAllRead
 } from '../../api/messages';
-import { Send, User as UserIcon, Users as UsersIcon, ArrowLeft } from '../../ui/icons';
+import { Send, User as UserIcon, Users as UsersIcon, ArrowLeft, Reply, X } from '../../ui/icons';
 import './MessagesPage.css';
 
 const MessagesPage = () => {
@@ -273,23 +273,23 @@ const MessagesPage = () => {
   const formatTime = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
-    const now = new Date();
-    
-    // Check if it's today
-    const isToday = date.toDateString() === now.toDateString();
-    
-    const timeStr = date.toLocaleTimeString('tr-TR', { 
+    return date.toLocaleTimeString('tr-TR', { 
         hour: '2-digit', 
         minute: '2-digit',
         hour12: false 
     });
+  };
 
-    if (isToday) {
-        return timeStr;
-    }
-    
-    // If not today, show date + time
-    return `${date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })} ${timeStr}`;
+  const getDayLabel = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    const now = new Date();
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (date.toDateString() === now.toDateString()) return 'Bugün';
+    if (date.toDateString() === yesterday.toDateString()) return 'Dün';
+    return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
   return (
@@ -374,56 +374,60 @@ const MessagesPage = () => {
                 {messagesLoading ? (
                   <div className="messages-main__loading">Yükleniyor...</div>
                 ) : (
-                  messages.map(msg => {
-                    const senderId = typeof msg.sender === 'object' ? msg.sender?.id : msg.sender;
-                    const isMe = user?.id && senderId === user.id;
+                  (() => {
+                    let lastDayLabel = null;
+                    return messages.map(msg => {
+                      const senderId = typeof msg.sender === 'object' ? msg.sender?.id : msg.sender;
+                      const isMe = user?.id && senderId === user.id;
+                      const dayLabel = getDayLabel(msg.created_at);
+                      const showDaySep = dayLabel !== lastDayLabel;
+                      if (showDaySep) lastDayLabel = dayLabel;
 
-                    return (
-                      <div
-                        key={msg.id}
-                        className={`message ${isMe ? 'mine' : 'theirs'}`}
-                      >
-                        {selectedConversation.type === 'GROUP' && !isMe && (
-                          <div className="message__sender-info">
-                            {msg.sender_profile_image ? (
-                              <img
-                                src={msg.sender_profile_image}
-                                alt={msg.sender_username}
-                                className="message__sender-avatar"
-                              />
-                            ) : (
-                              <div className="message__sender-avatar-placeholder">
-                                {msg.sender_username?.charAt(0).toUpperCase()}
-                              </div>
-                            )}
-                            <div className="message__sender-name-content">
-                              <span className="message__sender-name">{msg.sender_username}</span>
-                            </div>
-                          </div>
-                        )}
-                        <div className="message__bubble">
-                          {msg.parent_message_details && (
-                            <div className="message__reply-quote">
-                              <div className="reply-quote__sender">{msg.parent_message_details.sender_username}</div>
-                              <div className="reply-quote__content">{msg.parent_message_details.content}</div>
+                      return (
+                        <React.Fragment key={msg.id}>
+                          {showDaySep && (
+                            <div className="day-separator">
+                              <span>{dayLabel}</span>
                             </div>
                           )}
-                          <div className="message__text">{msg.content}</div>
-                          <div className="bubble-time-status">
-                            <span className="bubble-time">{formatTime(msg.created_at)}</span>
-                            {isMe && (
-                              <span className={`status-icon ${msg.is_read ? 'status-read' : ''}`}>
-                                {msg.id?.toString()?.startsWith('temp-') ? '...' : (msg.is_read ? '✓✓' : '✓')}
-                              </span>
+                          <div className={`message ${isMe ? 'mine' : 'theirs'}`}>
+                            {selectedConversation.type === 'GROUP' && !isMe && (
+                              <div className="message__sender-info">
+                                {msg.sender_profile_image ? (
+                                  <img src={msg.sender_profile_image} alt={msg.sender_username} className="message__sender-avatar" />
+                                ) : (
+                                  <div className="message__sender-avatar-placeholder">
+                                    {msg.sender_username?.charAt(0).toUpperCase()}
+                                  </div>
+                                )}
+                                <span className="message__sender-name">{msg.sender_username}</span>
+                              </div>
                             )}
+                            <div className="message__bubble">
+                              {msg.parent_message_details && (
+                                <div className="message__reply-quote">
+                                  <div className="reply-quote__sender">{msg.parent_message_details.sender_username}</div>
+                                  <div className="reply-quote__content">{msg.parent_message_details.content}</div>
+                                </div>
+                              )}
+                              <div className="message__text">{msg.content}</div>
+                              <div className="bubble-time-status">
+                                <span className="bubble-time">{formatTime(msg.created_at)}</span>
+                                {isMe && (
+                                  <span className={`status-icon ${msg.is_read ? 'status-read' : ''}`}>
+                                    {msg.id?.toString()?.startsWith('temp-') ? '...' : (msg.is_read ? '✓✓' : '✓')}
+                                  </span>
+                                )}
+                              </div>
+                              <button className="message__reply-btn" title="Yanıtla" onClick={() => setReplyingTo(msg)}>
+                                <Reply size={13} />
+                              </button>
+                            </div>
                           </div>
-                          <button className="message__reply-btn" onClick={() => setReplyingTo(msg)}>
-                            <Reply size={14} />
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })
+                        </React.Fragment>
+                      );
+                    });
+                  })()
                 )}
                 <div ref={messagesEndRef} />
               </div>

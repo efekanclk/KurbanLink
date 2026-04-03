@@ -21,6 +21,7 @@ export {
   Save,
   Send,
   Filter,
+  Reply,
   SlidersHorizontal,
   ClipboardList,
   Scissors,
