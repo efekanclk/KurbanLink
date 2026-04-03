@@ -39,10 +39,13 @@ class RecommendationEngine:
         
         if user and user.is_authenticated:
             # If logged in, prefer profile location if not overridden
-            if not target_city:
-                target_city = user.city
-            if not target_district:
-                target_district = user.district
+            try:
+                if not target_city:
+                    target_city = getattr(user, 'city', None)
+                if not target_district:
+                    target_district = getattr(user, 'district', None)
+            except AttributeError:
+                pass
         
         # 2. Get User Interactions for ML
         user_interacted_ids = []

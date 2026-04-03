@@ -122,11 +122,7 @@ class ConversationSerializer(serializers.ModelSerializer):
             serializers.ValidationError: If validation fails
         """
         if not value.is_active:
-            raise serializers.ValidationError("Cannot start conversation about inactive listing.")
-        
-        request = self.context.get('request')
-        if request and request.user == value.seller:
-            raise serializers.ValidationError("You cannot start a conversation about your own listing.")
+            raise serializers.ValidationError("Pasif ilanlar hakkında görüşme başlatılamaz.")
         
         return value
 

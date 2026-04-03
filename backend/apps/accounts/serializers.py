@@ -128,8 +128,8 @@ class RegisterSerializer(serializers.ModelSerializer):
     
     def validate_username(self, value):
         """Validate and normalize username."""
-        # Normalize username
-        normalized = User.normalize_username(value)
+        # Normalize username (lowercase and strip)
+        normalized = value.strip().lower()
         
         # Check uniqueness
         if User.objects.filter(username=normalized).exists():
