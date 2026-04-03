@@ -132,8 +132,8 @@ const MessagesPage = () => {
              // markGroupAllRead(conversation.id);
           } else {
              const hasNewTheirs = data.length > prev.length && 
-                                data[data.length-1].sender !== user.id;
-             if (hasNewTheirs) markAllRead(conversation.id);
+                                data[data.length-1]?.sender !== user?.id;
+             if (hasNewTheirs && user) markAllRead(conversation.id);
           }
           return data;
         }
@@ -155,7 +155,7 @@ const MessagesPage = () => {
         data = await fetchConversationMessages(conversation.id);
         await markAllRead(conversation.id);
       }
-      setMessages(data);
+      setMessages(Array.isArray(data) ? data : []);
 
       // Update local unread count
       setConversations(prev =>
@@ -204,8 +204,8 @@ const MessagesPage = () => {
       id: tempId,
       content: content,
       created_at: new Date().toISOString(),
-      sender: user.id || user, // fallback if user is an object
-      sender_username: user.username,
+      sender: user?.id || user, // fallback if user is an object
+      sender_username: user?.username,
     };
 
     // 1. Instantly update messages UI
@@ -352,14 +352,8 @@ const MessagesPage = () => {
                   <div className="messages-main__loading">Yükleniyor...</div>
                 ) : (
                   messages.map(msg => {
-                    const isMine = (msg.sender === user.id) || (msg.sender?.id === user.id) || (selectedConversation.type === 'DIRECT' && !msg.sender_username); // simplistic check
-                    // Adjust sender check based on API response structure
-                    // For unified structure, direct messages might have sender as ID, group as Object or ID.
-                    // The backend serializers:
-                    // MessageSerializer: sender is serializer (object)
-                    // GroupMessageSerializer: sender is serializer (object)
-                    const senderId = typeof msg.sender === 'object' ? msg.sender.id : msg.sender;
-                    const isMe = senderId === user.id;
+                    const senderId = typeof msg.sender === 'object' ? msg.sender?.id : msg.sender;
+                    const isMe = user?.id && senderId === user.id;
 
                     return (
                       <div
@@ -388,7 +382,7 @@ const MessagesPage = () => {
                           {msg.content}
                           {isMe && (
                             <div className="message__status">
-                              {msg.id.toString().startsWith('temp-') ? (
+                              {msg.id?.toString().startsWith('temp-') ? (
                                 <span className="status-sending">...</span>
                               ) : msg.is_read ? (
                                 <span className="status-read" title="Okundu">
