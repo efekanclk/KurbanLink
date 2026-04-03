@@ -382,13 +382,82 @@
     padding: 4px;
 }
 
-.status-icon {
-    font-size: 13px;
+.tick-status {
+    display: flex;
+    align-items: center;
     line-height: 1;
 }
 
-.status-read {
-    color: #4ade80 !important;
+.tick-status.tick-sent {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.tick-status.tick-read {
+    color: #4ade80;
+}
+
+.message.theirs .tick-status {
+    color: #94a3b8;
+}
+
+/* Context Menu */
+.msg-context-menu {
+    position: fixed;
+    z-index: 9999;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08);
+    padding: 6px 0;
+    min-width: 160px;
+    animation: contextMenuIn 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: top left;
+}
+
+@keyframes contextMenuIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.msg-context-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 16px;
+    background: none;
+    border: none;
+    font-size: 15px;
+    color: #1a1a1a;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s;
+}
+
+.msg-context-item:hover {
+    background: #f1f5f9;
+}
+
+.msg-context-item svg {
+    flex-shrink: 0;
+    color: #64748b;
+}
+
+.msg-context-divider {
+    height: 1px;
+    background: rgba(0,0,0,0.07);
+    margin: 4px 0;
+}
+
+.msg-context-delete {
+    color: #ef4444;
+}
+
+.msg-context-delete:hover {
+    background: #fef2f2;
+}
+
+.msg-context-delete svg {
+    color: #ef4444;
 }
 
 .message__time {

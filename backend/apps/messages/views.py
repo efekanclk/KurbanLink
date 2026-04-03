@@ -184,39 +184,31 @@ class MessageViewSet(viewsets.ModelViewSet):
     
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
-    http_method_names = ['get', 'post', 'head', 'options']  # Disable PUT/PATCH/DELETE
+    http_method_names = ['get', 'post', 'delete', 'head', 'options']
     
     def get_queryset(self):
-        """
-        Return messages from conversations user is part of.
-        
-        Filtered by conversation query parameter if provided.
-        
-        Returns:
-            QuerySet of accessible messages
-        """
         user = self.request.user
-        
-        # Only messages from user's conversations
         queryset = Message.objects.filter(
             Q(conversation__buyer=user) | Q(conversation__seller=user)
         ).select_related('conversation', 'sender').order_by('created_at')
-        
-        # Filter by conversation if specified
         conversation_id = self.request.query_params.get('conversation')
         if conversation_id:
             queryset = queryset.filter(conversation_id=conversation_id)
-        
         return queryset
     
     def perform_create(self, serializer):
-        """
-        Automatically set sender to authenticated user.
-        
-        Args:
-            serializer: The validated serializer instance
-        """
         serializer.save(sender=self.request.user)
+
+    def destroy(self, request, *args, **kwargs):
+        """Allow any conversation participant to delete any message."""
+        message = self.get_object()
+        user = request.user
+        conv = message.conversation
+        # Only participants (buyer/seller) may delete
+        if user not in [conv.buyer, conv.seller]:
+            return Response({'detail': 'Bu mesajı silemezsiniz.'}, status=status.HTTP_403_FORBIDDEN)
+        message.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET'])

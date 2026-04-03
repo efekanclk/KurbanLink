@@ -8,7 +8,9 @@ import {
   sendMessage,
   sendGroupMessage,
   markAllRead,
-  markGroupAllRead
+  markGroupAllRead,
+  deleteMessage,
+  deleteGroupMessage,
 } from '../../api/messages';
 import { Send, User as UserIcon, Users as UsersIcon, ArrowLeft, Reply, X } from '../../ui/icons';
 import './MessagesPage.css';
@@ -22,6 +24,7 @@ const MessagesPage = () => {
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
   const [replyingTo, setReplyingTo] = useState(null);
+  const [contextMenu, setContextMenu] = useState(null); // { msg, x, y }
   const [loading, setLoading] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [sending, setSending] = useState(false);
@@ -273,11 +276,7 @@ const MessagesPage = () => {
   const formatTime = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
-    return date.toLocaleTimeString('tr-TR', { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        hour12: false 
-    });
+    return date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', hour12: false });
   };
 
   const getDayLabel = (dateStr) => {
@@ -286,14 +285,53 @@ const MessagesPage = () => {
     const now = new Date();
     const yesterday = new Date(now);
     yesterday.setDate(yesterday.getDate() - 1);
-
     if (date.toDateString() === now.toDateString()) return 'Bugün';
     if (date.toDateString() === yesterday.toDateString()) return 'Dün';
     return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
+  const handleMessageContextMenu = (e, msg) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
+    setContextMenu({ msg, x: e.clientX, y: e.clientY });
+  };
+
+  const closeContextMenu = () => setContextMenu(null);
+
+  const handleReply = (msg) => {
+    setReplyingTo(msg);
+    closeContextMenu();
+    setTimeout(() => inputRef.current?.focus(), 50);
+  };
+
+  const handleCopy = (msg) => {
+    navigator.clipboard.writeText(msg.content).catch(() => {});
+    closeContextMenu();
+  };
+
+  const handleDelete = async (msg) => {
+    closeContextMenu();
+    // Optimistically remove
+    setMessages(prev => prev.filter(m => m.id !== msg.id));
+    try {
+      if (selectedConversation?.type === 'GROUP') {
+        await deleteGroupMessage(msg.id);
+      } else {
+        await deleteMessage(msg.id);
+      }
+    } catch (err) {
+      console.error('Delete failed:', err);
+      // Restore on failure
+      setMessages(prev => {
+        const restored = [...prev, msg];
+        return restored.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      });
+    }
+  };
+
   return (
-    <div className="messages-page">
+    <div className="messages-page" onClick={closeContextMenu}>
       <div className="messages-container">
         {/* Left Column - Conversation List */}
         <div className={`messages-sidebar ${isMobileView && selectedConversation ? 'hidden' : ''}`}>
@@ -386,11 +424,12 @@ const MessagesPage = () => {
                       return (
                         <React.Fragment key={msg.id}>
                           {showDaySep && (
-                            <div className="day-separator">
-                              <span>{dayLabel}</span>
-                            </div>
+                            <div className="day-separator"><span>{dayLabel}</span></div>
                           )}
-                          <div className={`message ${isMe ? 'mine' : 'theirs'}`}>
+                          <div
+                            className={`message ${isMe ? 'mine' : 'theirs'}`}
+                            onContextMenu={(e) => handleMessageContextMenu(e, msg)}
+                          >
                             {selectedConversation.type === 'GROUP' && !isMe && (
                               <div className="message__sender-info">
                                 {msg.sender_profile_image ? (
@@ -403,7 +442,14 @@ const MessagesPage = () => {
                                 <span className="message__sender-name">{msg.sender_username}</span>
                               </div>
                             )}
-                            <div className="message__bubble">
+                            <div
+                              className="message__bubble"
+                              onTouchStart={(e) => {
+                                const timer = setTimeout(() => handleMessageContextMenu(e.touches[0], msg), 500);
+                                e.currentTarget._touchTimer = timer;
+                              }}
+                              onTouchEnd={(e) => clearTimeout(e.currentTarget._touchTimer)}
+                            >
                               {msg.parent_message_details && (
                                 <div className="message__reply-quote">
                                   <div className="reply-quote__sender">{msg.parent_message_details.sender_username}</div>
@@ -414,14 +460,22 @@ const MessagesPage = () => {
                               <div className="bubble-time-status">
                                 <span className="bubble-time">{formatTime(msg.created_at)}</span>
                                 {isMe && (
-                                  <span className={`status-icon ${msg.is_read ? 'status-read' : ''}`}>
-                                    {msg.id?.toString()?.startsWith('temp-') ? '...' : (msg.is_read ? '✓✓' : '✓')}
+                                  <span className={`tick-status ${msg.is_read ? 'tick-read' : 'tick-sent'}`}>
+                                    {msg.id?.toString()?.startsWith('temp-') ? (
+                                      <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><circle cx="8" cy="8" r="3" opacity="0.4"/></svg>
+                                    ) : msg.is_read ? (
+                                      <svg viewBox="0 0 24 10" width="20" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="1,5 5,9 13,1"/>
+                                        <polyline points="8,5 12,9 20,1"/>
+                                      </svg>
+                                    ) : (
+                                      <svg viewBox="0 0 14 10" width="16" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="1,5 5,9 13,1"/>
+                                      </svg>
+                                    )}
                                   </span>
                                 )}
                               </div>
-                              <button className="message__reply-btn" title="Yanıtla" onClick={() => setReplyingTo(msg)}>
-                                <Reply size={13} />
-                              </button>
                             </div>
                           </div>
                         </React.Fragment>
@@ -460,6 +514,36 @@ const MessagesPage = () => {
                 </form>
               </div>
             </>
+          )}
+          {/* Context Menu */}
+          {contextMenu && (
+            <div
+              className="msg-context-menu"
+              style={{ top: contextMenu.y, left: contextMenu.x }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="msg-context-item" onClick={() => handleReply(contextMenu.msg)}>
+                <Reply size={15} />
+                <span>Yanıtla</span>
+              </button>
+              <button className="msg-context-item" onClick={() => handleCopy(contextMenu.msg)}>
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                <span>Kopyala</span>
+              </button>
+              <div className="msg-context-divider" />
+              <button className="msg-context-item msg-context-delete" onClick={() => handleDelete(contextMenu.msg)}>
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                  <path d="M10 11v6M14 11v6"/>
+                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                </svg>
+                <span>Sil</span>
+              </button>
+            </div>
           )}
         </div>
       </div>

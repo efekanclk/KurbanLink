@@ -83,3 +83,17 @@ export const markGroupAllRead = async (groupId) => {
     const response = await apiClient.post(`/api/messages/groups/${groupId}/mark_all_read/`);
     return response.data;
 };
+
+/**
+ * Delete a direct message
+ */
+export const deleteMessage = async (messageId) => {
+    await apiClient.delete(`/api/messages/${messageId}/`);
+};
+
+/**
+ * Delete a group message
+ */
+export const deleteGroupMessage = async (messageId) => {
+    await apiClient.delete(`/api/messages/groups/messages/${messageId}/`);
+};
