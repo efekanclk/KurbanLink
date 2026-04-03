@@ -1,10 +1,20 @@
 import axios from 'axios';
 import { getAccessToken, getRefreshToken, setTokens, clearTokens } from '../utils/token';
 
+// Determine base URL dynamically
+const getBaseURL = () => {
+    // If we're on localhost, use the local backend
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return 'http://localhost:8000';
+    }
+    // In production, assume same origin but different path if needed, 
+    // or just return empty for relative paths
+    return ''; 
+};
+
 // Create axios instance with base configuration
 const apiClient = axios.create({
-    baseURL: 'http://localhost:8000',
-    // Content-Type will be automatically set (JSON for objects, multipart for FormData)
+    baseURL: getBaseURL(),
 });
 
 // Request interceptor to attach access token
@@ -46,8 +56,9 @@ apiClient.interceptors.response.use(
                     throw new Error('No refresh token');
                 }
 
-                // Attempt to refresh token
-                const response = await axios.post('https://kurbanlink.com/api/auth/refresh/', {
+                // Attempt to refresh token using a relative URL or baseURL
+                const refreshURL = getBaseURL() + '/api/auth/refresh/';
+                const response = await axios.post(refreshURL, {
                     refresh: refreshToken,
                 });
 

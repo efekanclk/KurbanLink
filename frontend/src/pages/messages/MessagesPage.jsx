@@ -39,7 +39,26 @@ const MessagesPage = () => {
   // Load conversations on mount
   useEffect(() => {
     loadConversations();
+    
+    // Poll for inbox updates every 10 seconds
+    const inboxInterval = setInterval(() => {
+      loadConversations(false); // Pass false to avoid flickering loading states
+    }, 10000);
+    
+    return () => clearInterval(inboxInterval);
   }, []);
+
+  // Polling for new messages in selected conversation
+  useEffect(() => {
+    if (!selectedConversation) return;
+
+    // Poll for new messages every 3 seconds
+    const messagesInterval = setInterval(() => {
+      refreshMessages(selectedConversation);
+    }, 3000);
+
+    return () => clearInterval(messagesInterval);
+  }, [selectedConversation]);
 
   // Handle URL params
   useEffect(() => {
@@ -76,15 +95,44 @@ const MessagesPage = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const loadConversations = async () => {
-    setLoading(true);
+  const loadConversations = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
     try {
       const data = await fetchInbox();
       setConversations(data);
     } catch (error) {
       console.error('Failed to load conversations:', error);
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
+    }
+  };
+
+  const refreshMessages = async (conversation) => {
+    if (!conversation) return;
+    try {
+      let data;
+      if (conversation.type === 'GROUP') {
+        data = await fetchGroupMessages(conversation.id);
+      } else {
+        data = await fetchConversationMessages(conversation.id);
+      }
+      
+      // Only update if message count changed or something changed
+      // Simple check: compare length
+      setMessages(prev => {
+        if (prev.length !== data.length) {
+          // If we are refreshing and there's a new message, mark as read
+          if (conversation.type === 'GROUP') {
+             markGroupAllRead(conversation.id);
+          } else {
+             markAllRead(conversation.id);
+          }
+          return data;
+        }
+        return prev;
+      });
+    } catch (error) {
+      console.error('Failed to refresh messages:', error);
     }
   };
 

@@ -1,20 +1,4 @@
-import axios from 'axios';
-
-const apiClient = axios.create({
-    baseURL: 'http://localhost:8000',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-});
-
-// Add auth token to requests
-apiClient.interceptors.request.use(config => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-});
+import apiClient from './axios';
 
 /**
  * Fetch all conversations for current user
