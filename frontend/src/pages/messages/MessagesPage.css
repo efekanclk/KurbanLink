@@ -218,6 +218,16 @@
     margin-top: 4px;
 }
 
+.bubble-time-status {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    font-size: 10px;
+    margin-top: 4px;
+    opacity: 0.7;
+}
+
 .status-read {
     color: #4ade80 !important;
 }
@@ -239,28 +249,22 @@
 
 /* Footer Input Area */
 .messages-main__footer {
-    padding: 15px 30px 25px;
+    padding: 12px 24px 20px;
     background: white;
     border-top: 1px solid var(--border-soft);
-}
-
-.messages-main__footer form {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #f0f2f5;
-    padding: 6px 6px 6px 20px;
-    border-radius: 30px;
-    width: 100%;
 }
 
 .messages-main__footer input {
     flex: 1;
+    background: #f0f2f5;
     border: none;
-    outline: none;
+    padding: 12px 20px;
+    border-radius: 25px;
     font-size: 15px;
-    padding: 10px 0;
-    background: transparent;
+    outline: none;
     color: #1a1a1a;
 }
 

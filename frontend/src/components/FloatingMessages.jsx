@@ -203,7 +203,14 @@ const FloatingMessages = () => {
                                         className={`message-bubble ${msg.is_mine ? 'mine' : 'theirs'}`}
                                     >
                                         <div className="bubble-content">{msg.content}</div>
-                                        <div className="bubble-time">{formatTime(msg.created_at)}</div>
+                                        <div className="bubble-time-status">
+                                            {formatTime(msg.created_at)}
+                                            {msg.is_mine && (
+                                                <span className={`status-icon ${msg.is_read ? 'status-read' : ''}`}>
+                                                    {msg.is_read ? '✓✓' : '✓'}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                 ))}
                                 <div ref={messagesEndRef} />
