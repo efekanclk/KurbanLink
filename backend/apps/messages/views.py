@@ -62,10 +62,28 @@ class ConversationViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         
         listing = serializer.validated_data['listing']
-        buyer = request.user
-        seller = listing.seller
         
-        # Check if conversation already exists
+        # Determine roles
+        if request.user == listing.seller:
+            # Seller is initiating conversation with a buyer
+            buyer_id = request.data.get('buyer')
+            if not buyer_id:
+                return Response(
+                    {'buyer': ['This field is required when a seller initiates a conversation.']},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            from apps.accounts.models import User
+            try:
+                buyer = User.objects.get(pk=buyer_id)
+            except User.DoesNotExist:
+                return Response({'buyer': ['User not found.']}, status=status.HTTP_404_NOT_FOUND)
+            seller = request.user
+        else:
+            # Buyer is initiating conversation (standard flow)
+            buyer = request.user
+            seller = listing.seller
+        
+        # Check if conversation already exists (unique per listing and buyer)
         existing_conversation = Conversation.objects.filter(
             listing=listing,
             buyer=buyer

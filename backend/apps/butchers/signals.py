@@ -24,8 +24,8 @@ def notify_on_appointment_change(sender, instance, created, **kwargs):
         Notification.objects.create(
             user=instance.butcher.user,
             type=Notification.APPOINTMENT_REQUESTED,
-            title='New Appointment Request',
-            message=f'You have a new appointment request for {instance.date} at {instance.time}',
+            title='Yeni Randevu Talebi',
+            message=f'{instance.date} tarihinde saat {instance.time} için yeni bir randevu talebiniz var',
             data={
                 'appointment_id': instance.id,
                 'butcher_id': instance.butcher.id,
@@ -35,17 +35,14 @@ def notify_on_appointment_change(sender, instance, created, **kwargs):
         )
     else:
         # Status changed, determine what happened
-        # We need to track previous status to know what changed
-        # For now, we'll use simple status-based logic
-        
         if instance.status == Appointment.APPROVED:
             # Appointment approved → notify user
             butcher_name = f"{instance.butcher.first_name} {instance.butcher.last_name}"
             Notification.objects.create(
                 user=instance.user,
                 type=Notification.APPOINTMENT_APPROVED,
-                title='Appointment Approved',
-                message=f'Your appointment with {butcher_name} has been approved',
+                title='Randevu Onaylandı',
+                message=f'Kasap {butcher_name} ile olan randevunuz onaylandı',
                 data={
                     'appointment_id': instance.id,
                     'butcher_id': instance.butcher.id,
@@ -60,8 +57,8 @@ def notify_on_appointment_change(sender, instance, created, **kwargs):
             Notification.objects.create(
                 user=instance.user,
                 type=Notification.APPOINTMENT_REJECTED,
-                title='Appointment Rejected',
-                message=f'Your appointment with {butcher_name} has been rejected',
+                title='Randevu Reddedildi',
+                message=f'Kasap {butcher_name} ile olan randevunuz reddedildi',
                 data={
                     'appointment_id': instance.id,
                     'butcher_id': instance.butcher.id,
@@ -72,13 +69,11 @@ def notify_on_appointment_change(sender, instance, created, **kwargs):
         
         elif instance.status == Appointment.CANCELLED:
             # Appointment cancelled → notify the other party
-            # We can't determine who cancelled without tracking, so notify butcher
-            # In a real system, you'd track who performed the action
             Notification.objects.create(
                 user=instance.butcher.user,
                 type=Notification.APPOINTMENT_CANCELLED,
-                title='Appointment Cancelled',
-                message=f'An appointment for {instance.date} at {instance.time} has been cancelled',
+                title='Randevu İptal Edildi',
+                message=f'{instance.date} tarihinde saat {instance.time} için olan randevu iptal edildi',
                 data={
                     'appointment_id': instance.id,
                     'butcher_id': instance.butcher.id,

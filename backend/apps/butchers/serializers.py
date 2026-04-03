@@ -86,6 +86,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     butcher_name = serializers.SerializerMethodField()
     user_email = serializers.EmailField(source='user.email', read_only=True)
     user_name = serializers.SerializerMethodField()
+    user_full_name = serializers.SerializerMethodField()
     listing_title = serializers.CharField(source='listing.title', read_only=True, required=False)
     
     def get_butcher_name(self, obj):
@@ -96,6 +97,12 @@ class AppointmentSerializer(serializers.ModelSerializer):
         """Return customer's username or email."""
         return obj.user.username if obj.user.username else obj.user.email.split('@')[0]
     
+    def get_user_full_name(self, obj):
+        """Return customer's first and last name."""
+        if obj.user.first_name or obj.user.last_name:
+            return f"{obj.user.first_name} {obj.user.last_name}".strip()
+        return self.get_user_name(obj)
+    
     class Meta:
         model = Appointment
         fields = [
@@ -105,6 +112,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'user',
             'user_email',
             'user_name',
+            'user_full_name',
             'listing',
             'listing_title',
             'date',

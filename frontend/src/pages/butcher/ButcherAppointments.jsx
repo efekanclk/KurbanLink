@@ -10,7 +10,8 @@ import {
     updateButcherProfile
 } from '../../api/butchers';
 import './ButcherAppointments.css';
-import { Calendar, Clock, ArrowLeft, Edit3 } from '../../ui/icons';
+import { Calendar, Clock, ArrowLeft, Edit3, MessageCircle } from '../../ui/icons';
+import { createConversation } from '../../api/messages';
 import { cities, getDistrictsForCity } from '../../data/locations';
 
 const ButcherPanel = () => {
@@ -175,6 +176,27 @@ const ButcherPanel = () => {
         }
     };
 
+    const handleMessageCustomer = async (apt) => {
+        if (!apt.listing) {
+            alert('Bu randevu bir ilanla ilişkili olmadığı için mesaj başlatılamıyor.');
+            return;
+        }
+
+        setActionLoading(prev => ({ ...prev, [apt.id]: 'message' }));
+        try {
+            // Initiate/get conversation
+            // We pass listing ID and buyer ID (user)
+            // Note: Our modified backend will handle the roles if listing matches butcher
+            const conv = await createConversation(apt.listing, apt.user);
+            navigate(`/messages?conversation=${conv.id}`);
+        } catch (err) {
+            console.error('Failed to start conversation:', err);
+            alert('Mesajlaşma başlatılamadı: ' + (err.response?.data?.detail || 'Bilinmeyen hata'));
+        } finally {
+            setActionLoading(prev => ({ ...prev, [apt.id]: null }));
+        }
+    };
+
     const startEditing = () => {
         if (!currentProfile) return;
         setProfileData({
@@ -239,17 +261,23 @@ const ButcherPanel = () => {
             <div className="card-body">
                 <div className="info-row">
                     <span className="label">Müşteri:</span>
-                    <span className="value">{apt.customer_email || apt.customer || 'Bilinmiyor'}</span>
+                    <span className="value">
+                        {apt.user_full_name || apt.user_name || 'Bilinmiyor'}
+                    </span>
                 </div>
-                {apt.notes && (
+                <div className="info-row">
+                    <span className="label">E-posta:</span>
+                    <span className="value">{apt.user_email}</span>
+                </div>
+                {apt.note && (
                     <div className="info-row">
                         <span className="label">Not:</span>
-                        <span className="value">{apt.notes}</span>
+                        <span className="value">{apt.note}</span>
                     </div>
                 )}
             </div>
 
-            {showActions && (
+            {showActions ? (
                 <div className="card-actions">
                     <button
                         onClick={() => handleApprove(apt.id)}
@@ -264,6 +292,17 @@ const ButcherPanel = () => {
                         disabled={actionLoading[apt.id]}
                     >
                         {actionLoading[apt.id] === 'reject' ? 'Reddediliyor...' : 'Reddet'}
+                    </button>
+                </div>
+            ) : apt.status === 'APPROVED' && (
+                <div className="card-actions">
+                    <button
+                        onClick={() => handleMessageCustomer(apt)}
+                        className="btn-message"
+                        disabled={actionLoading[apt.id]}
+                    >
+                        <MessageCircle size={16} />
+                        {actionLoading[apt.id] === 'message' ? 'Bekleyin...' : 'Mesaj Gönder'}
                     </button>
                 </div>
             )}
