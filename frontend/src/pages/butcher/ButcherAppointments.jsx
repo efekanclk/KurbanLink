@@ -177,17 +177,11 @@ const ButcherPanel = () => {
     };
 
     const handleMessageCustomer = async (apt) => {
-        if (!apt.listing) {
-            alert('Bu randevu bir ilanla ilişkili olmadığı için mesaj başlatılamıyor.');
-            return;
-        }
-
         setActionLoading(prev => ({ ...prev, [apt.id]: 'message' }));
         try {
             // Initiate/get conversation
-            // We pass listing ID and buyer ID (user)
-            // Note: Our modified backend will handle the roles if listing matches butcher
-            const conv = await createConversation(apt.listing, apt.user);
+            // If apt.listing is null, the backend now supports general conversations
+            const conv = await createConversation(apt.listing || null, apt.user);
             navigate(`/messages?conversation=${conv.id}`);
         } catch (err) {
             console.error('Failed to start conversation:', err);

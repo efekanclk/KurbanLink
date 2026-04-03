@@ -50,6 +50,9 @@ class ConversationSerializer(serializers.ModelSerializer):
             'unread_count',
             'created_at'
         ]
+        extra_kwargs = {
+            'listing': {'required': False, 'allow_null': True},
+        }
         labels = {
             'listing': 'İlan',
             'buyer': 'Alıcı',

@@ -18,26 +18,39 @@ class Conversation(models.Model):
         'animals.AnimalListing',
         on_delete=models.CASCADE,
         related_name='conversations',
-        help_text="The animal listing being discussed"
+        null=True,
+        blank=True,
+        help_text="The animal listing being discussed (optional)"
     )
     buyer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='buyer_conversations',
-        help_text="The buyer in this conversation"
+        help_text="The buyer or client in this conversation"
     )
     seller = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='seller_conversations',
-        help_text="The seller (owner of the listing)"
+        help_text="The seller or service provider in this conversation"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         verbose_name = 'conversation'
         verbose_name_plural = 'conversations'
-        unique_together = [['listing', 'buyer']]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['listing', 'buyer'], 
+                name='unique_listing_buyer_conversation',
+                condition=models.Q(listing__isnull=False)
+            ),
+            models.UniqueConstraint(
+                fields=['buyer', 'seller'], 
+                name='unique_general_conversation',
+                condition=models.Q(listing__isnull=True)
+            )
+        ]
         ordering = ['-created_at']
     
     def __str__(self) -> str:

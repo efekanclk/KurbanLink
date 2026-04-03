@@ -51,43 +51,72 @@ class ConversationViewSet(viewsets.ModelViewSet):
         # Get listing from request
         listing_id = request.data.get('listing')
         
-        if not listing_id:
-            return Response(
-                {'listing': ['This field is required.']},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
         # Validate serializer
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
-        listing = serializer.validated_data['listing']
+        listing = serializer.validated_data.get('listing')
         
-        # Determine roles
-        if request.user == listing.seller:
-            # Seller is initiating conversation with a buyer
+        if listing:
+            # Determine roles based on listing
+            if request.user == listing.seller:
+                # Seller is initiating conversation with a buyer
+                buyer_id = request.data.get('buyer')
+                if not buyer_id:
+                    return Response(
+                        {'buyer': ['This field is required when a seller initiates a conversation.']},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                from apps.accounts.models import User
+                try:
+                    buyer = User.objects.get(pk=buyer_id)
+                except User.DoesNotExist:
+                    return Response({'buyer': ['User not found.']}, status=status.HTTP_404_NOT_FOUND)
+                seller = request.user
+            else:
+                # Buyer is initiating conversation (standard flow)
+                buyer = request.user
+                seller = listing.seller
+            
+            # Check if conversation already exists (unique per listing and buyer)
+            existing_conversation = Conversation.objects.filter(
+                listing=listing,
+                buyer=buyer
+            ).first()
+        else:
+            # No listing - General conversation between two users
+            # Usually initiated by one user towards another
+            # We need both buyer and seller IDs if it's new
+            # If initiated by Butcher, we use 'buyer' param as the customer
             buyer_id = request.data.get('buyer')
+            seller_id = request.data.get('seller')
+            
             if not buyer_id:
-                return Response(
-                    {'buyer': ['This field is required when a seller initiates a conversation.']},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({'buyer': ['This field is required for general conversations.']}, status=status.HTTP_400_BAD_REQUEST)
+            
             from apps.accounts.models import User
             try:
                 buyer = User.objects.get(pk=buyer_id)
             except User.DoesNotExist:
-                return Response({'buyer': ['User not found.']}, status=status.HTTP_404_NOT_FOUND)
-            seller = request.user
-        else:
-            # Buyer is initiating conversation (standard flow)
-            buyer = request.user
-            seller = listing.seller
-        
-        # Check if conversation already exists (unique per listing and buyer)
-        existing_conversation = Conversation.objects.filter(
-            listing=listing,
-            buyer=buyer
-        ).first()
+                return Response({'buyer': ['Buyer not found.']}, status=status.HTTP_404_NOT_FOUND)
+            
+            # Seller defaults to current user if not provided
+            if seller_id:
+                try:
+                    seller = User.objects.get(pk=seller_id)
+                except User.DoesNotExist:
+                    return Response({'seller': ['Seller not found.']}, status=status.HTTP_404_NOT_FOUND)
+            else:
+                seller = request.user
+                
+            # Uniqueness for general conversations: (buyer, seller)
+            # Check both directions to be safe, or stick to one convention
+            # Let's assume buyer is the recipient of service, seller is provider
+            existing_conversation = Conversation.objects.filter(
+                listing__isnull=True,
+                buyer=buyer,
+                seller=seller
+            ).first()
         
         if existing_conversation:
             # Return existing conversation
@@ -105,11 +134,12 @@ class ConversationViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         except IntegrityError:
-            # Handle race condition - conversation was just created
-            existing_conversation = Conversation.objects.get(
-                listing=listing,
-                buyer=buyer
-            )
+            # Handle race condition
+            if listing:
+                existing_conversation = Conversation.objects.get(listing=listing, buyer=buyer)
+            else:
+                existing_conversation = Conversation.objects.get(listing__isnull=True, buyer=buyer, seller=seller)
+            
             serializer = self.get_serializer(existing_conversation)
             return Response(serializer.data, status=status.HTTP_200_OK)
     
