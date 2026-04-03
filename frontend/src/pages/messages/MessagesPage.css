@@ -135,7 +135,10 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+    background-image: url('/Users/efekancelik/.gemini/antigravity/brain/d9796f59-5b40-4505-b16d-e64185204476/animal_doodle_wallpaper_1775230098739.png');
+    background-size: 300px;
+    background-repeat: repeat;
+    background-attachment: fixed;
     background-color: var(--chat-bg);
 }
 
@@ -223,13 +226,15 @@
     align-items: center;
     justify-content: flex-end;
     gap: 4px;
-    font-size: 10px;
+    font-size: 11px;
     margin-top: 4px;
-    opacity: 0.7;
+    opacity: 0.9;
+    font-weight: 500;
 }
 
-.status-read {
-    color: #4ade80 !important;
+.status-icon {
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .message__time {
