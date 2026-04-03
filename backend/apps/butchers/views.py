@@ -8,7 +8,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from apps.accounts.permissions import IsButcher
-from apps.core.hashids_mixin import HashidsMixin
 from .models import ButcherProfile, Appointment
 from .serializers import ButcherProfileSerializer, AppointmentSerializer
 
@@ -28,7 +27,7 @@ class IsOwnerOrReadOnly(IsAuthenticated):
         return obj.user == request.user
 
 
-class ButcherProfileViewSet(HashidsMixin, viewsets.ModelViewSet):
+class ButcherProfileViewSet(viewsets.ModelViewSet):
     """
     ViewSet for butcher profiles.
     

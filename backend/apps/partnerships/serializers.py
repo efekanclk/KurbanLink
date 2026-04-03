@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from apps.core.hashids_util import encode_id
 from .models import PartnershipListing, PartnershipMembership, PartnershipJoinRequest
 from django.contrib.auth import get_user_model
 
@@ -17,13 +16,11 @@ class PartnershipSerializer(serializers.ModelSerializer):
     user_is_member = serializers.SerializerMethodField()
     user_is_creator = serializers.SerializerMethodField()
     user_request_status = serializers.SerializerMethodField()
-    hashed_id = serializers.SerializerMethodField()
     
     class Meta:
         model = PartnershipListing
         fields = [
             'id',
-            'hashed_id',
             'creator',
             'creator_username',
             'city',
@@ -39,9 +36,6 @@ class PartnershipSerializer(serializers.ModelSerializer):
             'updated_at'
         ]
         read_only_fields = ['id', 'creator', 'created_at', 'updated_at']
-    
-    def get_hashed_id(self, obj):
-        return encode_id(obj.id)
     
     def get_creator_username(self, obj):
         if obj.creator.username:

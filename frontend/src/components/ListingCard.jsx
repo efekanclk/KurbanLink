@@ -25,7 +25,7 @@ const ListingCard = ({ listing, image, badgeText = null }) => {
                 : '';
 
     return (
-        <div className="listing-card" onClick={() => navigate(`/animals/${listing.hashed_id || listing.id}`)}>
+        <div className="listing-card" onClick={() => navigate(`/animals/${listing.id}`)}>
             <div className="card-image-wrapper">
                 {badgeText && (
                     <span className={`card-badge ${badgeClass}`}>{badgeText}</span>

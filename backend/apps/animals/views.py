@@ -8,14 +8,13 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from apps.accounts.permissions import IsOwner
-from apps.core.hashids_mixin import HashidsMixin
 from .models import AnimalListing
 from .serializers import AnimalListingSerializer
 from .filters import AnimalListingFilter
 from .pagination import AnimalListingPagination
 
 
-class AnimalListingViewSet(HashidsMixin, viewsets.ModelViewSet):
+class AnimalListingViewSet(viewsets.ModelViewSet):
     """
     ViewSet for animal listings.
     

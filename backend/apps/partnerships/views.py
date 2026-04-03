@@ -4,14 +4,13 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from django.db import transaction
-from apps.core.hashids_mixin import HashidsMixin
 from .models import PartnershipListing, PartnershipMembership, PartnershipJoinRequest
 from .serializers import PartnershipSerializer, MemberSerializer, JoinRequestSerializer
 from .permissions import IsCreator
 from apps.messages.models import GroupConversation, GroupConversationParticipant
 
 
-class PartnershipListingViewSet(HashidsMixin, viewsets.ModelViewSet):
+class PartnershipListingViewSet(viewsets.ModelViewSet):
     """
     ViewSet for partnership listings with membership management.
     """

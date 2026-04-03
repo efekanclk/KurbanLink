@@ -3,7 +3,6 @@ Serializers for animals app.
 """
 
 from rest_framework import serializers
-from apps.core.hashids_util import encode_id
 from .models import AnimalListing
 
 
@@ -14,7 +13,6 @@ class AnimalListingSerializer(serializers.ModelSerializer):
     Includes computed fields for display and seller information.
     """
     # Computed/extra fields
-    hashed_id = serializers.SerializerMethodField()
     seller_email = serializers.EmailField(source='seller.email', read_only=True)
     seller_username = serializers.CharField(source='seller.username', read_only=True)
     seller_phone_number = serializers.CharField(source='seller.phone_number', read_only=True)
@@ -25,7 +23,6 @@ class AnimalListingSerializer(serializers.ModelSerializer):
         model = AnimalListing
         fields = [
             'id',
-            'hashed_id',
             'seller',
             'seller_email',
             'seller_username',
@@ -51,9 +48,6 @@ class AnimalListingSerializer(serializers.ModelSerializer):
             'created_at',
         ]
         read_only_fields = ['id', 'seller', 'created_at']
-    
-    def get_hashed_id(self, obj):
-        return encode_id(obj.id)
     
     def get_age_display(self, obj):
         """
