@@ -323,21 +323,35 @@ const MessagesPage = () => {
     setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, is_deleted: true, content: '' } : m));
     try {
       const updated = selectedConversation?.type === 'GROUP'
-        ? await deleteGroupMessage(msg.id)
-        : await deleteMessage(msg.id);
+        ? await deleteGroupMessage(msg.id, true)
+        : await deleteMessage(msg.id, true);
+      // Backend returns the updated message with is_deleted=true
       if (updated) {
-        setMessages(prev => prev.map(m => m.id === msg.id ? { ...updated, is_deleted: true } : m));
+        setMessages(prev => prev.map(m => m.id === msg.id ? { ...m, ...updated } : m));
       }
     } catch (err) {
-      console.error('Delete failed:', err);
+      console.error('Delete for everyone failed:', err);
+      // Rollback on failure
       setMessages(prev => prev.map(m => m.id === msg.id ? msg : m));
     }
   };
 
-  const handleDeleteForMe = () => {
+  const handleDeleteForMe = async () => {
     const msg = deleteModal;
     setDeleteModal(null);
+    // Optimistically remove from view
     setMessages(prev => prev.filter(m => m.id !== msg.id));
+    try {
+      if (selectedConversation?.type === 'GROUP') {
+        await deleteGroupMessage(msg.id, false);
+      } else {
+        await deleteMessage(msg.id, false);
+      }
+    } catch (err) {
+      console.error('Delete for me failed:', err);
+      // No rollback for "Delete for Me" as it's a personal preference/cleanup
+      // but we could reload messages if it was critical.
+    }
   };
 
   return (
@@ -574,9 +588,14 @@ const MessagesPage = () => {
             <div className="delete-modal-overlay" onClick={() => setDeleteModal(null)}>
               <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
                 <p className="delete-modal__title">Mesaj silinsin mi?</p>
-                <button className="delete-modal__btn delete-modal__btn--everyone" onClick={handleDeleteForEveryone}>
-                  Herkesten sil
-                </button>
+                
+                {/* Herkesten sil only for sender (isMe) */}
+                {(typeof deleteModal.sender === 'object' ? deleteModal.sender?.id === user?.id : deleteModal.sender === user?.id) && (
+                  <button className="delete-modal__btn delete-modal__btn--everyone" onClick={handleDeleteForEveryone}>
+                    Herkesten sil
+                  </button>
+                )}
+                
                 <button className="delete-modal__btn delete-modal__btn--me" onClick={handleDeleteForMe}>
                   Benden sil
                 </button>

@@ -104,8 +104,15 @@ class ConversationSerializer(serializers.ModelSerializer):
         return obj.seller.email.split('@')[0] if obj.seller.email else None
     
     def get_last_message(self, obj):
-        """Get the most recent message in this conversation."""
-        last_msg = obj.messages.order_by('-created_at').first()
+        """Get the most recent message in this conversation, excluding those deleted for the user."""
+        request = self.context.get('request')
+        user = request.user if request else None
+        
+        msgs = obj.messages.all()
+        if user and user.is_authenticated:
+            msgs = msgs.exclude(deleted_by=user)
+            
+        last_msg = msgs.order_by('-created_at').first()
         if last_msg:
             sender_username = last_msg.sender.username
             if not sender_username and last_msg.sender.email:
@@ -250,6 +257,7 @@ class GroupMessageSerializer(serializers.ModelSerializer):
             'content',
             'parent_message',
             'parent_message_details',
+            'is_deleted',
             'created_at'
         ]
         read_only_fields = ['id', 'sender', 'created_at', 'parent_message_details']

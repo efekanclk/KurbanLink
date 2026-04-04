@@ -101,6 +101,12 @@ class Message(models.Model):
         default=False,
         help_text="Whether message has been deleted for everyone"
     )
+    deleted_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='deleted_messages',
+        help_text="Users who have deleted this message for themselves"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     parent_message = models.ForeignKey(
         'self',
@@ -193,6 +199,16 @@ class GroupMessage(models.Model):
         on_delete=models.CASCADE
     )
     content = models.TextField()
+    is_deleted = models.BooleanField(
+        default=False,
+        help_text="Whether message has been deleted for everyone"
+    )
+    deleted_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='deleted_group_messages',
+        help_text="Users who have deleted this message for themselves"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     parent_message = models.ForeignKey(
         'self',

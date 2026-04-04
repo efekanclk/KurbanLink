@@ -190,7 +190,10 @@ class MessageViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = Message.objects.filter(
             Q(conversation__buyer=user) | Q(conversation__seller=user)
+        ).exclude(
+            deleted_by=user
         ).select_related('conversation', 'sender').order_by('created_at')
+        
         conversation_id = self.request.query_params.get('conversation')
         if conversation_id:
             queryset = queryset.filter(conversation_id=conversation_id)
@@ -200,15 +203,33 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer.save(sender=self.request.user)
 
     def destroy(self, request, *args, **kwargs):
-        """Soft-delete: mark message as deleted for everyone."""
+        """
+        WhatsApp-style deletion.
+        - If query param 'for_everyone=true' and user is sender: soft-delete for all.
+        - Otherwise: Delete for me (add to deleted_by).
+        """
         message = self.get_object()
         user = request.user
-        conv = message.conversation
-        if user not in [conv.buyer, conv.seller]:
-            return Response({'detail': 'Bu mesajı silemezsiniz.'}, status=status.HTTP_403_FORBIDDEN)
-        message.is_deleted = True
-        message.content = ''
-        message.save(update_fields=['is_deleted', 'content'])
+        
+        # Security check: User must be part of conversation
+        if user not in [message.conversation.buyer, message.conversation.seller]:
+            return Response({'detail': 'Not authorized.'}, status=status.HTTP_403_FORBIDDEN)
+            
+        for_everyone = request.query_params.get('for_everyone') == 'true'
+        
+        if for_everyone:
+            if message.sender != user:
+                return Response(
+                    {'detail': 'Başkasına ait mesajı herkesten silemezsiniz.'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            message.is_deleted = True
+            message.content = ''
+            message.save(update_fields=['is_deleted', 'content'])
+        else:
+            # Delete for me
+            message.deleted_by.add(user)
+            
         serializer = self.get_serializer(message)
         return Response(serializer.data)
 
@@ -229,7 +250,8 @@ def inbox(request):
     )
     
     for conv in direct_convs:
-        last_msg = conv.messages.order_by('-created_at').first()
+        # Get last message that hasn't been deleted for this user
+        last_msg = conv.messages.exclude(deleted_by=user).order_by('-created_at').first()
         
         # Determine counterparty
         counterparty = conv.seller if user == conv.buyer else conv.buyer
@@ -264,7 +286,8 @@ def inbox(request):
     
     for participant in group_participants:
         conv = participant.conversation
-        last_msg = conv.messages.order_by('-created_at').first()
+        # Group messages: also exclude those deleted for this user
+        last_msg = conv.messages.exclude(deleted_by=user).order_by('-created_at').first()
         
         # Calculate unread count
         if participant.last_read_at:
@@ -317,7 +340,7 @@ class GroupConversationViewSet(viewsets.ViewSet):
         if not conversation.participants.filter(user=request.user, is_active=True).exists():
             return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
         
-        messages = conversation.messages.all()
+        messages = conversation.messages.exclude(deleted_by=request.user)
         serializer = GroupMessageSerializer(messages, many=True, context={'request': request})
         return Response(serializer.data)
     
@@ -364,3 +387,42 @@ class GroupConversationViewSet(viewsets.ViewSet):
         participant.save()
         
         return Response({'status': 'marked as read'})
+
+
+class GroupMessageViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for individual group messages.
+    Primarily used for deletion.
+    """
+    serializer_class = GroupMessageSerializer
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['delete']
+
+    def get_queryset(self):
+        user = self.request.user
+        return GroupMessage.objects.filter(
+            conversation__participants__user=user,
+            conversation__participants__is_active=True
+        ).distinct()
+
+    def destroy(self, request, *args, **kwargs):
+        message = self.get_object()
+        user = request.user
+        
+        for_everyone = request.query_params.get('for_everyone') == 'true'
+        
+        if for_everyone:
+            if message.sender != user:
+                return Response(
+                    {'detail': 'Başkasına ait mesajı herkesten silemezsiniz.'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            message.is_deleted = True
+            message.content = ''
+            message.save(update_fields=['is_deleted', 'content'])
+        else:
+            # Delete for me
+            message.deleted_by.add(user)
+            
+        serializer = self.get_serializer(message)
+        return Response(serializer.data)

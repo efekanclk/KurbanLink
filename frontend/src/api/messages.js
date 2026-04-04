@@ -87,13 +87,15 @@ export const markGroupAllRead = async (groupId) => {
 /**
  * Delete a direct message
  */
-export const deleteMessage = async (messageId) => {
-    await apiClient.delete(`/api/messages/${messageId}/`);
+export const deleteMessage = async (messageId, forEveryone = false) => {
+    const url = `/api/messages/${messageId}/${forEveryone ? '?for_everyone=true' : ''}`;
+    await apiClient.delete(url);
 };
 
 /**
  * Delete a group message
  */
-export const deleteGroupMessage = async (messageId) => {
-    await apiClient.delete(`/api/messages/groups/messages/${messageId}/`);
+export const deleteGroupMessage = async (messageId, forEveryone = false) => {
+    const url = `/api/messages/groups/messages/${messageId}/${forEveryone ? '?for_everyone=true' : ''}`;
+    await apiClient.delete(url);
 };

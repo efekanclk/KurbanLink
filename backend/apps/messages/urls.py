@@ -9,6 +9,7 @@ from . import views
 router = DefaultRouter()
 router.register(r'conversations', views.ConversationViewSet, basename='conversation')
 router.register(r'groups', views.GroupConversationViewSet, basename='group')
+router.register(r'groups/messages', views.GroupMessageViewSet, basename='group-message')
 router.register(r'', views.MessageViewSet, basename='message')
 
 urlpatterns = [
