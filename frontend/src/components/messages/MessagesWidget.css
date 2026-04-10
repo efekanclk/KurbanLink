@@ -345,7 +345,33 @@
 }
 
 /* Loading & Empty States */
-.messages-widget__loading,
+.messages-widget__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 0.75rem;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.messages-widget__loading::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 28px;
+    border: 2.5px solid rgba(31, 122, 77, 0.12);
+    border-top-color: var(--primary, #1f7a4d);
+    border-radius: 50%;
+    animation: widget-spin 0.9s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+@keyframes widget-spin {
+    to { transform: rotate(360deg); }
+}
+
 .messages-widget__empty {
     display: flex;
     align-items: center;

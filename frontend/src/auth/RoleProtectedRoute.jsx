@@ -16,7 +16,7 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
         return (
             <div className="page">
                 <div className="page__container">
-                    <div className="loading">Yükleniyor...</div>
+                    <div className="loading-state">Yükleniyor...</div>
                 </div>
             </div>
         );

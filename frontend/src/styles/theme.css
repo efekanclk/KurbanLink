@@ -287,13 +287,52 @@ a:hover {
     padding: var(--space-4) var(--space-3);
 }
 
-/* Loading State */
+/* Loading State — global */
 .loading-state {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: var(--space-6);
+    padding: 4rem 2rem;
+    gap: 1.25rem;
     color: var(--text-muted);
+}
+
+.loading-state::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(31, 122, 77, 0.12);
+    border-top-color: var(--primary, #1f7a4d);
+    border-radius: 50%;
+    animation: global-spin 0.9s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+@keyframes global-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Old inline ".loading" class — used in several pages */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    gap: 1rem;
+    color: var(--text-muted);
+}
+
+.loading::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(31, 122, 77, 0.12);
+    border-top-color: var(--primary, #1f7a4d);
+    border-radius: 50%;
+    animation: global-spin 0.9s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
 /* Error State */

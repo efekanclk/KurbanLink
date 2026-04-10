@@ -418,7 +418,10 @@ const MessagesPage = () => {
           </div>
           <div className="messages-sidebar__list">
             {loading && conversations.length === 0 ? (
-              <div className="messages-sidebar__loading">Yükleniyor...</div>
+              <div className="messages-sidebar__loading">
+                <div className="messages-inline-spinner" />
+                <span>Yükleniyor...</span>
+              </div>
             ) : conversations.length === 0 ? (
               <div className="messages-sidebar__empty">Henüz mesajınız yok</div>
             ) : (
@@ -492,7 +495,10 @@ const MessagesPage = () => {
               {/* Messages */}
               <div className="messages-main__body">
                 {messagesLoading ? (
-                  <div className="messages-main__loading">Yükleniyor...</div>
+                  <div className="messages-main__loading">
+                    <div className="messages-inline-spinner" />
+                    <span>Mesajlar yükleniyor...</span>
+                  </div>
                 ) : (
                   (() => {
                     let lastDayLabel = null;

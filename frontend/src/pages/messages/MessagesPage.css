@@ -1,5 +1,43 @@
 /* MessagesPage.css - Modern Full Screen Layout */
 
+/* Inline loading spinner — used in sidebar & message list */
+.messages-inline-spinner {
+    width: 30px;
+    height: 30px;
+    border: 2.5px solid rgba(31, 122, 77, 0.12);
+    border-top-color: var(--msg-mine-solid, #1f7a4d);
+    border-radius: 50%;
+    animation: msg-spin 0.85s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    flex-shrink: 0;
+}
+
+@keyframes msg-spin {
+    to { transform: rotate(360deg); }
+}
+
+.messages-sidebar__loading,
+.messages-main__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.875rem;
+    padding: 3rem 1.5rem;
+    color: var(--text-muted, #64748b);
+    font-size: 0.875rem;
+    font-weight: 500;
+    animation: loading-fade 1.8s ease-in-out infinite;
+}
+
+.messages-main__loading {
+    flex: 1;
+}
+
+@keyframes loading-fade {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+}
+
 :root {
     --chat-bg: #f8fafc;
     --msg-mine: linear-gradient(135deg, #1f7a4d 0%, #2e8b57 100%);
