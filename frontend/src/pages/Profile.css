@@ -1,18 +1,40 @@
-/* Profile Page Styles */
+/* Profile Page Styles — Modern & Readable */
 
 /* ── Banner ── */
 .profile-banner {
     position: relative;
     background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-    margin-bottom: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.07);
+    margin-bottom: 1.75rem;
     overflow: hidden;
 }
 
 .profile-banner__bg {
-    height: 120px;
-    background: linear-gradient(135deg, #2d6a4f 0%, #40916c 50%, #52b788 100%);
+    height: 140px;
+    background: linear-gradient(135deg, #1a5c3a 0%, #2d6a4f 40%, #40916c 75%, #52b788 100%);
+    position: relative;
+}
+
+/* Subtle decorative circles on the banner */
+.profile-banner__bg::before,
+.profile-banner__bg::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+}
+.profile-banner__bg::before {
+    width: 240px;
+    height: 240px;
+    top: -80px;
+    right: -40px;
+}
+.profile-banner__bg::after {
+    width: 140px;
+    height: 140px;
+    bottom: -60px;
+    right: 120px;
 }
 
 .profile-back-btn {
@@ -20,24 +42,31 @@
     top: 1rem;
     left: 1rem;
     z-index: 2;
-    background: rgba(255, 255, 255, 0.9) !important;
-    backdrop-filter: blur(8px);
-    border-color: transparent !important;
-    color: #2d6a4f !important;
+    background: rgba(255, 255, 255, 0.18) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
     margin-bottom: 0 !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    font-size: 0.875rem !important;
+    padding: 0.45rem 1rem !important;
+    border-radius: 50px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease;
 }
 
 .profile-back-btn:hover {
-    background: white !important;
+    background: rgba(255, 255, 255, 0.28) !important;
+    transform: translateX(-2px);
 }
 
 .profile-banner__content {
     display: flex;
-    align-items: center;
-    gap: 2rem;
+    align-items: flex-end;
+    gap: 1.75rem;
     padding: 0 2.5rem 2rem;
-    margin-top: -50px;
+    margin-top: -52px;
     position: relative;
     z-index: 1;
 }
@@ -45,58 +74,68 @@
 /* ── Avatar ── */
 .profile-avatar-wrapper {
     flex-shrink: 0;
+    position: relative;
 }
 
 .profile-avatar {
-    width: 110px;
-    height: 110px;
+    width: 108px;
+    height: 108px;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid white;
-    background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.25rem;
+    font-size: 2.5rem;
     font-weight: 700;
-    color: #64748b;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    color: #2d6a4f;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
 }
 
 /* ── Info ── */
 .profile-info-section {
     flex: 1;
     min-width: 0;
+    padding-bottom: 0.25rem;
 }
 
 .profile-name {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #1a202c;
-    margin: 0 0 0.35rem 0;
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.4rem 0;
+    letter-spacing: -0.4px;
+    line-height: 1.2;
 }
 
 .profile-location {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: #64748b;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.9rem;
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.3rem;
+    font-weight: 500;
 }
 
 .profile-contact {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
+    gap: 0.5rem 1.25rem;
 }
 
 .contact-item {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    color: #4a5568;
-    font-size: 0.9rem;
+    color: #475569;
+    font-size: 0.875rem;
+    background: #f1f5f9;
+    padding: 0.35rem 0.8rem;
+    border-radius: 50px;
+    font-weight: 500;
+    border: 1px solid #e2e8f0;
 }
 
 /* ── Edit Button ── */
@@ -105,16 +144,17 @@
     flex-direction: column;
     gap: 0.75rem;
     flex-shrink: 0;
+    padding-bottom: 0.25rem;
 }
 
 .edit-profile-btn {
-    background: #2d6a4f;
+    background: linear-gradient(135deg, #2d6a4f, #40916c);
     color: white;
     border: none;
     padding: 0.7rem 1.5rem;
-    border-radius: 10px;
+    border-radius: 12px;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
@@ -122,45 +162,50 @@
     justify-content: center;
     gap: 0.5rem;
     white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(45, 106, 79, 0.25);
+    letter-spacing: 0.01em;
 }
 
 .edit-profile-btn:hover {
-    background: #245a3f;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(45, 106, 79, 0.3);
+    box-shadow: 0 6px 20px rgba(45, 106, 79, 0.35);
 }
 
 /* ── Quick Actions ── */
 .quick-links-section {
     background: white;
     padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-    margin-bottom: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.06);
+    margin-bottom: 1.75rem;
 }
 
 .section-title {
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: 700;
-    color: #1a202c;
+    color: #0f172a;
     margin-bottom: 1.25rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 0.875rem;
+    border-bottom: 1px solid #f1f5f9;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    color: #94a3b8;
 }
 
 .links-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.875rem;
 }
 
 .action-card {
     background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    padding: 1.25rem;
-    border-radius: 12px;
+    border: 1.5px solid #e8eef4;
+    padding: 1.2rem 1.25rem;
+    border-radius: 14px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -171,78 +216,91 @@
     background: white;
     border-color: #2d6a4f;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 6px 20px rgba(45, 106, 79, 0.1);
 }
 
 .action-card:hover .action-icon {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
     color: #2d6a4f;
 }
 
 .action-icon {
-    font-size: 1.5rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #f1f5f9;
     color: #64748b;
-    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    transition: all 0.2s ease;
 }
 
 .action-text h3 {
     margin: 0;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #1a202c;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
 }
 
 .action-text p {
     margin: 0.2rem 0 0 0;
-    font-size: 0.825rem;
+    font-size: 0.8rem;
     color: #94a3b8;
+    font-weight: 400;
 }
 
 /* ── Logout ── */
 .logout-section {
     text-align: center;
-    margin-top: 1rem;
+    margin-top: 0.25rem;
     margin-bottom: 2rem;
 }
 
 .logout-btn-text {
     background: none;
-    border: 1px solid #fee2e2;
+    border: 1.5px solid #fee2e2;
     color: #dc2626;
     font-weight: 600;
     cursor: pointer;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     padding: 0.65rem 2rem;
-    border-radius: 10px;
+    border-radius: 12px;
     transition: all 0.2s;
+    letter-spacing: 0.01em;
 }
 
 .logout-btn-text:hover {
     background: #fef2f2;
     border-color: #dc2626;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
 }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
     .profile-banner__bg {
-        height: 90px;
+        height: 110px;
     }
 
     .profile-banner__content {
         flex-direction: column;
+        align-items: center;
         text-align: center;
-        padding: 0 1.5rem 1.5rem;
-        margin-top: -40px;
+        padding: 0 1.5rem 1.75rem;
+        margin-top: -44px;
         gap: 1rem;
     }
 
     .profile-avatar {
         width: 90px;
         height: 90px;
-        font-size: 1.75rem;
+        font-size: 2rem;
     }
 
     .profile-name {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
     }
 
     .profile-location {
@@ -251,8 +309,6 @@
 
     .profile-contact {
         justify-content: center;
-        flex-direction: column;
-        align-items: center;
     }
 
     .profile-actions-section {
@@ -268,6 +324,17 @@
     }
 
     .links-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .links-grid {
         grid-template-columns: 1fr;
+    }
+
+    .profile-back-btn {
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.875rem !important;
     }
 }
