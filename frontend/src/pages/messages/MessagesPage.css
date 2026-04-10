@@ -732,3 +732,50 @@
     align-items: flex-end;
     margin-bottom: 4px;
 }
+
+.messages-sidebar__item {
+    position: relative;
+}
+
+.messages-sidebar__delete-btn {
+    position: absolute;
+    right: 8px;
+    bottom: 14px;
+    opacity: 0;
+    visibility: hidden;
+    background: white;
+    border: 1px solid #fee2e2;
+    color: #ef4444;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
+    z-index: 5;
+}
+
+.messages-sidebar__item:hover .messages-sidebar__delete-btn {
+    opacity: 1;
+    visibility: visible;
+    right: 14px;
+}
+
+.messages-sidebar__delete-btn:hover {
+    background: #ef4444;
+    color: white;
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .messages-sidebar__delete-btn {
+        opacity: 0.8;
+        visibility: visible;
+        right: 12px;
+        bottom: 12px;
+        background: rgba(255, 255, 255, 0.9);
+    }
+}

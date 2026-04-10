@@ -23,7 +23,15 @@ class ConversationViewSet(viewsets.ModelViewSet):
     
     serializer_class = ConversationSerializer
     permission_classes = [IsAuthenticated]
-    http_method_names = ['get', 'post', 'head', 'options']  # Disable PUT/PATCH/DELETE
+    http_method_names = ['get', 'post', 'delete', 'head', 'options']
+    
+    def destroy(self, request, *args, **kwargs):
+        """
+        Hide conversation for the current user.
+        """
+        conversation = self.get_object()
+        conversation.deleted_by.add(request.user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
     def get_queryset(self):
         """
@@ -200,7 +208,9 @@ class MessageViewSet(viewsets.ModelViewSet):
         return queryset
     
     def perform_create(self, serializer):
-        serializer.save(sender=self.request.user)
+        message = serializer.save(sender=self.request.user)
+        # Un-hide conversation for everyone when a new message is sent
+        message.conversation.deleted_by.clear()
 
     def destroy(self, request, *args, **kwargs):
         """
@@ -245,9 +255,10 @@ def inbox(request):
     inbox_items = []
     
     # Get direct conversations (where user is buyer or seller)
+    # Filter out conversations hidden by the user
     direct_convs = Conversation.objects.filter(
         Q(buyer=user) | Q(seller=user)
-    )
+    ).exclude(deleted_by=user)
     
     for conv in direct_convs:
         # Get last message that hasn't been deleted for this user
@@ -279,10 +290,11 @@ def inbox(request):
         })
     
     # Get group conversations (where user is active participant)
+    # Filter out conversations hidden by the user
     group_participants = GroupConversationParticipant.objects.filter(
         user=user,
         is_active=True
-    ).select_related('conversation__partnership')
+    ).exclude(conversation__deleted_by=user).select_related('conversation__partnership')
     
     for participant in group_participants:
         conv = participant.conversation
@@ -366,6 +378,9 @@ class GroupConversationViewSet(viewsets.ViewSet):
             content=content
         )
         
+        # Un-hide conversation for all active participants when a new message is sent
+        conversation.deleted_by.clear()
+        
         serializer = GroupMessageSerializer(message, context={'request': request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
@@ -387,6 +402,21 @@ class GroupConversationViewSet(viewsets.ViewSet):
         participant.save()
         
         return Response({'status': 'marked as read'})
+
+    @action(detail=True, methods=['post'], url_path='hide')
+    def hide(self, request, pk=None):
+        """Hide group conversation for the current user."""
+        try:
+            conversation = GroupConversation.objects.get(pk=pk)
+        except GroupConversation.DoesNotExist:
+            return Response({'error': 'Conversation not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Check if user is participant
+        if not conversation.participants.filter(user=request.user, is_active=True).exists():
+            return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
+            
+        conversation.deleted_by.add(request.user)
+        return Response({'status': 'hidden'})
 
 
 class GroupMessageViewSet(viewsets.ModelViewSet):

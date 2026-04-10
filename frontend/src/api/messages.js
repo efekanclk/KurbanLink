@@ -99,3 +99,17 @@ export const deleteGroupMessage = async (messageId, forEveryone = false) => {
     const url = `/api/messages/groups/messages/${messageId}/${forEveryone ? '?for_everyone=true' : ''}`;
     await apiClient.delete(url);
 };
+
+/**
+ * Delete (hide) a direct conversation
+ */
+export const deleteConversation = async (conversationId) => {
+    await apiClient.delete(`/api/messages/conversations/${conversationId}/`);
+};
+
+/**
+ * Hide a group conversation
+ */
+export const hideGroupConversation = async (groupId) => {
+    await apiClient.post(`/api/messages/groups/${groupId}/hide/`);
+};

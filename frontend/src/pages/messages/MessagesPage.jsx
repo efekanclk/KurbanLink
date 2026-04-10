@@ -11,8 +11,10 @@ import {
   markGroupAllRead,
   deleteMessage,
   deleteGroupMessage,
+  deleteConversation,
+  hideGroupConversation,
 } from '../../api/messages';
-import { Send, User as UserIcon, Users as UsersIcon, ArrowLeft, Reply, X } from '../../ui/icons';
+import { Send, User as UserIcon, Users as UsersIcon, ArrowLeft, Reply, X, Trash2 } from '../../ui/icons';
 import './MessagesPage.css';
 
 const MessagesPage = () => {
@@ -26,6 +28,7 @@ const MessagesPage = () => {
   const [replyingTo, setReplyingTo] = useState(null);
   const [contextMenu, setContextMenu] = useState(null); // { msg, x, y }
   const [deleteModal, setDeleteModal] = useState(null); // msg to delete
+  const [convDeleteModal, setConvDeleteModal] = useState(null); // conv to delete
   const [loading, setLoading] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [sending, setSending] = useState(false);
@@ -277,7 +280,27 @@ const MessagesPage = () => {
   const formatTime = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
-    return date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const now = new Date();
+    
+    // If today: 14:30
+    if (date.toDateString() === now.toDateString()) {
+      return date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+    
+    // If yesterday: Dün
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    if (date.toDateString() === yesterday.toDateString()) {
+      return 'Dün';
+    }
+    
+    // If this year: 10 Nis
+    if (date.getFullYear() === now.getFullYear()) {
+      return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+    }
+    
+    // Older: 10.04.2023
+    return date.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   };
 
   const getDayLabel = (dateStr) => {
@@ -349,8 +372,36 @@ const MessagesPage = () => {
       }
     } catch (err) {
       console.error('Delete for me failed:', err);
-      // No rollback for "Delete for Me" as it's a personal preference/cleanup
-      // but we could reload messages if it was critical.
+    }
+  };
+
+  const handleDeleteConversation = (e, conv) => {
+    e.stopPropagation();
+    setConvDeleteModal(conv);
+  };
+
+  const confirmDeleteConversation = async () => {
+    if (!convDeleteModal) return;
+    const { id, type } = convDeleteModal;
+    setConvDeleteModal(null);
+
+    // Optimistically update UI
+    setConversations(prev => prev.filter(c => !(c.id === id && c.type === type)));
+    if (selectedConversation?.id === id && selectedConversation?.type === type) {
+      setSelectedConversation(null);
+      setMessages([]);
+    }
+
+    try {
+      if (type === 'GROUP') {
+        await hideGroupConversation(id);
+      } else {
+        await deleteConversation(id);
+      }
+    } catch (err) {
+      console.error('Failed to delete conversation:', err);
+      // Reload on error
+      loadConversations();
     }
   };
 
@@ -403,6 +454,13 @@ const MessagesPage = () => {
                   {conv.unread_count > 0 && (
                     <span className="messages-sidebar__unread">{conv.unread_count}</span>
                   )}
+                  <button 
+                    className="messages-sidebar__delete-btn"
+                    onClick={(e) => handleDeleteConversation(e, conv)}
+                    title="Sohbeti Sil"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </div>
               ))
             )}
@@ -600,6 +658,24 @@ const MessagesPage = () => {
                   Benden sil
                 </button>
                 <button className="delete-modal__btn delete-modal__btn--cancel" onClick={() => setDeleteModal(null)}>
+                  İptal
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Conversation Delete Modal */}
+          {convDeleteModal && (
+            <div className="delete-modal-overlay" onClick={() => setConvDeleteModal(null)}>
+              <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
+                <p className="delete-modal__title">Sohbet silinsin mi?</p>
+                <p style={{ color: '#94a3b8', fontSize: '13px', textAlign: 'center', marginBottom: '10px' }}>
+                  Bu sohbeti listenizden kaldırmak istediğinize emin misiniz?
+                </p>
+                <button className="delete-modal__btn delete-modal__btn--everyone" onClick={confirmDeleteConversation}>
+                  Evet, Sil
+                </button>
+                <button className="delete-modal__btn delete-modal__btn--cancel" onClick={() => setConvDeleteModal(null)}>
                   İptal
                 </button>
               </div>

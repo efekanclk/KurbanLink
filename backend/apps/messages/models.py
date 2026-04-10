@@ -35,6 +35,12 @@ class Conversation(models.Model):
         help_text="The seller or service provider in this conversation"
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    deleted_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='deleted_direct_conversations',
+        help_text="Users who have hidden/deleted this conversation from their inbox"
+    )
     
     class Meta:
         verbose_name = 'conversation'
@@ -149,6 +155,12 @@ class GroupConversation(models.Model):
         related_name='group_conversation'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    deleted_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='deleted_group_conversations',
+        help_text="Users who have hidden/deleted this group conversation from their inbox"
+    )
     
     class Meta:
         verbose_name = 'group conversation'
