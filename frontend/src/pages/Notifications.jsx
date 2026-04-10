@@ -22,8 +22,10 @@ const Notifications = () => {
 
         try {
             const data = await fetchNotifications();
-            // Sort by created_at desc
-            const sorted = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            // Sort by created_at desc, exclude message notifications (shown in floating widget)
+            const sorted = data
+                .filter(n => n.type !== 'NEW_MESSAGE')
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             setNotifications(sorted);
         } catch (err) {
             console.error('Failed to load notifications:', err);

@@ -40,8 +40,8 @@ const NotificationDropdown = () => {
         try {
             const data = await fetchNotifications();
             const all = Array.isArray(data) ? data : data.results || [];
-            // Exclude favorite notifications
-            const notifs = all.filter(n => n.type !== 'FAVORITED_LISTING');
+            // Exclude message & favorite notifications — messages are shown in the floating widget
+            const notifs = all.filter(n => n.type !== 'FAVORITED_LISTING' && n.type !== 'NEW_MESSAGE');
             setNotifications(notifs.slice(0, 5));
             const count = notifs.filter(n => !n.is_read).length;
             setUnreadCount(count);
