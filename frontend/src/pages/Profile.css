@@ -63,18 +63,19 @@
 
 .profile-banner__content {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     gap: 1.75rem;
-    padding: 0 2.5rem 2rem;
-    margin-top: -52px;
+    padding: 0 2.5rem 1.75rem;
     position: relative;
     z-index: 1;
+    /* No negative margin — avatar pulls itself up individually */
 }
 
 /* ── Avatar ── */
 .profile-avatar-wrapper {
     flex-shrink: 0;
     position: relative;
+    margin-top: -64px; /* Avatar floats up into the banner */
 }
 
 .profile-avatar {
@@ -97,7 +98,7 @@
 .profile-info-section {
     flex: 1;
     min-width: 0;
-    padding-bottom: 0.25rem;
+    padding-top: 0.75rem; /* Text starts in the white zone, below banner bottom */
 }
 
 .profile-name {
@@ -107,9 +108,7 @@
     margin: 0 0 0.4rem 0;
     letter-spacing: -0.4px;
     line-height: 1.2;
-    text-shadow:
-        0 1px 0 rgba(255,255,255,0.9),
-        0 2px 8px rgba(255,255,255,0.6);
+    /* No text-shadow needed — name is now in the white area */
 }
 
 .profile-location {
@@ -147,7 +146,7 @@
     flex-direction: column;
     gap: 0.75rem;
     flex-shrink: 0;
-    padding-bottom: 0.25rem;
+    padding-top: 0.75rem; /* Align with the info section */
 }
 
 .edit-profile-btn {
@@ -292,8 +291,11 @@
         align-items: center;
         text-align: center;
         padding: 0 1.5rem 1.75rem;
-        margin-top: -44px;
-        gap: 1rem;
+        gap: 0.25rem;
+    }
+
+    .profile-avatar-wrapper {
+        margin-top: -52px;
     }
 
     .profile-avatar {
