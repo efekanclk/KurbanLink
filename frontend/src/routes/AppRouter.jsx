@@ -53,14 +53,13 @@ const AppRouter = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Home />} />
-            <Route path="/search" element={<SearchPage />} />
             <Route path="/animals/:id" element={<AnimalDetail />} />
             <Route path="/kvkk" element={<KvkkPage />} />
             <Route path="/gizlilik" element={<GizlilikPage />} />
-
             {/* Protected routes */}
             <Route path="/coming-soon" element={<ProtectedRoute><ComingSoon /></ProtectedRoute>} />
             <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
+            <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
 
             {/* Messages routes */}
             <Route path="/messages" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
@@ -78,17 +77,17 @@ const AppRouter = () => {
             <Route path="/seller/listings/new" element={<ProtectedRoute><NewListing /></ProtectedRoute>} />
             <Route path="/seller/listings/:id/edit" element={<ProtectedRoute><EditListing /></ProtectedRoute>} />
 
-            {/* Butcher discovery routes - PUBLIC */}
-            <Route path="/butchers" element={<ButcherList />} />
-            <Route path="/butchers/:id" element={<ButcherDetail />} />
+            {/* Butcher discovery routes */}
+            <Route path="/butchers" element={<ProtectedRoute><ButcherList /></ProtectedRoute>} />
+            <Route path="/butchers/:id" element={<ProtectedRoute><ButcherDetail /></ProtectedRoute>} />
             <Route path="/butchers/:id/book" element={<ProtectedRoute><AppointmentBooking /></ProtectedRoute>} />
 
             {/* Butcher routes */}
             <Route path="/butcher/appointments" element={<RoleProtectedRoute requiredRole="BUTCHER"><ButcherAppointments /></RoleProtectedRoute>} />
 
-            {/* Partnerships route - PUBLIC */}
-            <Route path="/partnerships" element={<Partnerships />} />
-            <Route path="/partnerships/:id" element={<PartnershipDetail />} />
+            {/* Partnerships routes */}
+            <Route path="/partnerships" element={<ProtectedRoute><Partnerships /></ProtectedRoute>} />
+            <Route path="/partnerships/:id" element={<ProtectedRoute><PartnershipDetail /></ProtectedRoute>} />
 
             {/* Catch all */}
             <Route path="*" element={<Navigate to="/" replace />} />

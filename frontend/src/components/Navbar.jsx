@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { Menu, X } from '../ui/icons';
+import ConfirmDialog from './ui/ConfirmDialog';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -9,11 +10,30 @@ const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+    const [pendingPath, setPendingPath] = useState(null);
 
     const handleLogout = () => {
         logout();
         setIsDrawerOpen(false);
         navigate('/');
+    };
+
+    const handleProtectedLink = (e, path) => {
+        if (!user) {
+            e.preventDefault();
+            setPendingPath(path);
+            setIsAuthDialogOpen(true);
+        }
+    };
+
+    const handleAuthConfirm = () => {
+        setIsAuthDialogOpen(false);
+        if (pendingPath) {
+            navigate(`/login?next=${encodeURIComponent(pendingPath)}`);
+        } else {
+            navigate('/login');
+        }
     };
 
     const closeDrawer = () => {
@@ -48,6 +68,16 @@ const Navbar = () => {
 
     return (
         <>
+            <ConfirmDialog
+                isOpen={isAuthDialogOpen}
+                title="Giriş Gerekli"
+                message="Bu işlemi yapmak için giriş yapmalısınız!"
+                confirmText="Giriş Yap"
+                cancelText="Kapat"
+                onConfirm={handleAuthConfirm}
+                onCancel={() => setIsAuthDialogOpen(false)}
+                type="primary"
+            />
             <nav className="navbar">
                 <div className="navbar-container">
                     {/* Left: Brand */}
@@ -60,8 +90,20 @@ const Navbar = () => {
                     {/* Center: Desktop Navigation Links */}
                     <div className="navbar-nav">
                         <Link to="/" className="nav-link">Ana Sayfa</Link>
-                        <Link to="/partnerships" className="nav-link">Kurban Ortaklığı</Link>
-                        <Link to="/butchers" className="nav-link">Kasap Bul</Link>
+                        <Link 
+                            to="/partnerships" 
+                            className="nav-link"
+                            onClick={(e) => handleProtectedLink(e, '/partnerships')}
+                        >
+                            Kurban Ortaklığı
+                        </Link>
+                        <Link 
+                            to="/butchers" 
+                            className="nav-link"
+                            onClick={(e) => handleProtectedLink(e, '/butchers')}
+                        >
+                            Kasap Bul
+                        </Link>
                         {user && (
                             <Link to="/messages" className="nav-link">Mesajlar</Link>
                         )}
@@ -141,14 +183,20 @@ const Navbar = () => {
                         <Link
                             to="/partnerships"
                             className={`drawer-link ${isActive('/partnerships') ? 'active' : ''}`}
-                            onClick={closeDrawer}
+                            onClick={(e) => {
+                                handleProtectedLink(e, '/partnerships');
+                                if (user) closeDrawer();
+                            }}
                         >
                             Kurban Ortaklığı
                         </Link>
                         <Link
                             to="/butchers"
                             className={`drawer-link ${isActive('/butchers') ? 'active' : ''}`}
-                            onClick={closeDrawer}
+                            onClick={(e) => {
+                                handleProtectedLink(e, '/butchers');
+                                if (user) closeDrawer();
+                            }}
                         >
                             Kasap Bul
                         </Link>

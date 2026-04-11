@@ -3,6 +3,7 @@ import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { cities } from '../../data/locations';
 import { Search, PartnershipIcon, Filter, X, Heart, ClipboardList, Calendar, ButcherIcon } from '../../ui/icons';
+import ConfirmDialog from '../ui/ConfirmDialog';
 import './HomeSidebar.css';
 
 const HomeSidebar = () => {
@@ -10,6 +11,8 @@ const HomeSidebar = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+    const [pendingPath, setPendingPath] = useState(null);
 
     // Get current filter values
     const currentType = searchParams.get('animal_type');
@@ -32,12 +35,19 @@ const HomeSidebar = () => {
     };
 
     const handleProtectedLink = (e, path) => {
-        e.preventDefault();
         if (!user) {
-            alert('Bu işlem için giriş yapmalısınız.');
-            navigate(`/login?next=${encodeURIComponent(path)}`);
+            e.preventDefault();
+            setPendingPath(path);
+            setIsAuthDialogOpen(true);
+        }
+    };
+
+    const handleAuthConfirm = () => {
+        setIsAuthDialogOpen(false);
+        if (pendingPath) {
+            navigate(`/login?next=${encodeURIComponent(pendingPath)}`);
         } else {
-            navigate(path);
+            navigate('/login');
         }
     };
 
@@ -78,7 +88,11 @@ const HomeSidebar = () => {
                 <h3 className="sidebar-title">Hızlı İşlemler</h3>
                 <ul className="sidebar-list">
                     <li>
-                        <Link to="/butchers" className="sidebar-link partnership-link">
+                        <Link 
+                            to="/butchers" 
+                            className="sidebar-link partnership-link"
+                            onClick={(e) => handleProtectedLink(e, '/butchers')}
+                        >
                             <ButcherIcon size={16} />
                             Kasap Bul
                         </Link>
@@ -94,7 +108,11 @@ const HomeSidebar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/search" className="sidebar-link partnership-link">
+                        <Link 
+                            to="/search" 
+                            className="sidebar-link partnership-link"
+                            onClick={(e) => handleProtectedLink(e, '/search')}
+                        >
                             <Search size={16} />
                             Detaylı Arama
                         </Link>
@@ -256,6 +274,16 @@ const HomeSidebar = () => {
 
     return (
         <>
+            <ConfirmDialog
+                isOpen={isAuthDialogOpen}
+                title="Giriş Gerekli"
+                message="Bu işlemi yapmak için giriş yapmalısınız!"
+                confirmText="Giriş Yap"
+                cancelText="Kapat"
+                onConfirm={handleAuthConfirm}
+                onCancel={() => setIsAuthDialogOpen(false)}
+                type="primary"
+            />
             {/* Desktop Sidebar */}
             <aside className="home-sidebar desktop-only">
                 {renderFilterContent()}
