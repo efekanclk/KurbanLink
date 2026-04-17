@@ -72,6 +72,7 @@ const Footer = () => {
                 <span>© {new Date().getFullYear()} KurbanLink. Tüm hakları saklıdır.</span>
             </div>
         </footer>
+    </>
     );
 };
 
